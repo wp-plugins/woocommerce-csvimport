@@ -17,6 +17,7 @@ Import products into woocommerce. You can upload a zip, select you're own files 
 
 1. Upload to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+3. create a directoy in uploads called csvimport/fixed
 
 == Changelog ==
 
