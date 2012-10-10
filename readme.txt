@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: allaerd
-Tags: woocommerce, commerce,e-commerce, ecommerce, inventory, stock, wordpress ecommerce, products, import, csv, zip
+Tags: woocommerce, commerce,e-commerce, ecommerce, inventory, stock, products, import, csv, zip
 Requires at least: 3.0.1
 Tested up to: 3.4
 Stable tag: 4.3
