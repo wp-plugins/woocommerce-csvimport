@@ -21,6 +21,10 @@ Import products into woocommerce. You can upload a zip, select you're own files 
 
 == Changelog ==
 
+= 0.2 =
+* added a setting page where you can create the csvimport directory
+* fixed a css bug
+
 = 0.1 =
 
 first version.
