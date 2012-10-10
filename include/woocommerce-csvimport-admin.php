@@ -81,14 +81,33 @@ class woocsv_import_admin {
 	<?php
 	}
 
-	public function settings(){
+public function settings(){
+	
+	
+	$upload_dir = wp_upload_dir();
+	if ( isset( $_REQUEST['create_import_directory']) && check_admin_referer('create_import_directory')) {
+		mkdir($upload_dir['basedir'] .'/csvimport/');
+		mkdir($upload_dir['basedir'] .'/csvimport/fixed/');
+	}
+
+	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
+		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
+		
+		
 		echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
                 <h2>Settings</h2></div>';
-                ?>
-                Status of the product : draft, publish, pending, future, private
-                 
-                <?php
-	}
+        if (!is_dir($upload_dir['basedir'] .'/csvimport/')) {
+        	echo '<h3>Create import directory</h3>';
+			echo '<form id="create_import_directory" name="create_import_directory" method="POST">';
+			echo '<input name="create_import_directory" type="submit" value="create">';
+			echo wp_nonce_field('create_import_directory');
+			echo '</form>';
+	        
+        }
+    echo '<p>No settings available</p>';
+    }
+    
+
 
 
 }
