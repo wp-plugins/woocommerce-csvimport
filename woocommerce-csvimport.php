@@ -2,7 +2,7 @@
 /*
 Plugin Name: Woocommerce CSV Import
 Description: Import CSV files in Woocommerce
-Version: 0.02
+Version: 0.01
 Author: Allaerd Mensonides
 License: Buy it!
 Author URI: http://allaerd.org
@@ -28,12 +28,22 @@ function woocsv_js_and_css() {
 	wp_enqueue_script('jquery-ui-core');
 	wp_enqueue_script('jquery-ui-tabs');
 	wp_enqueue_style('jquery.ui.theme', '/wp-content/plugins/woocommerce-csvimport/css/jquery-ui-1.8.23.custom.css');
-	
 }
 
 function woocsvimport_activate() {
+	$upload_dir = wp_upload_dir();
 	if (!is_dir($upload_dir['basedir'].'/csvimport'))
 		woocsv_admin_notice ('Import directory niet gevonden. check og /uploads/csvimport bestaat');
+	//set default options
+	if (!get_option( 'csvimport-options' )) {
+		$options = array(
+			'importdir'=> 'csvimport',
+			'fixeddir' => 'fixed',
+			'deleteimages' => 0,
+			'arrayseperator' => '|',
+		);
+		update_option( 'csvimport-options', $options );
+	}
 }
 
 

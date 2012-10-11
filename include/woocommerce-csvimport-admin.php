@@ -81,14 +81,21 @@ class woocsv_import_admin {
 	<?php
 	}
 
-public function settings(){
+	public function settings(){
 	
-	
+	$options = get_option('csvimport-options');
 	$upload_dir = wp_upload_dir();
 	if ( isset( $_REQUEST['create_import_directory']) && check_admin_referer('create_import_directory')) {
 		mkdir($upload_dir['basedir'] .'/csvimport/');
 		mkdir($upload_dir['basedir'] .'/csvimport/fixed/');
 	}
+	
+	if ( isset( $_REQUEST['delete_images_import']) && check_admin_referer('delete_images_import')) {
+		$options['deleteimages'] = $_POST['images_import'];
+		update_option( 'csvimport-options', $options );
+	}
+	
+	
 
 	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
 		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
@@ -96,18 +103,33 @@ public function settings(){
 		
 		echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
                 <h2>Settings</h2></div>';
+        
+        //inport directory
+        echo '<h3>Create import directory</h3>';                        
         if (!is_dir($upload_dir['basedir'] .'/csvimport/')) {
-        	echo '<h3>Create import directory</h3>';
 			echo '<form id="create_import_directory" name="create_import_directory" method="POST">';
 			echo '<input name="create_import_directory" type="submit" value="create">';
 			echo wp_nonce_field('create_import_directory');
 			echo '</form>';
 	        
         }
-    echo '<p>No settings available</p>';
+	    echo '<p>Directory is there!</p>';
+	  
+	    //what to do with images
+	    ?>
+	    <h3>What to do with images?</h3>
+	    <p>You can choose if you want to keep the existing images or delete them before adding the new ones.</p>
+	    <form id="delete_images_import" name="delete_images_import" method="POST">
+	    <select id="images_import" name ="images_import">
+	    <option value=0 <?php if ($options['deleteimages'] == 0) echo 'selected'; ?> >append images to product</option>
+	    <option value=1 <?php if ($options['deleteimages'] == 1) echo 'selected'; ?> >remove all images before uploading new ones</option>
+	    </select>
+		<input name="delete_images_import" type="submit" value="Save">
+		<?php echo wp_nonce_field('delete_images_import'); ?>
+		</form>
+		<?php
     }
     
-
 
 
 }

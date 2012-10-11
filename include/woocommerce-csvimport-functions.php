@@ -117,8 +117,8 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		if ($product_id) $my_product['ID'] = $product_id;
 		//now we create the product...ig the id is there is will update the product else it will make a new
 		$post_id = wp_update_post($my_product);
-		
-		//set the attributes etc		
+
+		//set the attributes etc
 		update_post_meta( $post_id, '_stock', $data[4] );
 		update_post_meta( $post_id, '_price', $data[5] );
 		update_post_meta( $post_id, '_regular_price', $data[6] );
@@ -131,41 +131,65 @@ function woocsv_import_products_from_csv ($file,$dir) {
 
 		update_post_meta( $post_id, '_manage_stock', 'yes' );
 		update_post_meta( $post_id, '_visibility', 'visible' );
-		
+
 		//link the product to the category
 		$category = wp_set_object_terms($post_id, $data[3] ,'product_cat');
 
 		//get picture if there is one and add it as featured image
-		$picture = glob($dir.$data[13]);
-		if ( $picture ) {
-			woocsv_add_featured_image ( $post_id , $picture[0] );
+		if ( isset( $data[13] )) {
+			woocsv_add_featured_image ( $post_id , $data[13], $dir );
 		}
 	}
 }
 
-function woocsv_add_featured_image($post_id,$image_url) {
+function woocsv_add_featured_image($post_id,$image_array,$dir) {
+	$options = get_option('csvimport-options');
 
-	$upload_dir = wp_upload_dir();
-	$image_data = file_get_contents($image_url);
-	$filename = basename($image_url);
-	if(wp_mkdir_p($upload_dir['path']))
-		$file = $upload_dir['path'] . '/' . $filename;
-	else
-		$file = $upload_dir['basedir'] . '/' . $filename;
-	if (!file_put_contents($file, $image_data)) die ('file not oke'.$file);
+	//delete images
+	if ($options['deleteimages'] == 1) {
+		//get the images
+		$attachments = get_posts( array(
+				'post_type' => 'attachment',
+				'post_parent' => $post_id,
+			));
+		foreach ($attachments as $attachment) {
+			wp_delete_attachment ($attachment->ID);
+		}
+	}
 
-	$wp_filetype = wp_check_filetype($filename, null );
-	$attachment = array(
-		'post_mime_type' => $wp_filetype['type'],
-		'post_title' => sanitize_file_name($filename),
-		'post_content' => '',
-		'post_status' => 'inherit'
-	);
-	$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
-	require_once(ABSPATH . 'wp-admin/includes/image.php');
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
-	wp_update_attachment_metadata( $attach_id, $attach_data );
-	set_post_thumbnail( $post_id, $attach_id );
+	$images = explode('|', $image_array);
+	if (count($images) > 0) {
+		foreach ($images as $image) {
+			$image_url = $dir.$image;
+			if ( count( glob($image_url) ) ) {
+				$upload_dir = wp_upload_dir();
+				$image_data = file_get_contents($image_url);
+				$filename = basename($image_url);
+				if(wp_mkdir_p($upload_dir['path']))
+					$file = $upload_dir['path'] . '/' . $filename;
+				else
+					$file = $upload_dir['basedir'] . '/' . $filename;
+
+				if (file_put_contents($file, $image_data)) {
+					$wp_filetype = wp_check_filetype($filename, null );
+					$attachment = array(
+						'post_mime_type' => $wp_filetype['type'],
+						'post_title' => sanitize_file_name($filename),
+						'post_content' => '',
+						'post_status' => 'inherit'
+					);
+
+					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+					set_post_thumbnail( $post_id, $attach_id );
+
+				}
+			}
+
+		}
+	}
 
 }
 
