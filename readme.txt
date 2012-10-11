@@ -14,7 +14,7 @@ Import products into woocommerce.
 
 Import products into woocommerce. You can upload a zip, select you're own files or put them at a fixed place. An example csv is included.
 
-The import handles most common fields, but also images. You can even multiple images for one product in youre csv file!
+The import handles most common fields, but also images. You can even upload multiple images for one product in youre csv file!
 
 == Installation ==
 
