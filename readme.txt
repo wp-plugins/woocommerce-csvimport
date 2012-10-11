@@ -24,7 +24,7 @@ The import handles most common fields, but also images. You can even upload mult
 
 == Frequently Asked Questions ==
 1. What fields can i import?
-title,description,short_description,category,stock,price,regular_price,sales_prices,weight,length,width,height,sku,picture
+title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture
 
 2. Can i upload multiple pictures?
 In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
