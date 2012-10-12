@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.4 =
+* images can now also be from an URL. In the image fields you can add http://mydomain.com/image1.jpg. You can also mix them!
+
 = 0.3 =
 * add setting to handle image imports. You can now choose to delete current images before importing new ones or append the image to the already existing ones
 * add the possibiliy to have multiple images. In the column you can do image1.jpg|image2.jpg|image3.jpg

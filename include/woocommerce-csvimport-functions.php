@@ -144,7 +144,7 @@ function woocsv_import_products_from_csv ($file,$dir) {
 
 function woocsv_add_featured_image($post_id,$image_array,$dir) {
 	$options = get_option('csvimport-options');
-
+	$upload_dir = wp_upload_dir();
 	//delete images
 	if ($options['deleteimages'] == 1) {
 		//get the images
@@ -160,11 +160,14 @@ function woocsv_add_featured_image($post_id,$image_array,$dir) {
 	$images = explode('|', $image_array);
 	if (count($images) > 0) {
 		foreach ($images as $image) {
-			$image_url = $dir.$image;
-			if ( count( glob($image_url) ) ) {
-				$upload_dir = wp_upload_dir();
-				$image_data = file_get_contents($image_url);
-				$filename = basename($image_url);
+			if (woocsv_isvalidurl($image)) {
+				$image_data = file_get_contents($image); 
+			} else {
+				$image_data = file_get_contents($dir.$image);
+			}
+
+			if ( $image_data ) {
+				$filename = basename($image);
 				if(wp_mkdir_p($upload_dir['path']))
 					$file = $upload_dir['path'] . '/' . $filename;
 				else
@@ -187,7 +190,6 @@ function woocsv_add_featured_image($post_id,$image_array,$dir) {
 
 				}
 			}
-
 		}
 	}
 
@@ -234,4 +236,9 @@ function woocsv_handle_uploads ( $dir ){
 	} catch (MyException $e) {
 		return false;
 	}
+}
+
+function woocsv_isvalidurl($url)
+{
+return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 }
