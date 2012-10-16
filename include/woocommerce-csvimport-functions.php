@@ -86,20 +86,23 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	fclose($handle);
 
 	$content = $csvcontent;
-	//0 title,
-	//1 description,
-	//2 short_description,
-	//3 category
-	//4 stock,
-	//5 price,
-	//6 regular_price,
-	//7 sales_price,
-	//8 weight,
-	//9 length,
-	//10 width,
-	//11 height,
-	//12 sku,
-	//13 picture
+	/*
+	0 title,
+	1 description,
+	2 short_description,
+	3 category
+	4 stock,
+	5 price,
+	6 regular_price,
+	7 sales_price,
+	8 weight,
+	9 length,
+	10 width,
+	11 height,
+	12 sku,
+	13 picture
+	14 tags
+	*/
 
 	foreach ( $content as $data ) {
 		$num = count($data);
@@ -134,6 +137,12 @@ function woocsv_import_products_from_csv ($file,$dir) {
 
 		//link the product to the category
 		$category = wp_set_object_terms($post_id, $data[3] ,'product_cat');
+
+		//handle tags
+		if ( isset( $data[14] )){
+			$tags = explode('|', $data[14]);
+			wp_set_object_terms( $post_id, $tags, 'product_tag',true );			
+		}
 
 		//get picture if there is one and add it as featured image
 		if ( isset( $data[13] )) {

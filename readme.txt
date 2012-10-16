@@ -24,7 +24,7 @@ The import handles most common fields, but also images. You can even upload mult
 
 == Frequently Asked Questions ==
 1. What fields can i import?
-title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture
+title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture, tags
 
 2. Can i upload multiple pictures?
 In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
@@ -37,6 +37,12 @@ In the plugin folder there is and example csv.
 nothing special so far :D
 
 == Changelog ==
+
+= 0.4.1 =
+* tags can be imported now as well. You can add one or multiple. In the tag column of the import do like this: tag1|tag2|tag3. Now the product will have 3 tags.
+* added the example CSV to the settings page
+
+
 
 = 0.4 =
 * images can now also be from an URL. In the image fields you can add http://mydomain.com/image1.jpg. You can also mix them!
