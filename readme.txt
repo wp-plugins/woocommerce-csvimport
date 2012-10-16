@@ -30,7 +30,7 @@ title, description, short_description, category, stock,price, regular_price, sal
 In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
 
 3. Do you have an example csv?
-In the plugin folder there is and example csv.
+In the plugin folder there is and example csv. And on the settings page there is also an example as well!
 
 == Upgrade Notice ==
 
