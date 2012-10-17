@@ -26,6 +26,7 @@ $woocsv_options = array(
 function woocsv_check_options() {
 	global $woocsv_options;
 	$options = get_option('csvimport-options');
+	if (!$options) $options = $woocsv_options;
 	foreach( $options as $key => $value) {
 		$woocsv_options[$key]=$value;
 	}
@@ -58,7 +59,7 @@ global $woocsv_options;
 	//set default options
 	if (!get_option( 'csvimport-options' )) {
 		
-		update_option( 'csvimport-options', $options );
+		update_option( 'csvimport-options', $woocsv_options );
 	}
 }
 
