@@ -72,14 +72,15 @@ function woocsv_handle_fixed_import () {
 
 //import the products
 function woocsv_import_products_from_csv ($file,$dir) {
-	global $wpdb;
+	global $wpdb, $woocsv_options;
+	$fieldseperator = (isset($woocsv_options['fieldseperator'])) ?  $woocsv_options['fieldseperator'] : ',';
 	set_time_limit(0);
 	$row = 0;
 
 	if ($handle = fopen($file, 'r') == FALSE) throw new Exception(__('Can not open file!'));
 	$handle = fopen($file, 'r');
 	$csvcontent = '';
-	while (($line = fgetcsv($handle)) !== FALSE) {
+	while (($line = fgetcsv($handle,0,$woocsv_options['fieldseperator'])) !== FALSE) {
 		if ($row <> 0 ) $csvcontent[] = $line;
 		$row ++;
 	}
@@ -136,11 +137,28 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		update_post_meta( $post_id, '_visibility', 'visible' );
 
 		//link the product to the category
-		$category = wp_set_object_terms($post_id, $data[3] ,'product_cat');
+		$cats = explode ( '|', $data[3] );
+		foreach ($cats as $cat){
+			$cat_taxs = explode( '->', $cat );
+			$parent = false;
+			foreach ( $cat_taxs as $cat_tax)
+			{
+				$new_cat = term_exists( $cat_tax, 'product_cat' );
+				
+				if ( ! is_array( $new_cat ) ) {
+					$new_cat = wp_insert_term(	$cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
+				}
+				var_dump($new_cat);
+				wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
+				$parent = $new_cat['term_id'];
+			}
+			unset($parent);	
+		}
 
 		//handle tags
 		if ( isset( $data[14] )){
 			$tags = explode('|', $data[14]);
+			
 			wp_set_object_terms( $post_id, $tags, 'product_tag',true );			
 		}
 

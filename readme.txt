@@ -2,8 +2,8 @@
 Contributors: allaerd
 Tags: woocommerce, commerce,e-commerce, ecommerce, inventory, stock, products, import, csv, zip, multiple images, upload
 Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+Tested up to: 3.4.2
+Stable tag: 0.5
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -37,6 +37,11 @@ In the plugin folder there is and example csv. And on the settings page there is
 nothing special so far :D
 
 == Changelog ==
+
+= 0.5 =
+* categories can now be have children. In the category part you can now do like this: cat1->subcat1->subsubcat1|cat2->subcat2|cat3
+* added an option in the settings page to select a field seperator
+* made a function to check the options on init
 
 = 0.4.1 =
 * tags can be imported now as well. You can add one or multiple. In the tag column of the import do like this: tag1|tag2|tag3. Now the product will have 3 tags.
