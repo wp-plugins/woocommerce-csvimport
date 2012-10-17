@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.5.1 =
+* small bug fixes because of header already sent when updating plugin
+
 = 0.5 =
 * categories can now have children. In the category column you can now do like this: cat1->subcat1->subsubcat1|cat2->subcat2|cat3
 * added an option in the settings page to select a field seperator
