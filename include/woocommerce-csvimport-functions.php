@@ -104,7 +104,6 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	13 picture
 	14 tags
 	*/
-
 	foreach ( $content as $data ) {
 		$num = count($data);
 		$row ++;
@@ -148,7 +147,6 @@ function woocsv_import_products_from_csv ($file,$dir) {
 				if ( ! is_array( $new_cat ) ) {
 					$new_cat = wp_insert_term(	$cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
 				}
-				var_dump($new_cat);
 				wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
 				$parent = $new_cat['term_id'];
 			}
