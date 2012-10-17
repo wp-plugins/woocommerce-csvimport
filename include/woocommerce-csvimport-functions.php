@@ -143,7 +143,6 @@ function woocsv_import_products_from_csv ($file,$dir) {
 			foreach ( $cat_taxs as $cat_tax)
 			{
 				$new_cat = term_exists( $cat_tax, 'product_cat' );
-				
 				if ( ! is_array( $new_cat ) ) {
 					$new_cat = wp_insert_term(	$cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
 				}

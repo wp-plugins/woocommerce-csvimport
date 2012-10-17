@@ -2,7 +2,7 @@
 /*
 Plugin Name: Woocommerce CSV Import
 Description: Import CSV files in Woocommerce
-Version: 0.5
+Version: 0.5.1
 Author: Allaerd Mensonides
 License: GPLv2 or later
 Author URI: http://allaerd.org
@@ -58,7 +58,6 @@ global $woocsv_options;
 		woocsv_admin_notice ('Import directory not found! check if /uploads/csvimport is there!!!');
 	//set default options
 	if (!get_option( 'csvimport-options' )) {
-		
 		update_option( 'csvimport-options', $woocsv_options );
 	}
 }
