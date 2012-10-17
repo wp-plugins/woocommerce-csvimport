@@ -47,8 +47,6 @@ nothing special so far :D
 * tags can be imported now as well. You can add one or multiple. In the tag column of the import do like this: tag1|tag2|tag3. Now the product will have 3 tags.
 * added the example CSV to the settings page
 
-
-
 = 0.4 =
 * images can now also be from an URL. In the image fields you can add http://mydomain.com/image1.jpg. You can also mix them!
 
