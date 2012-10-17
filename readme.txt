@@ -39,7 +39,7 @@ nothing special so far :D
 == Changelog ==
 
 = 0.5 =
-* categories can now be have children. In the category part you can now do like this: cat1->subcat1->subsubcat1|cat2->subcat2|cat3
+* categories can now have children. In the category column you can now do like this: cat1->subcat1->subsubcat1|cat2->subcat2|cat3
 * added an option in the settings page to select a field seperator
 * made a function to check the options on init
 
