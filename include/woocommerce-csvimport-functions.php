@@ -148,6 +148,9 @@ function woocsv_import_products_from_csv ($file,$dir) {
 				}
 				wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
 				$parent = $new_cat['term_id'];
+				
+				//check out http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem
+				delete_option("product_cat_children");
 			}
 			unset($parent);	
 		}

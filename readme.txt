@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.5.2 =
+* Sub categories did not apear when importing, while they where there! This is related to http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem. Problem fixed!
+
 = 0.5.1 =
 * small bug fixes because of header already sent when updating plugin
 
