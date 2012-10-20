@@ -76,7 +76,8 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	$fieldseperator = (isset($woocsv_options['fieldseperator'])) ?  $woocsv_options['fieldseperator'] : ',';
 	set_time_limit(0);
 	$row = 0;
-
+	if ( $woocsv_options['auto_detect_line_endings'] == 1 ) 
+		ini_set('auto_detect_line_endings', true);
 	if ($handle = fopen($file, 'r') == FALSE) throw new Exception(__('Can not open file!'));
 	$handle = fopen($file, 'r');
 	$csvcontent = '';

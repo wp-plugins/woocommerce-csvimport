@@ -2,7 +2,7 @@
 /*
 Plugin Name: Woocommerce CSV Import
 Description: Import CSV files in Woocommerce
-Version: 0.5.3
+Version: 0.5.4
 Author: Allaerd Mensonides
 License: GPLv2 or later
 Author URI: http://allaerd.org
@@ -20,6 +20,7 @@ $woocsv_options = array(
 			'deleteimages' => 0,
 			'arrayseperator' => '|',
 			'fieldseperator' => ',',
+			'auto_detect_line_endings' => 0,
 			);
 			
 //check options and update them...but preserve the values

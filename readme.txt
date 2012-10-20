@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.5.4 =
+* added a setting to use auto_detect_line_endings to solve the problem that the import is seen as ONE big file :D
+
 = 0.5.3 =
 * added tax functionality. You can now import tax related stuff. You can now import tax status ( taxable, shipping, none ) and the tax class. The tax class is somehow a but strange. If you have a tax class called 10 RATE it is stored like 10-rate. 
 

@@ -101,6 +101,12 @@ class woocsv_import_admin {
 		$woocsv_options['fieldseperator'] = $_POST['fieldseperatorvalue'];
 		update_option( 'csvimport-options', $woocsv_options );
 	}	
+	
+	//hanlde form for auto detect line endings
+	if ( isset( $_REQUEST['auto_detect_line_endings']) && check_admin_referer('auto_detect_line_endings')) {
+		$woocsv_options['auto_detect_line_endings'] = $_POST['auto_detect_line_endings'];
+		update_option( 'csvimport-options', $woocsv_options );
+	}
 
 	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
 		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
@@ -133,10 +139,21 @@ class woocsv_import_admin {
 		<?php echo wp_nonce_field('delete_images_import'); ?>
 		</form>
 		
+		<h3>What to do with line endings?</h3>
+	    <p>If you have problems with the line endings. try the option "use auto select"</p>
+	    <form id="auto_detect_line_endings" name="auto_detect_line_endings" method="POST">
+	    <select id="auto_detect_line_endings" name ="auto_detect_line_endings">
+	    <option value=0 <?php if ($woocsv_options['auto_detect_line_endings'] == 0) echo 'selected'; ?> >use default</option>
+	    <option value=1 <?php if ($woocsv_options['auto_detect_line_endings'] == 1) echo 'selected'; ?> >use auto detect</option>
+	    </select>
+		<input name="" type="submit" value="Save">
+		<?php echo wp_nonce_field('auto_detect_line_endings'); ?>
+		</form>
+		
 		<h3>What to do with the field seperator?</h3>
 	    <p>You can choose what field seperator you want to use</p>
 	    <form id="fieldseperator" name="fieldseperator" method="POST">
-		<input type="text" name="fieldseperatorvalue" id="fieldseperatorvalue"" size="1" value="<?php echo $woocsv_options['fieldseperator']; ?>">
+		<input type="text" name="fieldseperatorvalue" id="fieldseperatorvalue" size="1" value="<?php echo $woocsv_options['fieldseperator']; ?>">
 		<input name="fieldseperator" type="submit" value="Save">
 		<?php echo wp_nonce_field('fieldseperator'); ?>
 		</form>
