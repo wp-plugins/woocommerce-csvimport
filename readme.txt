@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.5.3 =
+* added tax functionality. You can now import tax related stuff. You can now import tax status ( taxable, shipping, none ) and the tax class. The tax class is somehow a but strange. If you have a tax class called 10 RATE it is stored like 10-rate. 
+
 = 0.5.2 =
 * Sub categories did not apear when importing, while they where there! This is related to http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem. Problem fixed!
 

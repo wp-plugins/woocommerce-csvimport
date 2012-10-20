@@ -103,6 +103,8 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	12 sku,
 	13 picture
 	14 tags
+	15 tax status ( taxable, shipping, none )
+	16 tax class 
 	*/
 	foreach ( $content as $data ) {
 		$num = count($data);
@@ -134,7 +136,19 @@ function woocsv_import_products_from_csv ($file,$dir) {
 
 		update_post_meta( $post_id, '_manage_stock', 'yes' );
 		update_post_meta( $post_id, '_visibility', 'visible' );
-
+		
+		//tax status taxable, shipping, none
+		$tax_status = array ('taxable', 'shipping', 'none');
+		if ($data[15]) {
+			//check if the data is in the array
+			if (in_array($data[15], $tax_status))
+				update_post_meta( $post_id, '_tax_status', $data[15] );
+		}
+		
+		//tax class
+		if ($data[16])
+			update_post_meta( $post_id, '_tax_class', $data[16] );
+		
 		//link the product to the category
 		$cats = explode ( '|', $data[3] );
 		foreach ($cats as $cat){
