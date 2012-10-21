@@ -86,7 +86,12 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		$row ++;
 	}
 	fclose($handle);
-
+	
+	if (!$csvcontent) {
+		woocsv_admin_notice('No content in csv....check it (also the line endings!)');
+		exit;
+	}
+		
 	$content = $csvcontent;
 	/*
 	0 title,
@@ -125,15 +130,45 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		$post_id = wp_update_post($my_product);
 
 		//set the attributes etc
-		update_post_meta( $post_id, '_stock', $data[4] );
-		update_post_meta( $post_id, '_price', $data[5] );
-		update_post_meta( $post_id, '_regular_price', $data[6] );
-		update_post_meta( $post_id, '_sale_price', $data[7] );
-		update_post_meta( $post_id, '_weight', $data[8] );
-		update_post_meta( $post_id, '_length', $data[9] );
-		update_post_meta( $post_id, '_width', $data[10] );
-		update_post_meta( $post_id, '_height', $data[11] );
-		update_post_meta( $post_id, '_sku', $data[12] );
+		if ( $data[4] ) 
+			update_post_meta( $post_id, '_stock', $data[4] );
+
+		//set the price and replace , by . if set 
+		if ( $data[5] ) {
+			if ($woocsv_options['change_comma_to_dot'] == 1) $data[5] = str_replace(',', '.', $data[5]);
+			update_post_meta( $post_id, '_price', $data[5] );
+		}
+
+		if ( $data[6] ) {
+			if ($woocsv_options['change_comma_to_dot'] == 1) $data[6] = str_replace(',', '.', $data[6]);
+			update_post_meta( $post_id, '_regular_price', $data[6] );
+		}
+
+		if ( $data[7] ) {
+			if ($woocsv_options['change_comma_to_dot'] == 1) $data[7] = str_replace(',', '.', $data[7]);
+			update_post_meta( $post_id, '_sale_price', $data[7] );
+		}
+		//end prices
+
+		//set the weight
+		if ($data[8]) 
+			update_post_meta( $post_id, '_weight', $data[8] );
+
+		//set the length 
+		if ($data[9])
+			update_post_meta( $post_id, '_length', $data[9] );
+
+		//set the height 
+		if ( $data[10] )
+			update_post_meta( $post_id, '_width', $data[10] );
+
+		//set the height 
+		if ( $data[11] )
+			update_post_meta( $post_id, '_height', $data[11] );
+
+		//set the SKU
+		if ( $data[12] ) 
+			update_post_meta( $post_id, '_sku', $data[12] );
 
 		update_post_meta( $post_id, '_manage_stock', 'yes' );
 		update_post_meta( $post_id, '_visibility', 'visible' );
@@ -202,7 +237,7 @@ function woocsv_add_featured_image($post_id,$image_array,$dir) {
 	$images = explode('|', $image_array);
 	if (count($images) > 0) {
 		foreach ($images as $image) {
-			if (woocsv_isvalidurl($image)) {
+			if ( woocsv_isvalidurl( $image ) ) {
 				$image_data = file_get_contents($image); 
 			} else {
 				$image_data = file_get_contents($dir.$image);

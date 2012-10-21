@@ -38,6 +38,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.5.5 =
+* added setting to convert a comma to a dot in the prices
+
 = 0.5.4 =
 * added a setting to use auto_detect_line_endings to solve the problem that the import is seen as ONE big file :D
 

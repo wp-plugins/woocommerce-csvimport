@@ -107,6 +107,12 @@ class woocsv_import_admin {
 		$woocsv_options['auto_detect_line_endings'] = $_POST['auto_detect_line_endings'];
 		update_option( 'csvimport-options', $woocsv_options );
 	}
+	
+	//hanlde form for change comma to dot
+	if ( isset( $_REQUEST['change_comma_to_dot']) && check_admin_referer('change_comma_to_dot')) {
+		$woocsv_options['change_comma_to_dot'] = $_POST['change_comma_to_dot'];
+		update_option( 'csvimport-options', $woocsv_options );
+	}
 
 	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
 		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
@@ -158,9 +164,19 @@ class woocsv_import_admin {
 		<?php echo wp_nonce_field('fieldseperator'); ?>
 		</form>
 		
+		<h3>What to do with comma's that are in the price fields?</h3>
+	    <p>You can do nothing or convert them to dot's</p>
+	    <form id="change_comma_to_dot" name="change_comma_to_dot" method="POST">
+		<select id="change_comma_to_dot" name ="change_comma_to_dot">
+	    <option value=0 <?php if ($woocsv_options['change_comma_to_dot'] == 0) echo 'selected'; ?> >do nothing</option>
+	    <option value=1 <?php if ($woocsv_options['change_comma_to_dot'] == 1) echo 'selected'; ?> >replace to dot</option>
+	    </select>
+		<input name="" type="submit" value="Save">
+		<?php echo wp_nonce_field('change_comma_to_dot'); ?>
+		</form>
 		
 		
-				<h3>How does the CSV look like?</h3>
+		<h3>How does the CSV look like?</h3>
 		<p>It looks like this:</p>
 		<pre>
 		<code>
