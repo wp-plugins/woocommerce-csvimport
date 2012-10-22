@@ -48,7 +48,7 @@ class woocsv_import_admin {
 		<div id="tabs-1">
 			<?php
 			echo '<h3>'.__('Upload a zip file').'</h3>';
-			echo '<form id="handle_csv_import_zip" name="handle_csv_import_zip" action="" method="POST" enctype="multipart/form-data">';
+			echo '<form id="handle_csv_import_zip" name="handle_csv_import_zip" method="POST" enctype="multipart/form-data">';
 			echo '<input id="zip_file" name="zip_file" type="file" accept="application/zip"> <br />';
 			echo '<input name="handle_csv_import_zip" type="submit" value="start">';
 			echo wp_nonce_field('handle_csv_import_zip');
@@ -113,6 +113,12 @@ class woocsv_import_admin {
 		$woocsv_options['change_comma_to_dot'] = $_POST['change_comma_to_dot'];
 		update_option( 'csvimport-options', $woocsv_options );
 	}
+	
+	//hanlde form for experimental background loading
+	if ( isset( $_REQUEST['use_schedule_event']) && check_admin_referer('use_schedule_event')) {
+		$woocsv_options['use_schedule_event'] = $_POST['use_schedule_event'];
+		update_option( 'csvimport-options', $woocsv_options );
+	}
 
 	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
 		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
@@ -173,6 +179,17 @@ class woocsv_import_admin {
 	    </select>
 		<input name="" type="submit" value="Save">
 		<?php echo wp_nonce_field('change_comma_to_dot'); ?>
+		</form>
+		
+		<h3>EXPERIMENTAL!!!  Schedule you're import</h3>
+	    <p>If you have problems with session timeouts, 500 server errors, etc.....try this setting. It will execute you're import on the background.<br/>THIS IS AN EXPERIMENTAL SETTING!!!!!!! This will only work if you use the fixed import tab.</p>
+	    <form id="use_schedule_event" name="use_schedule_event" method="POST">
+		<select id="use_schedule_event" name ="use_schedule_event">
+	    <option value=0 <?php if ($woocsv_options['use_schedule_event'] == 0) echo 'selected'; ?> >use default</option>
+	    <option value=1 <?php if ($woocsv_options['use_schedule_event'] == 1) echo 'selected'; ?> >experimental background</option>
+	    </select>
+		<input name="" type="submit" value="Save">
+		<?php echo wp_nonce_field('use_schedule_event'); ?>
 		</form>
 		
 		
