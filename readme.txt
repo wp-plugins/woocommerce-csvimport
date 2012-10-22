@@ -16,6 +16,8 @@ Import products into woocommerce. You can upload a zip, select you're own files 
 
 The import handles most common fields, but also images. You can even upload multiple images for one product in youre csv file!
 
+With the new schedule option it can handle REALLY BIG files!
+
 == Installation ==
 
 1. Upload to the `/wp-content/plugins/` directory
@@ -37,6 +39,11 @@ In the plugin folder there is and example csv. And on the settings page there is
 nothing special so far :D
 
 == Changelog ==
+
+= 0.6.0 =
+* added experimental schedule function. Can be enabled for fixed imports in the settngs page.
+* solved some bugs related to empy fields in import
+* solved some bugs related to check if a file is there and if it is valid
 
 = 0.5.5 =
 * added setting to convert a comma to a dot in the prices

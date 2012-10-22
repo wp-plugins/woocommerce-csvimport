@@ -1,6 +1,6 @@
 <?php
 function wppcsv_handle_csv_import_random () {
-	//try {
+	try {
 	//create temp directory
 	$upload_dir = wp_upload_dir();
 	$dir = $upload_dir['basedir'] .'/csvimport/' . woocsv_random_string() . '/';
@@ -10,13 +10,13 @@ function wppcsv_handle_csv_import_random () {
 		throw new Exception(__('Er is iets mis gegaan bij het uploaden'));
 
 	$are_there_csv_files = glob($dir.'*.csv');
+	
 	if (count($are_there_csv_files) != 1) throw new Exception(__('Er is geen of meerdere csv bestand(en) gevonden'));
 	//run the magic
 	$result = woocsv_import_products_from_csv ($are_there_csv_files[0],$dir);
-
-	//}  catch (Exception $e) {
-	// woocsv_admin_notice ($e->getMessage());
-	//}
+	}  catch (Exception $e) {
+	 woocsv_admin_notice ('No CSV file is found');
+	}
 
 }
 
@@ -47,6 +47,7 @@ function woocsv_handle_zip_import () {
 }
 
 function woocsv_handle_fixed_import () {
+	global $woocsv_options;
 	//get the upload dir
 	$upload_dir = wp_upload_dir();
 	$dir = $upload_dir['basedir'] .$_POST['fixed_dir'] .'/';
@@ -62,17 +63,30 @@ function woocsv_handle_fixed_import () {
 		if (count($are_there_csv_files) != 1) throw new Exception(__('Er is geen of meerdere csv bestand(en) gevonden'));
 
 		//run the magic
-		$result = woocsv_import_products_from_csv ($are_there_csv_files[0],$dir);
-
-
+		if ($woocsv_options['use_schedule_event'] == 0) {
+			$result = woocsv_import_products_from_csv ($are_there_csv_files[0],$dir); 
+		} else {
+			wp_schedule_single_event(time()-1, 'woocsv_schedule_import',array ($are_there_csv_files,$dir));
+		}
 	} catch (Exception $e) {
 		woocsv_admin_notice ($e->getMessage());
 	}
 }
 
+
+function woocsv_schedule_import($are_there_csv_files,$dir) {
+	woocsv_import_products_from_csv ($are_there_csv_files[0],$dir);
+}
+
+add_action('woocsv_schedule_import','woocsv_schedule_import');
+
+
+
+
 //import the products
 function woocsv_import_products_from_csv ($file,$dir) {
-	global $wpdb, $woocsv_options;
+	global $wpdb; 
+	$woocsv_options = get_option('csvimport-options');
 	$fieldseperator = (isset($woocsv_options['fieldseperator'])) ?  $woocsv_options['fieldseperator'] : ',';
 	set_time_limit(0);
 	$row = 0;
@@ -120,54 +134,55 @@ function woocsv_import_products_from_csv ($file,$dir) {
 			'post_content' => $data[1],
 			'post_excerpt' => $data[2],
 			'post_status' => 'publish' ,
-			'post_type' => 'product'
+			'post_type' => 'product',
 		);
 		//check to see if the product already exists and add the ID if true
 		$product_id = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta
 				WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $data[12] ));
-		if ($product_id) $my_product['ID'] = $product_id;
+		($product_id) ? $my_product['ID'] = $product_id : $my_product['ID'] = false;
+
 		//now we create the product...ig the id is there is will update the product else it will make a new
 		$post_id = wp_update_post($my_product);
 
 		//set the attributes etc
-		if ( $data[4] ) 
+		if ( isset($data[4]) && $data[4] ) 
 			update_post_meta( $post_id, '_stock', $data[4] );
 
 		//set the price and replace , by . if set 
-		if ( $data[5] ) {
+		if (isset($data[5]) &&  $data[5] ) {
 			if ($woocsv_options['change_comma_to_dot'] == 1) $data[5] = str_replace(',', '.', $data[5]);
 			update_post_meta( $post_id, '_price', $data[5] );
 		}
 
-		if ( $data[6] ) {
+		if ( isset($data[6]) && $data[6] ) {
 			if ($woocsv_options['change_comma_to_dot'] == 1) $data[6] = str_replace(',', '.', $data[6]);
 			update_post_meta( $post_id, '_regular_price', $data[6] );
 		}
 
-		if ( $data[7] ) {
+		if (isset($data[7]) &&  $data[7] ) {
 			if ($woocsv_options['change_comma_to_dot'] == 1) $data[7] = str_replace(',', '.', $data[7]);
 			update_post_meta( $post_id, '_sale_price', $data[7] );
 		}
 		//end prices
 
 		//set the weight
-		if ($data[8]) 
+		if (isset($data[8]) && $data[8]) 
 			update_post_meta( $post_id, '_weight', $data[8] );
 
 		//set the length 
-		if ($data[9])
+		if (isset($data[9]) && $data[9])
 			update_post_meta( $post_id, '_length', $data[9] );
 
 		//set the height 
-		if ( $data[10] )
+		if (isset($data[10]) && $data[10] )
 			update_post_meta( $post_id, '_width', $data[10] );
 
 		//set the height 
-		if ( $data[11] )
+		if (isset($data[12]) && $data[11] )
 			update_post_meta( $post_id, '_height', $data[11] );
 
 		//set the SKU
-		if ( $data[12] ) 
+		if (isset($data[12]) && $data[12] ) 
 			update_post_meta( $post_id, '_sku', $data[12] );
 
 		update_post_meta( $post_id, '_manage_stock', 'yes' );
@@ -175,14 +190,14 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		
 		//tax status taxable, shipping, none
 		$tax_status = array ('taxable', 'shipping', 'none');
-		if ($data[15]) {
+		if (isset($data[15]) && $data[15]) {
 			//check if the data is in the array
 			if (in_array($data[15], $tax_status))
 				update_post_meta( $post_id, '_tax_status', $data[15] );
 		}
 		
 		//tax class
-		if ($data[16])
+		if (isset($data[16]) && $data[16])
 			update_post_meta( $post_id, '_tax_class', $data[16] );
 		
 		//link the product to the category
@@ -196,7 +211,7 @@ function woocsv_import_products_from_csv ($file,$dir) {
 				if ( ! is_array( $new_cat ) ) {
 					$new_cat = wp_insert_term(	$cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
 				}
-				wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
+				$x = wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
 				$parent = $new_cat['term_id'];
 				
 				//check out http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem
@@ -235,15 +250,15 @@ function woocsv_add_featured_image($post_id,$image_array,$dir) {
 	}
 
 	$images = explode('|', $image_array);
-	if (count($images) > 0) {
+	if (count($images) > 0 && $images[0] !== "" ) {
 		foreach ($images as $image) {
 			if ( woocsv_isvalidurl( $image ) ) {
-				$image_data = file_get_contents($image); 
+				$image_data = @file_get_contents($image); 
 			} else {
-				$image_data = file_get_contents($dir.$image);
+				$image_data = @file_get_contents($dir.$image);
 			}
 
-			if ( $image_data ) {
+			if ( $image_data !== false ) {
 				$filename = basename($image);
 				if(wp_mkdir_p($upload_dir['path']))
 					$file = $upload_dir['path'] . '/' . $filename;
