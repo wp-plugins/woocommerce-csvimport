@@ -56,9 +56,6 @@ function woocsv_js_and_css() {
 
 function woocsvimport_activate() {
 global $woocsv_options;
-	$upload_dir = wp_upload_dir();
-	if (!is_dir($upload_dir['basedir'].'/csvimport'))
-		woocsv_admin_notice ('Import directory not found! check if /uploads/csvimport is there!!!');
 	//set default options
 	if (!get_option( 'csvimport-options' )) {
 		update_option( 'csvimport-options', $woocsv_options );
