@@ -26,7 +26,7 @@ With the new schedule option it can handle REALLY BIG files!
 
 == Frequently Asked Questions ==
 1. What fields can i import?
-title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture, tags
+title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture, tags, tax status and tax class
 
 2. Can i upload multiple pictures?
 In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
@@ -34,11 +34,16 @@ In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle mul
 3. Do you have an example csv?
 In the plugin folder there is and example csv. And on the settings page there is also an example as well!
 
+4. The most important is the SKU! The SKU is used to make a product UNIQUE! Make sure you always have one!. It is also used to update the products when you import multiple times.
+
 == Upgrade Notice ==
 
 nothing special so far :D
 
 == Changelog ==
+
+= 0.6.1 =
+* fixed header already sent bug when activating
 
 = 0.6.0 =
 * added experimental schedule function. Can be enabled for fixed imports in the settngs page.
