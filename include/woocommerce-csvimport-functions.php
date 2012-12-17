@@ -142,7 +142,11 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		($product_id) ? $my_product['ID'] = $product_id : $my_product['ID'] = false;
 
 		//now we create the product...ig the id is there is will update the product else it will make a new
-		$post_id = wp_update_post($my_product);
+		// wordpress 3.5 not allows anymore to use wp_update_post to insert as well!
+		if (!$product_id)
+			$post_id = wp_insert_post($my_product);
+		else 		
+			$post_id = wp_update_post($my_product);
 
 		//set the attributes etc
 		if ( isset($data[4]) && $data[4] ) 

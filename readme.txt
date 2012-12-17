@@ -1,9 +1,9 @@
 === Woocommerce CSV importer ===
 Contributors: allaerd
 Tags: woocommerce, commerce,e-commerce, ecommerce, inventory, stock, products, import, csv, zip, multiple images, upload
-Requires at least: 3.0.1
-Tested up to: 3.4.2
-Stable tag: 0.5.1
+Requires at least: 3.4.0
+Tested up to: 3.5.0
+Stable tag: 0.7.0
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,9 @@ In the plugin folder there is and example csv. And on the settings page there is
 nothing special so far :D
 
 == Changelog ==
+
+= 0.7.0 =
+* fix for wordpress 3.5 wp_update_post does not insert anymore :-( 
 
 = 0.6.1 =
 * fixed header already sent bug when activating
