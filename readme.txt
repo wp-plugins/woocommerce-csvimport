@@ -42,6 +42,9 @@ nothing special so far :D
 
 == Changelog ==
 
+= 0.7.1 =
+* fix some bugs (thanks to fransberns)
+
 = 0.7.0 =
 * fix for wordpress 3.5 wp_update_post does not insert anymore :-( 
 
