@@ -128,7 +128,7 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	*/
 	foreach ( $content as $data ) {
 		$num = count($data);
-		$row ++;
+		//$row ++;
 		$my_product = array(
 			'post_title' => wp_strip_all_tags( $data[0] ),
 			'post_content' => $data[1],
@@ -177,12 +177,12 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		if (isset($data[9]) && $data[9])
 			update_post_meta( $post_id, '_length', $data[9] );
 
-		//set the height 
+		//set the width 
 		if (isset($data[10]) && $data[10] )
 			update_post_meta( $post_id, '_width', $data[10] );
 
 		//set the height 
-		if (isset($data[12]) && $data[11] )
+		if (isset($data[11]) && $data[11] )
 			update_post_meta( $post_id, '_height', $data[11] );
 
 		//set the SKU
@@ -204,7 +204,9 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		if (isset($data[16]) && $data[16])
 			update_post_meta( $post_id, '_tax_class', $data[16] );
 		
+		
 		//link the product to the category
+		if (isset($data[3]) && $data[3]) {
 		$cats = explode ( '|', $data[3] );
 		foreach ($cats as $cat){
 			$cat_taxs = explode( '->', $cat );
@@ -223,7 +225,7 @@ function woocsv_import_products_from_csv ($file,$dir) {
 			}
 			unset($parent);	
 		}
-
+		}
 		//handle tags
 		if ( isset( $data[14] )){
 			$tags = explode('|', $data[14]);
