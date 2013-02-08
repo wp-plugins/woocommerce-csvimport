@@ -7,7 +7,7 @@ class woocsv_import_admin {
 
 	public function admin_menu(){
 		//add main menu page
-		add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', array($this,'main_page'),'',58);
+		add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', array($this,'main_page'),'','58.12');
 		//add settings page
 		add_submenu_page( 'woocsv_import', 'Settings', 'Settings', 'manage_options', 'woocsv_settings', array($this,'settings'));
 	}
