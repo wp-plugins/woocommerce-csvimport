@@ -96,7 +96,11 @@ function woocsv_import_products_from_csv ($file,$dir) {
 	$handle = fopen($file, 'r');
 	$csvcontent = '';
 	while (($line = fgetcsv($handle,0,$woocsv_options['fieldseperator'])) !== FALSE) {
-		if ($row <> 0 ) $csvcontent[] = $line;
+		if ($row <> 0 ) {
+			$csvcontent[] = $line;
+		} else {
+			$header = $line;
+		}
 		$row ++;
 	}
 	fclose($handle);
@@ -236,6 +240,15 @@ function woocsv_import_products_from_csv ($file,$dir) {
 		//get picture if there is one and add it as featured image
 		if ( isset( $data[13] )) {
 			woocsv_add_featured_image ( $post_id , $data[13], $dir );
+		}
+		
+		//custom fields
+		foreach ($header as $key=>$value) {
+			if (substr($value,0,3) === 'cf_') {				
+				if (isset($data[$key])) {
+					update_post_meta( $post_id, substr($value,3), $data[$key]);
+				}
+			}
 		}
 	}
 }
