@@ -16,7 +16,7 @@ class woocsv_import_admin {
 	//some bassic checks
 	$upload_dir = wp_upload_dir();
 	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
-		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
+		woocsv_admin_notice ('Import directory not found or not writeable, check if it is there and has the right permissions');
 		
 	//handle zip uploads
 	if ( isset( $_REQUEST['handle_csv_import_zip']) && check_admin_referer('handle_csv_import_zip')) 
@@ -42,7 +42,7 @@ class woocsv_import_admin {
 	<div id="tabs">
 		<ul>
 			<li><a href="#tabs-1"><?php echo __('Select a zip file'); ?></a></li>
-			<li><a href="#tabs-2"><?php echo __('Select youre own files'); ?></a></li>
+			<li><a href="#tabs-2"><?php echo __('Select your own files'); ?></a></li>
 			<li><a href="#tabs-3"><?php echo __('You already uploaded the files');?></a></li>
 		</ul>
 		<div id="tabs-1">
