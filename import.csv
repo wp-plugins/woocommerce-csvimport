@@ -1,0 +1,4 @@
+title,description,short_description,category,stock,price,regular_price,sales_prices,weight,length,width,height,sku,picture,tags,tax_status,tax_class
+product1,very nice product,nice product,cat1->subcat1->subsubcat1|cat2,10,100,100,90,2,1,2,3,123456789,product1.jpg|product2.jpg|product3.jpg,tag1|tag2|tag3,taxable,zero-rate
+product2,very nice product two,nice product two,cat2,5,200,200,190,2,4,5,6,46345,product1.jpg,tag1|tag4,taxable,zero-rate
+product3,very nice product three with strange letters čšžýáí,nice product three,cat2,5,200,200,190,2,4,5,6,98765,http://www.allaerd.org/plugins/product4.jpg,tag2|tag5,taxable,zero-rate
