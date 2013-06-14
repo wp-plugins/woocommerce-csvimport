@@ -42,8 +42,11 @@ nothing special so far :D
 
 == Changelog ==
 
+= 1.0.0 =
+* Complete new importer. With ajax calls, custom headers and addons
+
 = 0.7.3 =
-* add option to import custom fieds. In your csv file add extra columns with the prefix cf_ . For example if you want the custom field color, you add cf_color in your header.
+* add option to import custom fields. In your csv file add extra columns with the prefix cf_ . For example if you want the custom field color, you add cf_color in your header.
 
 = 0.7.2 =
 * fix a small bug. Menu was not visisble because other plugin used the same menu order.
