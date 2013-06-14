@@ -1,213 +1,408 @@
 <?php
-class woocsv_import_admin {
+class woocsvImportAdmin extends woocsvImport
+{
 
-	public function __construct() {
-		add_action('admin_menu', array($this,'admin_menu'));
-	}
-
-	public function admin_menu(){
-		//add main menu page
-		add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', array($this,'main_page'),'','58.12');
-		//add settings page
-		add_submenu_page( 'woocsv_import', 'Settings', 'Settings', 'manage_options', 'woocsv_settings', array($this,'settings'));
-	}
-
-	public function main_page(){
-	//some bassic checks
-	$upload_dir = wp_upload_dir();
-	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
-		woocsv_admin_notice ('Import directory not found or not writeable, check if it is there and has the right permissions');
-		
-	//handle zip uploads
-	if ( isset( $_REQUEST['handle_csv_import_zip']) && check_admin_referer('handle_csv_import_zip')) 
-		woocsv_handle_zip_import();
-	//handle manual uploads
-	if ( isset( $_REQUEST['handle_csv_import_random']) && check_admin_referer('handle_csv_import_random')) 
-		wppcsv_handle_csv_import_random();
-	//handle fixed uploads
-	if ( isset( $_REQUEST['handle_csv_import_fixed']) && check_admin_referer('handle_csv_import_fixed')) 
-		woocsv_handle_fixed_import();
-
+	public $csvContent = array();
 	
-	//main page
-		echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>Import</h2></div>';
-     ?>
-	<script>
-	jQuery(document).ready(function() {
-		    jQuery( "#tabs" ).tabs();
-		  });
+	public $options = array();
 
-	</script>
-	<div id="tabs">
-		<ul>
-			<li><a href="#tabs-1"><?php echo __('Select a zip file'); ?></a></li>
-			<li><a href="#tabs-2"><?php echo __('Select your own files'); ?></a></li>
-			<li><a href="#tabs-3"><?php echo __('You already uploaded the files');?></a></li>
-		</ul>
-		<div id="tabs-1">
-			<?php
-			echo '<h3>'.__('Upload a zip file').'</h3>';
-			echo '<form id="handle_csv_import_zip" name="handle_csv_import_zip" method="POST" enctype="multipart/form-data">';
-			echo '<input id="zip_file" name="zip_file" type="file" accept="application/zip"> <br />';
-			echo '<input name="handle_csv_import_zip" type="submit" value="start">';
-			echo wp_nonce_field('handle_csv_import_zip');
-			echo '</form>';
-			?>
-		</div>
-		<div id="tabs-2">
-			<?php
-			echo '<h3>'.__('Upload selected files from').'</h3>';
-			echo '<p>'.__('We will only proccess csv and jpg files').'</p>';
-			echo '<form id="handle_csv_import_random" name="handle_csv_import_random" method="POST" enctype="multipart/form-data">';
-			echo __('jpg en csv:').'<input id="all_files" name="all_files[]" type="file" multiple> <br />';
-			echo '<input name="handle_csv_import_random" type="submit" value="start">';
-			echo wp_nonce_field('handle_csv_import_random');
-			echo '</form>';
-			?>
-		</div>
-		<div id="tabs-3">
-			<?php
-			echo '<h3>'.__('You already uploaded the files').'</h3>';
-			echo '<p>'.__('We expect it to be the in uploads/csvimport/fixed').'</p>';
-			echo '<form id="handle_csv_import_fixed" name="handle_csv_import_fixed" method="POST">';
-			echo __('Override fixed directory with uploads').'<input type="text" name="fixed_dir" value="/csvimport/fixed"><br />';
-			echo '<input name="handle_csv_import_fixed" type="submit" value="start">';
-			echo wp_nonce_field('handle_csv_import_fixed');
-			echo '</form>';
-			?>
-		</div>
-	</div>
+	public function __construct()
+	{
+		add_action('admin_menu', array($this, 'adminMenu'));
+		add_action('wp_ajax_saveHeader', array($this, 'saveHeader'));
+		add_action('wp_ajax_header', array($this, 'header'));
+		add_action('wp_ajax_saveSettings', array($this, 'saveSettings'));
+		add_action('wp_ajax_runImport', array($this, 'runImport'));		
+		ini_set('auto_detect_line_endings', true);
+		
+		
+		$this->options = get_option('woocsv-options');
+	}
+
+	public function adminMenu()
+	{
+		$page=add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', array($this, 'mainPage'), '', 58);
+		add_action('admin_print_scripts-' .$page, array(&$this, 'initJsCss'));
+		$this->handleRequest();
+	}
+
+	public function initJsCss()
+	{
+		wp_enqueue_script('jquery');
+		wp_register_script( 'woocsv-script', plugins_url( '/woocommerce-csvimport/js/woocsv.js' ) );
+		wp_enqueue_script( 'woocsv-script' );
+	}
+
+	public function handleRequest()
+	{
+		add_action('woocsv_admin_menu' , array(&$this, 'mainPageContent'));
+	}
+
+	public function mainPageContent()
+	{
+
+		$tab = (isset($_REQUEST['tab']))?$_REQUEST['tab']:'main';
+
+?>
+	<div id="icon-themes" class="icon32"><br></div>
+	<h2 class="nav-tab-wrapper">
+		<a href="<?php echo admin_url('admin.php?page=woocsv_import');?>"
+			class="nav-tab <?php echo ($tab==='main')?'nav-tab-active':''; ?>">Import</a>
+		<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=header');?>"
+			class="nav-tab <?php echo ($tab==='header')?'nav-tab-active':''; ?>">Header</a>
+		<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=settings');?>"
+			class="nav-tab <?php echo ($tab==='settings')?'nav-tab-active':''; ?>">Settings</a>
+		<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=info');?>"
+			class="nav-tab <?php echo ($tab==='info')?'nav-tab-active':''; ?>">Info</a>
+	</h2>
+
 	<?php
+		switch ($tab) {
+		case 'main':
+			$this->import();
+			break;
+		case 'header':
+			$this->header();
+			break;
+		case 'settings':
+			$this->settings();
+			break;
+		case 'info':
+			$this->info();
+			break;
+		default:
+			$this->import();
+		}
+
+
 	}
 
-	public function settings(){
-	global $woocsv_options;
-	$upload_dir = wp_upload_dir();
-
-	//handle form for creation of import dir
-	if ( isset( $_REQUEST['create_import_directory']) && check_admin_referer('create_import_directory')) {
-		mkdir($upload_dir['basedir'] .'/csvimport/');
-		mkdir($upload_dir['basedir'] .'/csvimport/fixed/');
-	}
-	//handle form for images
-	if ( isset( $_REQUEST['delete_images_import']) && check_admin_referer('delete_images_import')) {
-		$woocsv_options['deleteimages'] = $_POST['images_import'];
-		update_option( 'csvimport-options', $woocsv_options );
-	}
-	
-	//hanlde form for fields seperator
-	if ( isset( $_REQUEST['fieldseperator']) && check_admin_referer('fieldseperator')) {
-		$woocsv_options['fieldseperator'] = $_POST['fieldseperatorvalue'];
-		update_option( 'csvimport-options', $woocsv_options );
-	}	
-	
-	//hanlde form for auto detect line endings
-	if ( isset( $_REQUEST['auto_detect_line_endings']) && check_admin_referer('auto_detect_line_endings')) {
-		$woocsv_options['auto_detect_line_endings'] = $_POST['auto_detect_line_endings'];
-		update_option( 'csvimport-options', $woocsv_options );
-	}
-	
-	//hanlde form for change comma to dot
-	if ( isset( $_REQUEST['change_comma_to_dot']) && check_admin_referer('change_comma_to_dot')) {
-		$woocsv_options['change_comma_to_dot'] = $_POST['change_comma_to_dot'];
-		update_option( 'csvimport-options', $woocsv_options );
-	}
-	
-	//hanlde form for experimental background loading
-	if ( isset( $_REQUEST['use_schedule_event']) && check_admin_referer('use_schedule_event')) {
-		$woocsv_options['use_schedule_event'] = $_POST['use_schedule_event'];
-		update_option( 'csvimport-options', $woocsv_options );
+	public function mainPage()
+	{
+		echo '<div class="wrap">';
+		echo '<div id="woocsv_warning" style="display:none" class="updated"></div>';
+		$this->mainPageContent();
+		echo '</div>';
 	}
 
-	if (!is_writable($upload_dir['basedir'].'/csvimport/'))
-		woocsv_admin_notice ('Import directory niet gevonden of hij is niet schrijfbaar. check of /uploads/csvimport bestaat');
-		
-		
-		echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>Settings</h2></div>';
-        
-        //import directory
-        echo '<h3>Create import directory</h3>';                        
-        if (!is_dir($upload_dir['basedir'] .'/csvimport/')) {
-			echo '<form id="create_import_directory" name="create_import_directory" method="POST">';
-			echo '<input name="create_import_directory" type="submit" value="create">';
-			echo wp_nonce_field('create_import_directory');
-			echo '</form>';
-	        
-        }
-	    echo '<p>Directory is there!</p>';
-	  
-	    //what to do with images
-	    ?>
-	    <h3>What to do with images?</h3>
-	    <p>You can choose if you want to keep the existing images or delete them before adding the new ones.</p>
-	    <form id="delete_images_import" name="delete_images_import" method="POST">
-	    <select id="images_import" name ="images_import">
-	    <option value=0 <?php if ($woocsv_options['deleteimages'] == 0) echo 'selected'; ?> >append images to product</option>
-	    <option value=1 <?php if ($woocsv_options['deleteimages'] == 1) echo 'selected'; ?> >remove all images before uploading new ones</option>
-	    </select>
-		<input name="delete_images_import" type="submit" value="Save">
-		<?php echo wp_nonce_field('delete_images_import'); ?>
+	public function addons() {
+		do_action('woocsv_add_addons_to_menu');
+	}
+
+	public function settings()
+	{
+		global $woocsvImport;
+?>
+		<form id="settingsForm" method="POST">
+		<h2>Import settings</h2>
+		<table class="form-table">
+		<tbody>
+			<tr>
+				<th scope="row" class="titledesc"><label for="seperator">Seperator</label></th>
+				<td>
+					<select id="seperator" name="seperator">
+						<option value=";" <?php if ($woocsvImport->options['seperator']==';') echo 'selected';?> >;</option>
+						<option value="," <?php if ($woocsvImport->options['seperator']==',') echo 'selected';?> >,</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row" class="titledesc"><label for="skipfirstline">Skip the first line</label></th>
+				<td>
+					<select id="skipfirstline" name="skipfirstline">
+						<option value="0" <?php if ($woocsvImport->options['skipfirstline']=='0') echo 'selected';?>>No</option>
+						<option value="1" <?php if ($woocsvImport->options['skipfirstline']=='1') echo 'selected';?>>Yes</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row" class="titledesc"><label for="blocksize">How many rows to process in one call</label></th>
+				<td>
+					<select id="blocksize" name="blocksize">
+						<option value="1" <?php if ($woocsvImport->options['blocksize']=='1') echo 'selected';?>>1</option>
+						<option value="25" <?php if ($woocsvImport->options['blocksize']=='50') echo 'selected';?>>50</option>
+						<option value="75" <?php if ($woocsvImport->options['blocksize']=='75') echo 'selected';?>>75</option>
+						<option value="100" <?php if ($woocsvImport->options['blocksize']=='100') echo 'selected';?>>100</option>
+						<option value="250" <?php if ($woocsvImport->options['blocksize']=='250') echo 'selected';?>>250</option>
+					</select>
+				</td>
+			</tr>
+			<!--
+			<tr>
+				<th scope="row" class="titledesc"><label for="language">Language</label></th>
+				<td>
+					<select id="language" name="language">
+					<?php foreach ($this->language as $key=>$value) :?>
+						<option value="<?php echo $key ?>" <?php if ($woocsvImport->options['language']==$key) echo 'selected';?>><?php echo $value?></option>
+					<?php endforeach;?>
+					</select>
+				</td>
+			</tr>
+			-->
+			<tr>
+				<td><button type="submit" class="button-primary">Save</button></td>
+			</tr>
+		</tbody>
+		</table>
+
+		<input type="hidden" name="action" value="saveSettings">
+		</fieldset>
 		</form>
-		
-		<h3>What to do with line endings?</h3>
-	    <p>If you have problems with the line endings. try the option "use auto select"</p>
-	    <form id="auto_detect_line_endings" name="auto_detect_line_endings" method="POST">
-	    <select id="auto_detect_line_endings" name ="auto_detect_line_endings">
-	    <option value=0 <?php if ($woocsv_options['auto_detect_line_endings'] == 0) echo 'selected'; ?> >use default</option>
-	    <option value=1 <?php if ($woocsv_options['auto_detect_line_endings'] == 1) echo 'selected'; ?> >use auto detect</option>
-	    </select>
-		<input name="" type="submit" value="Save">
-		<?php echo wp_nonce_field('auto_detect_line_endings'); ?>
-		</form>
-		
-		<h3>What to do with the field seperator?</h3>
-	    <p>You can choose what field seperator you want to use</p>
-	    <form id="fieldseperator" name="fieldseperator" method="POST">
-		<input type="text" name="fieldseperatorvalue" id="fieldseperatorvalue" size="1" value="<?php echo $woocsv_options['fieldseperator']; ?>">
-		<input name="fieldseperator" type="submit" value="Save">
-		<?php echo wp_nonce_field('fieldseperator'); ?>
-		</form>
-		
-		<h3>What to do with comma's that are in the price fields?</h3>
-	    <p>You can do nothing or convert them to dot's</p>
-	    <form id="change_comma_to_dot" name="change_comma_to_dot" method="POST">
-		<select id="change_comma_to_dot" name ="change_comma_to_dot">
-	    <option value=0 <?php if ($woocsv_options['change_comma_to_dot'] == 0) echo 'selected'; ?> >do nothing</option>
-	    <option value=1 <?php if ($woocsv_options['change_comma_to_dot'] == 1) echo 'selected'; ?> >replace to dot</option>
-	    </select>
-		<input name="" type="submit" value="Save">
-		<?php echo wp_nonce_field('change_comma_to_dot'); ?>
-		</form>
-		
-		<h3>EXPERIMENTAL!!!  Schedule you're import</h3>
-	    <p>If you have problems with session timeouts, 500 server errors, etc.....try this setting. It will execute you're import on the background.<br/>THIS IS AN EXPERIMENTAL SETTING!!!!!!! This will only work if you use the fixed import tab.</p>
-	    <form id="use_schedule_event" name="use_schedule_event" method="POST">
-		<select id="use_schedule_event" name ="use_schedule_event">
-	    <option value=0 <?php if ($woocsv_options['use_schedule_event'] == 0) echo 'selected'; ?> >use default</option>
-	    <option value=1 <?php if ($woocsv_options['use_schedule_event'] == 1) echo 'selected'; ?> >experimental background</option>
-	    </select>
-		<input name="" type="submit" value="Save">
-		<?php echo wp_nonce_field('use_schedule_event'); ?>
-		</form>
-		
-		
-		<h3>How does the CSV look like?</h3>
-		<p>It looks like this:</p>
-		<pre>
-		<code>
-title,description,short_description,category,stock,price,regular_price,sales_prices,weight,length,width,height,sku,picture,tags,tax_status,tax_class
-product1,very nice product,nice product,cat1->subcat1->subsubcat1|cat2,10,100,100,90,2,1,2,3,123456789,product1.jpg|product2.jpg|product3.jpg,tag1|tag2|tag3,taxable,zero-rate
-product2,very nice product two,nice product two,cat2,5,200,200,190,2,4,5,6,46345,product1.jpg,tag1|tag4,taxable,zero-rate
-product3,very nice product three with strange letters čšžýáí,nice product three,cat2,5,200,200,190,2,4,5,6,98765,http://www.allaerd.org/plugins/product4.jpg,tag2|tag5,taxable,zero-rate
-</code>
-		</pre>
 		<?php
-    }
-    
+	}
+
+	public function saveSettings()
+	{
+		$options = array (
+			'seperator'=> $_POST['seperator'] ,
+			'skipfirstline'=> $_POST['skipfirstline'],
+			'blocksize' => $_POST['blocksize'],
+			//'language' => $_POST['language'],
+		);
+		update_option('woocsv-options', $options);
+		wp_die('<p>settings saved!</p>');
+	}
+
+	public function header()
+	{
+		global $woocsvImport;
+		$file = (!empty($_FILES['file']['name']))?$_FILES['file']['name']:false;
+		if (!$file) {
+?>
+
+	<form id="headerFileForm" enctype="multipart/form-data" method="POST">
+		<h2>Set your header</h2>
+		<table class="form-table">
+		<tbody>
+			<tr>
+				<th scope="row" class="titledesc"><label for="file">Select your csv file</label></th>
+				<td><input id="file" name="file" type="file" accept="text/csv" /></td>
+			</tr>
+			<tr>
+				<td><button type="submit" class="button-primary">Load</button></td>
+				<td></td>
+			</tr>
+		</tbody>
+		</table>
+	</form>
+	<?php
+			$currentHeader = get_option('woocsv-header');
+
+			if ($currentHeader) {
+				echo '<hr><h2>Your current header is:</h2>';
+				foreach ($currentHeader as $field) {
+					echo '<span class="badge">'.$field.';</span>';
+				}
+			}
+
+		} else {
+
+			$handle = fopen($_FILES['file']['tmp_name'], 'r');
+			$row = 1;
+			$csvcontent = '';
+			while ($row < 4) {
+				$csvcontent[] = @fgetcsv($handle, 0, $woocsvImport->options['seperator']);
+				$row ++;
+			}
+
+			if (count($csvcontent[0]) == 1 ) {
+				echo 'I think you have the wrong seperator';
+				return;
+			}
+			fclose($handle);
+			$length = (count($csvcontent[0]) >= count($woocsvImport->fields))?count($csvcontent[0]):count($woocsvImport->fields);
+
+?>
+
+		<form id="headerForm">
+		<input type="hidden" name="action" value="saveHeader">
+		<table class="widefat">
+		<thead>
+			<tr>
+				<th>Fields</th>
+				<th>Row 1</th>
+				<th>Row 2</th>
+				<th>Row 3</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php for ($i = 0; $i <= $length-1; $i++) : ?>
+		<tr>
+			<td>
+			<select name="fields_<?php echo $i;?>">
+				<option value="skip">Skip</option>
+				<?php foreach ($woocsvImport->fields as $field) :?>
+					<option value="<?php echo $field;?>" <?php if ( $field === $csvcontent[0][$i] ) echo 'selected'; ?>>
+						<?php echo $field;?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+			</td>
+			<td><?php if (isset($csvcontent[0][$i])) echo $csvcontent[0][$i];?></td>
+			<td><?php if (isset($csvcontent[1][$i])) echo $csvcontent[1][$i];?></td>
+			<td><?php if (isset($csvcontent[2][$i])) echo $csvcontent[2][$i];?></td>
+		</tr>
+		<?php endfor;?>
+		<tfoot>
+			<tr><th><button type="submit" class="button-primary button-hero">Safe</button></th></tr>
+		</tfoot>
+		</tbody>
+		</table>
+		</form>
+		<?php
+		}
+	}
+
+	public function saveHeader()
+	{
+		$headerOrder = '';
+
+		foreach ($_POST as $key=>$value) {
+			if (preg_match("/fields_[0-9]/", $key, $matches)) {
+				$headerOrder[] = $value;
+			}
+		}
+		update_option('woocsv-header', $headerOrder);
+		wp_die('<p>header saved!</p>');
+	}
+
+	
+
+	public function runImport() {
+			wp_suspend_cache_invalidation ( true );
+			$postData = $_POST;
+			
+			for ($i = 1; $i <= $this->options['blocksize']; $i++) {
+			$product = new woocsvImportProduct;
+			if ($postData['currentrow'] >= $postData['rows'] ) {
+				die('done');
+			}
+			
+			if (!$this->csvContent) {
+				$handle = fopen($postData['filename'], 'r');
+				while (($line = fgetcsv($handle, 0, $this->options['seperator'])) !== FALSE) 
+				{
+					$this->csvContent[] = $line;
+				}
+			}
+			
+			if ($this->options['skipfirstline'] ==  1 && $postData['currentrow'] == 0) {
+				$postData['currentrow'] ++;
+				echo json_encode($postData);
+				die();
+			}			
+			
+			
+			if ($this->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0) 
+					$product->rawData = $this->csvContent[0];
+
+			if ($postData['currentrow'] > 0)
+				$product->rawData = $this->csvContent[$postData['currentrow']];
+			
+			$postData['currentrow'] ++;
+			
+			//create a new product
+			
+			
+			//parse all data
+			$product->fillInData();
+
+			//save it
+			$id = $product->save();
+			
+			$postData['ID'] = $id;
+			$postData['sku'] = $product->meta['_sku'];
+			
+			}
+			wp_suspend_cache_invalidation ( false );
+			echo json_encode($postData);
+			die();
+	}
+
+	function handleUpload ($from_location,$filename) {
+		$upload_dir = wp_upload_dir();
+		$to_location = $upload_dir['basedir'] .'/csvimport/'.$filename;
+		if (@move_uploaded_file($from_location, $to_location)) {
+			return $to_location;
+		} else return false;
+	}
+
+	public function import()
+	{
+		if (isset($_REQUEST['action']) && $_FILES['file']['type'] == 'text/csv' && check_admin_referer('woocsv','uploadCsvFile')) {
+			$options = get_option('woocsv-options');
+			$filename = $this->handleUpload($_FILES['file']['tmp_name'],$_FILES['file']['name']);
+			if (!$filename) wp_die('<h2>Could not upload file.</h2>');
+			$handle = fopen($filename, 'r');
+			$row = 0;
+			$csvcontent = '';
+			while (($line = fgetcsv($handle, 0, $options['seperator'])) !== FALSE) {
+				$csvcontent[] = $line;
+				$row ++;
+			}
+			?>
+			<h2>Import preview</h2>
+			<div id="importPreview">
+			<table class="widefat">
+				<thead>
+			<tr>
+				<th><?php echo implode('</th><th>', $csvcontent[0]);?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			for ($i=1;$i<=5 && $i<=$row-1;$i++) {
+				echo '<tr><td>'.implode('</td><td>',$csvcontent[$i]).'</td></tr>';
+			}
+			?>
+		</tbody>
+		</table>
+			<form id="runImportForm"  method="POST">
+				<input type="hidden" name="currentrow" value="0" />
+				<input type="hidden" name="rows" value="<?php echo $row;?>" />
+				<input type="hidden" name="filename" value="<?php echo $filename; ?>" />
+				<input type="hidden" name="action" value="runImport">
+				<button type="submit" class="button button-primary button-hero">Run</button>
+			</form>
+		</div>
+			<div class="postbox" style="margin:1em 0 0 0;">
+				<div class="inside">
+					<div id="import_log">
+					</textarea>
+				</div>
+			</div>
+			<?php
+		} else {
+		?>
+			<h2>Let's import!</h2>
+			<form name="loadPreview" method="POST" enctype="multipart/form-data">
+			<fieldset>
+				<input id="file" name="file" type="file" accept="text/csv" />
+				<input type="hidden" name="action" value="runImport">
+				<?php wp_nonce_field('woocsv','uploadCsvFile'); ?>
+				<br/><br/>
+				<button type="submit" class="button button-primary button-hero">Load</button>
+			</fieldset>
+			</form>
+		<?php
+		}
+	}
+
+
+	public function info()
+	{
+		?>
+		<h2>Support the free plugin</h2>
+		Want to support the free version. Please consider a donation :-)
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick" />
+<input type="hidden" name="hosted_button_id" value="PGEBD4BHNH6W4" />
+<input type="image" alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif" />
+<img alt="" src="https://www.paypalobjects.com/nl_NL/i/scr/pixel.gif" width="1" height="1" border="0" /></form>
+		<p>
+			There are also a few add-ons you can use. You van find them at <a href="http://allaerd.org">allaerd.org</a>	
+		</p>
+		<?php
+	}
 
 
 }
-
-$csv_import_admin = new woocsv_import_admin();
