@@ -14,8 +14,6 @@ parent: woocommerce
 include dirname( __FILE__ ) . '/include/woocommerce-csvimport-admin.php';
 include dirname( __FILE__ ) . '/include/woocommerce-csvimport-product.php';
 
-add_action( 'add_meta_boxes', 'myplugin_add_custom_box' );
-
 class woocsvImport
 {
 	public $options;
@@ -238,6 +236,8 @@ class woocsvImport
 	}
 	
 	public function showWarning() {
+	global $current_screen;
+	 if ($current_screen->parent_base == 'woocsv_import' )
 		echo '<div class="error"><p>'.$this->message.'</p></div>';
 	}
 
