@@ -22,11 +22,10 @@ With the new schedule option it can handle REALLY BIG files!
 
 1. Upload to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. create a directoy in uploads called csvimport/fixed
 
 == Frequently Asked Questions ==
 1. What fields can i import?
-title, description, short_description, category, stock,price, regular_price, sales_prices, weight, length, width, height, sku, picture, tags, tax status and tax class
+Almost all
 
 2. Can i upload multiple pictures?
 In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
@@ -41,6 +40,10 @@ In the plugin folder there is and example csv. And on the settings page there is
 nothing special so far :D
 
 == Changelog ==
+
+= 1.0.1 =
+* Admin warnigns only show on plugin page 
+* get rid of some fucntions 
 
 = 1.0.0 =
 * Complete new importer. With ajax calls, custom headers and addons to import custom fields and attributes.

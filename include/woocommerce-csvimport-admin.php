@@ -389,8 +389,7 @@ class woocsvImportAdmin extends woocsvImport
 	}
 
 
-	public function info()
-	{
+	public function info() {
 		?>
 		<h2>Support the free plugin</h2>
 		Want to support the free version. Please consider a donation :-)
