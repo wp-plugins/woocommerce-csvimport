@@ -57,6 +57,7 @@ What fields can i import?
 
 == Screenshots ==
 
+1. Create a header
 
 == Installation ==
 
