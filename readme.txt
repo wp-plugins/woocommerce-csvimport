@@ -1,6 +1,6 @@
 === Woocommerce CSV importer ===
-Contributors: allaerd
-Tags: woocommerce, commerce,e-commerce, ecommerce, inventory, stock, products, import, csv, zip, multiple images, upload
+Contributors: Allaerd
+Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.4.0
 Tested up to: 3.5.0
 Stable tag: 0.7.3
@@ -12,47 +12,71 @@ Import products into woocommerce.
 
 == Description ==
 
-Import products into woocommerce. You can upload a zip, select you're own files or put them at a fixed place. An example csv is included.
+Import and manage products in Woocommerce. Upload your csv file, create your custom header and import. The import plugin uses AJAX to import the products. No more timeouts on big files. This plugin is tested to 10.000+ products.
 
-The import handles most common fields, but also images. You can even upload multiple images for one product in youre csv file!
+First step is to look at your settings, select the right field separator and take a look at the other settings as well. 
 
-With the new schedule option it can handle REALLY BIG files!
+When you have done that it's time to link the right columns to the right fields. Upload your CSV file in the header section and link them. If the plugin can map the fields it will do so automatically.
+
+When you have mapped the right fields, it is time to import!
+
+= There are a few nice add-ons: =
+
+1. Import custom fields
+2. Import attributes
+3. Import variable products
+
+You can find them at [allaerd.org](http://allaerd.org/shop)
+
+== Frequently Asked Questions == 
+
+What fields can i import?
+*. sku
+*. post_status
+* post_title
+* post_content
+* post_excerpt
+* category
+* tags
+* stock
+* price
+* regular_price
+* sales_price
+* weight
+* length
+* width
+* height
+* images
+* tax_status
+* tax_class
+* stock_status
+* visibility
+* backorder
+* featured
 
 == Installation ==
 
-1. Upload to the `/wp-content/plugins/` directory
+1. Upload to the plugins directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-== Frequently Asked Questions ==
-1. What fields can i import?
-Almost all
-
-2. Can i upload multiple pictures?
-In the picture fields you can put image1.jpg|image2.jpg|image3.jpg to handle multiple files
-
-3. Do you have an example csv?
-In the plugin folder there is and example csv. And on the settings page there is also an example as well!
-
-4. The most important is the SKU! The SKU is used to make a product UNIQUE! Make sure you always have one!. It is also used to update the products when you import multiple times.
 
 == Upgrade Notice ==
 
-nothing special so far :D
-
+Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
 = 1.0.1 =
-* Admin warnigns only show on plugin page 
-* get rid of some fucntions 
+* Admin warnings only show on plugin page 
+* get rid of some old functions 
 
 = 1.0.0 =
-* Complete new importer. With ajax calls, custom headers and addons to import custom fields and attributes.
+* Complete new importer. With AJAX calls, custom headers and add-ons to import custom fields and attributes.
 
 = 0.7.3 =
-* add option to import custom fields. In your csv file add extra columns with the prefix cf_ . For example if you want the custom field color, you add cf_color in your header.
+* add option to import custom fields. In your CSV file add extra columns with the prefix cf_ . For example if you want the custom field colour, you add cf_colour in your header.
 
 = 0.7.2 =
-* fix a small bug. Menu was not visisble because other plugin used the same menu order.
+* fix a small bug. Menu was not visible because other plugin used the same menu order.
 
 = 0.7.1 =
 * fix some bugs (thanks to fransberns)
@@ -64,8 +88,8 @@ nothing special so far :D
 * fixed header already sent bug when activating
 
 = 0.6.0 =
-* added experimental schedule function. Can be enabled for fixed imports in the settngs page.
-* solved some bugs related to empy fields in import
+* added experimental schedule function. Can be enabled for fixed imports in the settings page.
+* solved some bugs related to empty fields in import
 * solved some bugs related to check if a file is there and if it is valid
 
 = 0.5.5 =
@@ -78,7 +102,7 @@ nothing special so far :D
 * added tax functionality. You can now import tax related stuff. You can now import tax status ( taxable, shipping, none ) and the tax class. The tax class is somehow a but strange. If you have a tax class called 10 RATE it is stored like 10-rate. 
 
 = 0.5.2 =
-* Sub categories did not apear when importing, while they where there! This is related to http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem. Problem fixed!
+* Sub categories did not appear when importing, while they where there! This is related to http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem. Problem fixed!
 
 = 0.5.1 =
 * small bug fixes because of header already sent when updating plugin
@@ -97,7 +121,7 @@ nothing special so far :D
 
 = 0.3 =
 * add setting to handle image imports. You can now choose to delete current images before importing new ones or append the image to the already existing ones
-* add the possibiliy to have multiple images. In the column you can do image1.jpg|image2.jpg|image3.jpg
+* add the possibility to have multiple images. In the column you can do image1.jpg|image2.jpg|image3.jpg
 * solved some minor bugs added some additional checks
 
 = 0.2 =
