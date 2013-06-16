@@ -51,6 +51,7 @@ class woocsvImport
 		20 => 'visibility',
 		21 => 'backorders',
 		22 => 'featured',
+		23 => 'manage_stock',
 	);
 	
 	public $language = array (
