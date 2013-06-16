@@ -54,13 +54,13 @@ What fields can i import?
 * visibility
 * backorder
 * featured
+* manage_stock (yes/no)
 
 == Screenshots ==
 
 1. Upload a CSV and create a header
 2. Link the fields to the right column
 3. Upload the CSV, look at the preview and run your import!
-
 
 == Installation ==
 
@@ -72,7 +72,9 @@ What fields can i import?
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
-
+= 1.0.2 =
+* add manage stock to field list
+ 
 = 1.0.1 =
 * Admin warnings only show on plugin page 
 * get rid of some old functions 
