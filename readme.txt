@@ -57,7 +57,10 @@ What fields can i import?
 
 == Screenshots ==
 
-1. Create a header
+1. Upload a CSV and create a header
+2. Link the fields to the right column
+3. Upload the CSV, look at the preview and run your import!
+
 
 == Installation ==
 
