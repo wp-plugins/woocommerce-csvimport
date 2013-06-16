@@ -31,8 +31,9 @@ You can find them at [allaerd.org](http://allaerd.org/shop)
 == Frequently Asked Questions == 
 
 What fields can i import?
-*. sku
-*. post_status
+
+* sku
+* post_status
 * post_title
 * post_content
 * post_excerpt
@@ -53,6 +54,9 @@ What fields can i import?
 * visibility
 * backorder
 * featured
+
+== Screenshots ==
+
 
 == Installation ==
 
