@@ -45,6 +45,7 @@ jQuery(document).ready(function()
 			scrollTop: 0
 		}, 'slow');
 		jQuery('#importPreview').slideUp();
+		jQuery('#import_log').prepend('<p>Starting.....</p>');
 		var formData = jQuery(this).serialize();
 		doAjaxImport(formData);
 		e.preventDefault();
@@ -64,7 +65,7 @@ function doAjaxImport(formData)
 			if (data != 'done')
 			{
 				var newFormData = jQuery.parseJSON(data);
-				jQuery('#import_log').prepend('<p> row: ' + newFormData.currentrow + ' / ' + newFormData.rows + ' product id = ' + newFormData.ID + ' product sku = ' + newFormData.sku + '</p>');
+				jQuery('#import_log').prepend('<p> row: ' + newFormData.currentrow + ' / ' + newFormData.rows + '</p>');
 				doAjaxImport(newFormData);
 			}
 			else
