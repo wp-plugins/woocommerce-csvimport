@@ -154,6 +154,7 @@ class woocsvImportProduct
 		foreach ($this->images as $image_array) {
 			$upload_dir = wp_upload_dir();
 			$images = explode('|', $image_array);
+			$gallery = array();
 			if (count($images) > 0 && $images[0] !== "" ) {
 				foreach ($images as $image) {
 					$filename = basename($image);
@@ -166,6 +167,7 @@ class woocsvImportProduct
 
 					if ( $already_there->amount > 0 ) {
 						set_post_thumbnail( $post_id, $already_there->maxid );
+						$gallery[] = $already_there->maxid;
 						continue;
 					}
 
@@ -191,6 +193,7 @@ class woocsvImportProduct
 							);
 
 							$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+							$gallery[] = $attach_id;
 							require_once ABSPATH . 'wp-admin/includes/image.php';
 							$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 							wp_update_attachment_metadata( $attach_id, $attach_data );
@@ -199,6 +202,10 @@ class woocsvImportProduct
 					}
 				}
 			}
+		}
+		if(!empty($gallery)) {
+			$meta_value = implode(',', $gallery);
+			update_post_meta($post_id, '_product_image_gallery', $meta_value);
 		}
 	}
 
