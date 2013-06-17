@@ -28,9 +28,13 @@ When you have mapped the right fields, it is time to import!
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
-== Frequently Asked Questions == 
+== Frequently Asked Questions ==
 
-What fields can i import?
+= I get the error "something went wrong"=
+
+Change the number of rows to process at the same time. You might have run into timeouts!
+
+= What fields can i import? =
 
 * sku
 * post_status
@@ -72,6 +76,9 @@ What fields can i import?
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+= 1.0.3 =
+* add more options for number of rows to process in the same run to prevent timeouts
+
 = 1.0.2 =
 * add manage stock to field list
  
