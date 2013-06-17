@@ -24,7 +24,7 @@ class woocsvImport
 		'seperator'=>',',
 		'skipfirstline'=>1,
 		'upload_dir' => '/csvimport/',
-		'blocksize' => 100,
+		'blocksize' => 10,
 		'language' => 'EN',
 		);
 
