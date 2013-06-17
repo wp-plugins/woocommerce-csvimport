@@ -120,7 +120,9 @@ class woocsvImportAdmin extends woocsvImport
 				<td>
 					<select id="blocksize" name="blocksize">
 						<option value="1" <?php if ($woocsvImport->options['blocksize']=='1') echo 'selected';?>>1</option>
-						<option value="25" <?php if ($woocsvImport->options['blocksize']=='50') echo 'selected';?>>50</option>
+						<option value="10" <?php if ($woocsvImport->options['blocksize']=='10') echo 'selected';?>>10</option>
+						<option value="25" <?php if ($woocsvImport->options['blocksize']=='25') echo 'selected';?>>25</option>
+						<option value="50" <?php if ($woocsvImport->options['blocksize']=='50') echo 'selected';?>>50</option>
 						<option value="75" <?php if ($woocsvImport->options['blocksize']=='75') echo 'selected';?>>75</option>
 						<option value="100" <?php if ($woocsvImport->options['blocksize']=='100') echo 'selected';?>>100</option>
 						<option value="250" <?php if ($woocsvImport->options['blocksize']=='250') echo 'selected';?>>250</option>
