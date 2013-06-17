@@ -76,6 +76,10 @@ Change the number of rows to process at the same time. You might have run into t
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+
+= 1.0.4 =
+* added support for product gallery. the last image is set as thumbnail! (thanks to Fahad Mahmood) 
+
 = 1.0.3 =
 * add more options for number of rows to process in the same run to prevent timeouts
 
@@ -87,7 +91,7 @@ Version 1.+  is very different. Please make a backup first before you upgrade! Y
 * get rid of some old functions 
 
 = 1.0.0 =
-* Complete new importer. With AJAX calls, custom headers and add-ons to import custom fields and attributes.
+* Complete new importer. With AJAX calls, custom headers and add-ons to import custom fields and attributes. BAckup your old stuff before trying this one!
 
 = 0.7.3 =
 * add option to import custom fields. In your CSV file add extra columns with the prefix cf_ . For example if you want the custom field colour, you add cf_colour in your header.
