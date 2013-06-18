@@ -331,7 +331,7 @@ class woocsvImportAdmin extends woocsvImport
 
 	public function import()
 	{
-		if (isset($_REQUEST['action']) && $_FILES['file']['type'] == 'text/csv' && check_admin_referer('woocsv','uploadCsvFile')) {
+			if (isset($_REQUEST['action']) && ($_FILES['file']['type'] == 'text/csv' || $_FILES['file']['type'] == 'application/vnd.ms-excel')   && 		check_admin_referer('woocsv','uploadCsvFile')) {
 			$options = get_option('woocsv-options');
 			$filename = $this->handleUpload($_FILES['file']['tmp_name'],$_FILES['file']['name']);
 			if (!$filename) wp_die('<h2>Could not upload file.</h2>');
