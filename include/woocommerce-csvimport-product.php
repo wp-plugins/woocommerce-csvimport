@@ -157,13 +157,18 @@ class woocsvImportProduct
 			$gallery = array();
 			if (count($images) > 0 && $images[0] !== "" ) {
 				foreach ($images as $image) {
-					$filename = basename($image);
+					$filename = $post_title =  basename($image);
+					$info = pathinfo($image);
+					if (!empty($info['extension'])) {
+						$post_title =  basename($filename,'.'.$info['extension']);
+						
+					}
 
 					//check if the filename is not already uploaded...and if yes, pick th latest
 					$already_there= $wpdb->get_row(
 						$wpdb->prepare(
 							"SELECT max(ID) as maxid ,COUNT(*) as amount FROM $wpdb->posts where post_type='attachment' and post_title=%s",
-							$filename));
+							$post_title));
 
 					if ( $already_there->amount > 0 ) {
 						set_post_thumbnail( $post_id, $already_there->maxid );
