@@ -77,6 +77,10 @@ Change the number of rows to process at the same time. You might have run into t
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.0.5 =
+* solved bug with upload not working on windows machine!
+* beteer handling images 
+
 = 1.0.4 =
 * added support for product gallery. the last image is set as thumbnail! (thanks to Fahad Mahmood) 
 
