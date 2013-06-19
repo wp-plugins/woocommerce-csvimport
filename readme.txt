@@ -60,6 +60,10 @@ Change the number of rows to process at the same time. You might have run into t
 * featured
 * manage_stock (yes/no)
 
+= Max number of files in a directory = 
+
+If you have a FAT32 filesystem you can run into troubles when you are trying to put more than 15.000+ files in a directory!
+
 == Screenshots ==
 
 1. Upload a CSV and create a header
@@ -79,7 +83,7 @@ Version 1.+  is very different. Please make a backup first before you upgrade! Y
 
 = 1.0.5 =
 * solved bug with upload not working on windows machine!
-* beteer handling images 
+* better handling images 
 
 = 1.0.4 =
 * added support for product gallery. the last image is set as thumbnail! (thanks to Fahad Mahmood) 
