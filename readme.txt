@@ -30,6 +30,10 @@ You can find them at [allaerd.org](http://allaerd.org/shop)
 
 == Frequently Asked Questions ==
 
+= How do i use it =
+
+[youtube http://www.youtube.com/watch?v=RBLyoGCqa0Y]
+
 = I get the error "something went wrong" =
 
 Change the number of rows to process at the same time. You might have run into timeouts!
