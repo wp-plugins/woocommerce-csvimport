@@ -115,6 +115,17 @@ class woocsvImportAdmin extends woocsvImport
 					</select>
 				</td>
 			</tr>
+			<!--
+			<tr>
+				<th scope="row" class="titledesc"><label for="add_to_gallery">Add images to the product gallery</label></th>
+				<td>
+					<select id="add_to_gallery" name="add_to_gallery">
+						<option value="0" <?php if ($woocsvImport->options['add_to_gallery']=='0') echo 'selected';?>>No</option>
+						<option value="1" <?php if ($woocsvImport->options['add_to_gallery']=='1') echo 'selected';?>>Yes</option>
+					</select>
+				</td>
+			</tr>
+			-->
 			<tr>
 				<th scope="row" class="titledesc"><label for="blocksize">How many rows to process in one call</label></th>
 				<td>
@@ -159,6 +170,7 @@ class woocsvImportAdmin extends woocsvImport
 			'seperator'=> $_POST['seperator'] ,
 			'skipfirstline'=> $_POST['skipfirstline'],
 			'blocksize' => $_POST['blocksize'],
+			'add_to_gallery' => $_POST['add_to_gallery'],
 			//'language' => $_POST['language'],
 		);
 		update_option('woocsv-options', $options);
@@ -317,6 +329,7 @@ class woocsvImportAdmin extends woocsvImport
 			
 			}
 			wp_suspend_cache_invalidation ( false );
+			ob_get_clean();
 			echo json_encode($postData);
 			die();
 	}
