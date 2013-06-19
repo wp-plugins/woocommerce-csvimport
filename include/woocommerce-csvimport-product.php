@@ -84,6 +84,8 @@ class woocsvImportProduct
 		$post_id = wp_insert_post($this->body);
 		$this->body['ID'] = $post_id;
 		
+		//product type
+		wp_set_object_terms( $post_id, 'simple' , 'product_type', true );
 		
 		//save the meta
 		foreach ($this->meta as $key=>$value) {
@@ -119,7 +121,6 @@ class woocsvImportProduct
 	{
 		//check out http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem
 		delete_option("product_cat_children");
-
 		foreach ($this->categories as $category) {
 			$cats = explode( '|', $category );
 			foreach ($cats as $cat) {
