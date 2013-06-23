@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce CSV Import
 #Plugin URI: http://allaerd.org/woocommerce-csv-importer/
 Description: Import CSV files in Woocommerce
-Version: 1.0.7
+Version: 1.0.8
 Author: Allaerd Mensonides
 License: GPLv2 or later
 Author URI: http://allaerd.org
