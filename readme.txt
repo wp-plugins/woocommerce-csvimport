@@ -85,6 +85,9 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.0.8 =
+* fixed a possible bug when saving settings
+
 = 1.0.7 =
 * add the product by default to simple term
 
