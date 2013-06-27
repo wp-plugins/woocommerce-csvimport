@@ -1,4 +1,4 @@
-=== Woocommerce CSV importer ===
+v=== Woocommerce CSV importer ===
 Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.4.0
@@ -84,6 +84,15 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+
+= 1.1.0 =
+This is a mayor revision of the plugin. A lot of small and larger bugfixes are done! Thanks to some help from the forum and code suggestions. 
+
+* ajaxurl in javascript instead of hard link to ajax page (solves the problem that a header or the settings could not be saved!)
+* added option to enable/disable adding images to gallery
+* bug fixes for IE
+* header and settings are not saved anymore through ajax.
+
 
 = 1.0.8 =
 * fixed a possible bug when saving settings

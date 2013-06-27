@@ -1,63 +1,11 @@
 var d = Date.now();
-jQuery(document).ready(function()
-{
-	jQuery('#headerForm').submit(function(e)
-	{
-		var saveHeaderForm = jQuery(this).serialize();
-		jQuery.ajax(
-		{
-			type: "POST",
-			url: "/wp-admin/admin-ajax.php",
-			data: saveHeaderForm,
-			success: function(data)
-			{
-				jQuery('html, body').animate(
-				{
-					scrollTop: 0
-				}, 'slow');
-				jQuery('#woocsv_warning').html(data);
-				jQuery("#woocsv_warning").slideDown().delay(2500).slideUp();
-			}
-		});
-		e.preventDefault();
-	});
-	
-	jQuery('#settingsForm').submit(function(e)
-	{
-		var formData = jQuery(this).serialize();
-		jQuery.ajax(
-		{
-			type: "POST",
-			url: "/wp-admin/admin-ajax.php",
-			data: formData,
-			success: function(data)
-			{
-				jQuery('#woocsv_warning').html(data);
-				jQuery("#woocsv_warning").slideDown().delay(2500).slideUp();
-			}
-		});
-		e.preventDefault();
-	});
-	jQuery('#runImportForm').submit(function(e)
-	{
-		jQuery('html, body').animate(
-		{
-			scrollTop: 0
-		}, 'slow');
-		jQuery('#importPreview').slideUp();
-		jQuery('#import_log').prepend('<p>Starting.....</p>');
-		var formData = jQuery(this).serialize();
-		doAjaxImport(formData);
-		e.preventDefault();
-	});
-});
 
 function doAjaxImport(formData)
 {
 	jQuery.ajax(
 	{
 		type: "POST",
-		url: "/wp-admin/admin-ajax.php",
+		url: ajaxurl,
 		data: formData,
 		success: function(data)
 		{ 
@@ -80,3 +28,19 @@ function doAjaxImport(formData)
 		}
 	});
 }
+
+jQuery(document).ready(function()
+{
+	jQuery('#runImportForm').submit(function(e)
+	{
+		jQuery('html, body').animate(
+		{
+			scrollTop: 0
+		}, 'slow');
+		jQuery('#importPreview').slideUp();
+		jQuery('#import_log').prepend('<p>Starting.....</p>');
+		var formData = jQuery(this).serialize();
+		doAjaxImport(formData);
+		e.preventDefault();
+	});
+});

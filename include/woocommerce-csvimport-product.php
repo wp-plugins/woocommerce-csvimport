@@ -62,6 +62,7 @@ class woocsvImportProduct
 		'_download_expiry' => '',
 		'_product_url' => '',
 		'_button_text' => '',
+		'total_sales'=>0,
 	);
 
 	public function __construct()
@@ -97,7 +98,7 @@ class woocsvImportProduct
 			$this->saveTags($post_id);
 
 		//save categories
-		if ($this->categories)
+		if (!empty($this->categories))
 			$this->saveCategories($post_id);
 
 		if ($this->images)
@@ -118,7 +119,7 @@ class woocsvImportProduct
 	}
 
 	public function saveCategories($post_id)
-	{
+	{	
 		//check out http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem
 		delete_option("product_cat_children");
 		foreach ($this->categories as $category) {
@@ -131,13 +132,14 @@ class woocsvImportProduct
 					if ( ! is_array( $new_cat ) ) {
 						$new_cat = wp_insert_term( $cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
 					}
-					$parent = $new_cat['term_id'];
-
-
+					if (!is_wp_error($new_cat)) {
+						$parent = $new_cat['term_id'];
+					}
 				}
-
-
-				wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
+				if (!is_wp_error($new_cat)) {
+					wp_set_object_terms( $post_id, null , 'product_cat');
+					wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
+				}
 
 			}
 		}
@@ -209,7 +211,9 @@ class woocsvImportProduct
 				}
 			}
 		}
-		if(!empty($gallery)) {
+		$options = get_option('woocsv-options');
+		
+		if(!empty($gallery) && $options['add_to_gallery'] == 1) {
 			$meta_value = implode(',', $gallery);
 			update_post_meta($post_id, '_product_image_gallery', $meta_value);
 		}
