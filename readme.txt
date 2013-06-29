@@ -85,6 +85,10 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.1.1 =
+* fixed a bug with the sales price. Was a typo in the fields. Now sales prices should be imported correct!
+* If you have no SKU or leave it empty, a new post is created. but remember no SKU no updating!!!! 
+
 = 1.1.0 =
 This is a mayor revision of the plugin. A lot of small and larger bugfixes are done! Thanks to some help from the forum and code suggestions. 
 
@@ -92,7 +96,6 @@ This is a mayor revision of the plugin. A lot of small and larger bugfixes are d
 * added option to enable/disable adding images to gallery
 * bug fixes for IE
 * header and settings are not saved anymore through ajax.
-
 
 = 1.0.8 =
 * fixed a possible bug when saving settings
