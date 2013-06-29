@@ -225,7 +225,8 @@ class woocsvImportProduct
 		//check if the product already exists by cheking it's sku
 		if (in_array('sku', $this->header)) {
 			$sku = $this->rawData[array_search('sku', $this->header)];
-			$id = $this->getProductId($sku);
+			if (!empty($sku))
+				$id = $this->getProductId($sku);
 		}
 
 		//fill in the product body
