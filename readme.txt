@@ -85,6 +85,9 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.1.2 =
+* fixed a bug with the multiple categories. Now all categories are linked to the product instead of the last
+
 = 1.1.1 =
 * fixed a bug with the sales price. Was a typo in the fields. Now sales prices should be imported correct!
 * If you have no SKU or leave it empty, a new post is created. but remember no SKU no updating!!!! 
