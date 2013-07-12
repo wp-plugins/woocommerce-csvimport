@@ -137,7 +137,7 @@ class woocsvImportProduct
 					}
 				}
 				if (!is_wp_error($new_cat)) {
-					wp_set_object_terms( $post_id, null , 'product_cat');
+					//wp_set_object_terms( $post_id, null , 'product_cat');
 					wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
 				}
 
