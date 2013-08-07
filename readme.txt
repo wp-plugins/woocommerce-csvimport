@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.4.0
 Tested up to: 3.5.0
-Stable tag: 0.7.3
+Stable tag: 1.1.2
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,14 +25,15 @@ When you have mapped the right fields, it is time to import!
 1. Import custom fields
 2. Import attributes
 3. Import variable products
+4. Import all other fields and product types
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
-== Frequently Asked Questions ==
-
-= How do i use it =
+== How do i use it ==
 
 [youtube http://www.youtube.com/watch?v=RBLyoGCqa0Y]
+
+== Frequently Asked Questions ==
 
 = I get the error "something went wrong" =
 
@@ -84,6 +85,10 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+
+= 1.1.3 =
+* small bug fixes. 
+* added some actions hooks
 
 = 1.1.2 =
 * fixed a bug with the multiple categories. Now all categories are linked to the product instead of the last

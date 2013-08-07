@@ -19,6 +19,7 @@ class woocsvHandleImport
 			$product = new woocsvImportProduct;
 			if ($postData['currentrow'] >= $postData['rows'] ) {
 				ob_get_clean();
+				do_action('woocsv_after_import_finished');
 				die('done');
 			}
 
@@ -62,6 +63,7 @@ class woocsvHandleImport
 			$postData['sku'] = $product->meta['_sku'];
 			$postData['product'] = $product;
 		}
+		
 		delete_option('category_children');
 		wp_suspend_cache_invalidation ( false );
 		ob_get_clean();
@@ -71,9 +73,11 @@ class woocsvHandleImport
 
 	function handleUpload($from_location, $filename)
 	{
+		do_action('woocsv_before_csv_upload',$filename);
 		$upload_dir = wp_upload_dir();
 		$to_location = $upload_dir['basedir'] .'/csvimport/'.$filename;
 		if (@move_uploaded_file($from_location, $to_location)) {
+			do_action('woocsv_after_csv_upload',$filename);
 			return $to_location;
 		} else return false;
 	}

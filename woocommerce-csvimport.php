@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce CSV Import
 #Plugin URI: http://allaerd.org/woocommerce-csv-importer/
 Description: Import CSV files in Woocommerce
-Version: 1.1.2
+Version: 1.1.3
 Author: Allaerd Mensonides
 License: GPLv2 or later
 Author URI: http://allaerd.org
@@ -51,12 +51,11 @@ class woocsvImport
 		16 =>'images',
 		17 =>'tax_status',
 		18 =>'tax_class' ,
-		19 => 'stock_status',
-		20 => 'visibility',
-		21 => 'backorders',
-		22 => 'featured',
-		23 => 'manage_stock',
-		//24 => 'featured_image'
+		19 => 'stock_status', 	// instock, outofstock
+		20 => 'visibility', 	// yes,no
+		21 => 'backorders', 	// yes,no
+		22 => 'featured',		// yes,no
+		23 => 'manage_stock', 	// yes/no
 	);
 
 	public function __construct()
@@ -141,5 +140,14 @@ if (class_exists('woocsvAttributes')) {
 if (class_exists('woocsvVariableProducts')) {
 	$woocsvVariableProducts = new woocsvVariableProducts();
 }
+
+if (class_exists('woocsvPremium')) {
+	$woocsvPremium = new woocsvPremium();
+}
+
+if (class_exists('woocsvWPML')) {
+	$woocsvWPML = new woocsvWPML();
+}
+
 
 ?>

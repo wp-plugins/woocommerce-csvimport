@@ -57,7 +57,7 @@ class woocsvImportAdmin extends woocsvImport
 		</h2>
 		<div id="woocsvSidebar" class="welcome-panel" style="width:20%;float:right;">
 			<h2>Add-ons</h2>
-			<p>If you want to import custom fields, attributes and variable products check out <a href="http://allaerd.org">allaerd.org</a></p>
+			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out <a href="http://allaerd.org">allaerd.org</a></p><p>There are add-ons for every type!</p>
 		</div>
 		<div style="width:70%;float:left;">
 		<?php
