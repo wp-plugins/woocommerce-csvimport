@@ -2,15 +2,23 @@
 class woocsvImportProduct
 {
 
+	public $new = true;
+	
 	public $header = array();
 
-	public $tags =array();
+	public $tags = array();
 
 	public $categories = array();
 
 	public $images = array();
-	
+
 	public $rawData = array();
+
+	public $shippingClass = '';
+
+	public $featuredImage = '';
+
+	public $productGallery = '';
 
 	public $body = array(
 		'ID' => '',
@@ -65,47 +73,84 @@ class woocsvImportProduct
 		'total_sales'=>0,
 	);
 
-	public function __construct()
+	public function mergeProduct($id)
 	{
-		$this->header = get_option('woocsv-header');
+
+		//get post data and store it
+		$post = get_post( $id, 'ARRAY_A' );
+		$this->body = $post;
+
+		//get meta data and store it
+		$post_meta = get_metadata('post', $id, '', true );
+		foreach ($post_meta as $key=>$value) {
+			$this->meta[$key] = maybe_unserialize($value[0]);
+		}
+
 	}
 
 	public function getProductId($sku)
 	{
 		global $wpdb;
-		$product_id = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta a, $wpdb->posts b
+		$product_id = $wpdb->get_var($wpdb->prepare("SELECT max(post_id) FROM $wpdb->postmeta a, $wpdb->posts b
 				WHERE a.post_id= b.id and meta_key='_sku' AND meta_value='%s' LIMIT 1", $sku ));
-		return ($product_id) ? $product['ID'] = $product_id : $my_product['ID'] = false;
+
+		if ($product_id) $product['ID'] = $product_id; else $product_id = false;
+		return $product_id;
 	}
 
 	public function save()
 	{
-		do_action( 'woocsv_before_save',$this );
 		//save the post
 		$post_id = wp_insert_post($this->body);
 		$this->body['ID'] = $post_id;
-		
+
+		do_action( 'woocsv_before_save', $this);
+
+		do_action( 'woocsv_product_after_body_save');
+
 		//product type
-		wp_set_object_terms( $post_id, 'simple' , 'product_type', true );
-		
+		if ($this->new = true)
+			wp_set_object_terms( $post_id, 'simple' , 'product_type', true );
+
+		do_action( 'woocsv_product_before_meta_save');
+
 		//save the meta
 		foreach ($this->meta as $key=>$value) {
 			update_post_meta($post_id, $key, $value);
 		}
 
+		do_action( 'woocsv_product_before_tags_save');
+
 		//save tags
 		if ($this->tags)
 			$this->saveTags($post_id);
+
+		do_action( 'woocsv_product_before_categorie_save');
 
 		//save categories
 		if (!empty($this->categories))
 			$this->saveCategories($post_id);
 
+		do_action( 'woocsv_product_before_images_save');
+		/* ! --DEPRECIATED */
 		if ($this->images)
 			$this->saveImages($post_id);
-			
-		do_action( 'woocsv_after_save',$this );
-		
+
+
+		if ($this->featuredImage)
+			$this->saveFeaturedImage();
+
+		if ($this->productGallery)
+			$this->saveProductGallery();
+
+		do_action( 'woocsv_product_before_shipping_save');
+		if ($this->shippingClass) {
+			$this->saveShippingClass();
+		}
+
+
+		do_action( 'woocsv_after_save', $this);
+
 		return $post_id;
 	}
 
@@ -118,36 +163,141 @@ class woocsvImportProduct
 		}
 	}
 
-	public function saveCategories($post_id)
-	{	
+	public function saveShippingClass()
+	{
+		$term = term_exists($this->shippingClass, 'product_shipping_class');
+
+		if (!$term) {
+			$term=wp_insert_term( $this->shippingClass, 'product_shipping_class');
+			wp_set_object_terms( $this->body['ID'], array ((int)$term['term_id']) , 'product_shipping_class' );
+		}
+
+		wp_set_object_terms( $this->body['ID'], array ( (int)$term['term_id'] ) , 'product_shipping_class' );
+
+	}
+
+	public function saveCategories()
+	{
+		global $woocsvImport;
+
 		//check out http://wordpress.stackexchange.com/questions/24498/wp-insert-term-parent-child-problem
 		delete_option("product_cat_children");
+
+		//clear currrent
+		wp_set_object_terms( $this->body['ID'], null, 'product_cat' );
+
 		foreach ($this->categories as $category) {
 			$cats = explode( '|', $category );
 			foreach ($cats as $cat) {
 				$cat_taxs = explode( '->', $cat );
 				$parent = false;
 				foreach ( $cat_taxs as $cat_tax) {
-					$new_cat = term_exists( $cat_tax, 'product_cat' );
+					$new_cat = term_exists( $cat_tax, 'product_cat', $parent );
 					if ( ! is_array( $new_cat ) ) {
 						$new_cat = wp_insert_term( $cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
 					}
 					if (!is_wp_error($new_cat)) {
 						$parent = $new_cat['term_id'];
 					}
-				}
-				if (!is_wp_error($new_cat)) {
-					//wp_set_object_terms( $post_id, null , 'product_cat');
-					wp_set_object_terms( $post_id, (int)$new_cat['term_id'], 'product_cat', true );
+
+					if (!is_wp_error($new_cat) && $woocsvImport->options['add_to_categories'] == 1)
+						wp_set_object_terms( $this->body['ID'], (int)$new_cat['term_id'], 'product_cat', true );
 				}
 
+				if (!is_wp_error($new_cat) && $woocsvImport->options['add_to_categories'] == 0)
+					wp_set_object_terms( $this->body['ID'], (int)$new_cat['term_id'], 'product_cat', true );
 			}
 		}
 	}
-
-	public function isValidUrl($url)
+	
+	public function saveFeaturedImage()
 	{
-		return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+		$imageID = false;
+		
+		if ($this->isValidUrl($this->featuredImage)) {
+			$imageID = $this->saveImageWithUrl($this->featuredImage);
+		} else {
+			$imageID = $this->saveImageWithName($this->featuredImage);
+		}
+		
+		if ($imageID)
+			set_post_thumbnail( $this->body['ID'], $imageID );	
+	}
+
+	public function saveProductGallery()
+	{	
+		$images = explode('|', $this->productGallery);
+		$gallery = false;
+		foreach ($images as $image) {
+			
+			if ($this->isValidUrl($image)) {
+				$imageID = $this->saveImageWithUrl($image);
+			} else {
+				$imageID = $this->saveImageWithName($image);
+			}
+			$gallery[] = $imageID;
+		}
+
+		if ($gallery) {
+			$meta_value = implode(',', $gallery);
+			update_post_meta($this->body['ID'], '_product_image_gallery', $meta_value);
+		}
+		
+	}
+
+	public function saveImageWithUrl($image)
+	{
+		$attach_id = false;
+		$upload_dir = wp_upload_dir();
+		//get data
+		$image_data = @file_get_contents($image);
+
+		//get the filename
+		$filename = basename($image);
+
+		//create the dir or take the current one
+		if (wp_mkdir_p($upload_dir['path'])) {
+			$file = $upload_dir['path'] . '/' . $filename;
+		} else {
+			$file = $upload_dir['basedir'] . '/' . $filename;
+		}
+
+		if (file_put_contents($file, $image_data)) {
+			$wp_filetype = wp_check_filetype($filename, null );
+			$attachment = array(
+				'post_mime_type' => $wp_filetype['type'],
+				'post_title' => sanitize_file_name($filename),
+				'post_content' => '',
+				'post_status' => 'inherit'
+			);
+
+			$attach_id = wp_insert_attachment( $attachment, $file); //,$this->body['ID'] );
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+			wp_update_attachment_metadata( $attach_id, $attach_data );	
+		}
+		return $attach_id;
+	}
+
+	public function saveImageWithName($image)
+	{
+		global $wpdb;
+		$upload_dir = wp_upload_dir();
+
+		//check if the filename is not already uploaded...and if yes, pick th latest
+		$already_there= $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT max(ID) as maxid ,COUNT(*) as amount 
+					FROM $wpdb->posts 
+					where post_type='attachment' 
+					and guid like %s or post_title like %s",
+					'%'.$image.'%','%'.$image.'%'
+				));
+				
+		if ( $already_there->amount > 0 ) {
+			return $already_there->maxid;
+		} else return false;
+		
 	}
 
 	public function saveImages($post_id)
@@ -163,8 +313,8 @@ class woocsvImportProduct
 					$filename = $post_title =  basename($image);
 					$info = pathinfo($image);
 					if (!empty($info['extension'])) {
-						$post_title =  basename($filename,'.'.$info['extension']);
-						
+						$post_title =  basename($filename, '.'.$info['extension']);
+
 					}
 
 					//check if the filename is not already uploaded...and if yes, pick th latest
@@ -190,7 +340,7 @@ class woocsvImportProduct
 							$file = $upload_dir['path'] . '/' . $filename;
 						else
 							$file = $upload_dir['basedir'] . '/' . $filename;
-						
+
 						if (file_put_contents($file, $image_data)) {
 							$wp_filetype = wp_check_filetype($filename, null );
 							$attachment = array(
@@ -212,8 +362,8 @@ class woocsvImportProduct
 			}
 		}
 		$options = get_option('woocsv-options');
-		
-		if(!empty($gallery) && $options['add_to_gallery'] == 1) {
+
+		if (!empty($gallery) && $options['add_to_gallery'] == 1) {
 			$meta_value = implode(',', $gallery);
 			update_post_meta($post_id, '_product_image_gallery', $meta_value);
 		}
@@ -221,18 +371,28 @@ class woocsvImportProduct
 
 	public function fillInData()
 	{
-		
-		//check if the product already exists by cheking it's sku
-		if (in_array('sku', $this->header)) {
-			$sku = $this->rawData[array_search('sku', $this->header)];
-			if (!empty($sku))
+		global $woocsvImport;
+		do_action( 'woocsv_before_fill_in_data');
+
+		//check if the product already exists by checking it's sku
+		if (in_array('sku', $woocsvImport->header)) {
+			$sku = $this->rawData[array_search('sku', $woocsvImport->header)];
+			if (!empty($sku)) {
 				$id = $this->getProductId($sku);
+				$this->new = false;
+			}
+
+			//check for if we need to merge the product
+			if ($id && $woocsvImport->options['merge_products'] == 1) {
+				$this->mergeProduct($id);
+			}
+
 		}
 
 		//fill in the product body
 		foreach ($this->body as $key=>$value) {
-			if (in_array($key, $this->header)) {
-				$this->body[$key] = $this->rawData[array_search($key, $this->header)];
+			if (in_array($key, $woocsvImport->header)) {
+				$this->body[$key] = $this->rawData[array_search($key, $woocsvImport->header)];
 			}
 		}
 
@@ -240,39 +400,66 @@ class woocsvImportProduct
 		if ($id) {
 			$this->body['ID'] = $id;
 		}
-
 		//fill in the meta data
 		foreach ($this->meta as $key=>$value) {
-			if (in_array(substr($key, 1), $this->header)) {
-				$this->meta[$key] = $this->rawData[array_search(substr($key, 1), $this->header)];
+			if (in_array(substr($key, 1), $woocsvImport->header)) {
+				$this->meta[$key] = $this->rawData[array_search(substr($key, 1), $woocsvImport->header)];
 			}
 		}
 
 		//check if there are tags
-		if (in_array('tags', $this->header)) {
-			foreach ($this->header as $key=>$value) {
+		if (in_array('tags', $woocsvImport->header)) {
+			foreach ($woocsvImport->header as $key=>$value) {
 				if ($value == 'tags')
 					$this->tags[] = $this->rawData[$key];
 			}
 		}
 
+		//check if there is a shipping
+		if (in_array('shipping_class', $woocsvImport->header)) {
+			$key = array_search('shipping_class', $woocsvImport->header);
+			$this->shippingClass = $this->rawData[$key];
+		}
+
 		//check if there are categories
-		if (in_array('category', $this->header)) {
-			foreach ($this->header as $key=>$value) {
+		if (in_array('category', $woocsvImport->header)) {
+			foreach ($woocsvImport->header as $key=>$value) {
 				if ($value == 'category')
 					$this->categories[] = $this->rawData[$key];
 			}
 		}
 
+
+		//check if there is a featured image
+		if (in_array('featured_image', $woocsvImport->header)) {
+			$key = array_search('featured_image', $woocsvImport->header);
+			$this->featuredImage = $this->rawData[$key];
+		} 
+		
+		/* ! --DEPRECIATED */
 		//check if there are images
-		if (in_array('images', $this->header)) {
-			foreach ($this->header as $key=>$value) {
+		if (in_array('images', $woocsvImport->header)) {
+			foreach ($woocsvImport->header as $key=>$value) {
 				if ($value == 'images')
 					$this->images[] = $this->rawData[$key];
 			}
 		}
 
+		//check if there is a product gallery
+		if (in_array('product_gallery', $woocsvImport->header)) {
+			$key = array_search('product_gallery', $woocsvImport->header);
+			$this->productGallery = $this->rawData[$key];
+		}
 
+
+		do_action( 'woocsv_after_fill_in_data');
+
+	}
+
+	// ! helpers
+	public function isValidUrl($url)
+	{
+		return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 	}
 
 }

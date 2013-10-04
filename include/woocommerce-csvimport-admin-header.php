@@ -1,28 +1,29 @@
 <?php
-class woocsvImportAdminHeader
+class woocsvAdminHeader
 {
 
-	public function __construct() {
-		if ( !empty($_POST) && $_POST['action'] === 'uploadHeader' && 
-			!empty($_FILES['file']['name']) && 
-			check_admin_referer('uploadHeaderFile', 'uploadHeaderFile') 
+	public static function start()
+	{
+		if ( !empty($_POST) && $_POST['action'] === 'uploadHeader' &&
+			!empty($_FILES['file']['name']) &&
+			check_admin_referer('uploadHeaderFile', 'uploadHeaderFile')
 		) {
-			$this->showHeaderPreview();
-		} elseif ( !empty($_POST) && $_POST['action'] === 'saveHeader' && 
-			check_admin_referer('saveHeaderFields', 'saveHeaderFields') 
+			self::showHeaderPreview();
+		} elseif ( !empty($_POST) && $_POST['action'] === 'saveHeader' &&
+			check_admin_referer('saveHeaderFields', 'saveHeaderFields')
 		) {
-			$this->saveHeader();
-			$this->checkHeader();
-			$this->headerUpload();
+			self::saveHeader();
+			self::checkHeader();
+			self::headerUpload();
 		} else {
-			$this->checkHeader();
-			$this->headerUpload();
+			self::checkHeader();
+			self::headerUpload();
 		}
 	}
 
-	public function headerUpload()
+	public static function headerUpload()
 	{
-		?>
+?>
 		<h2>Create a header</h2>
 		<form name="headerFileForm" id="headerFileForm" enctype="multipart/form-data" method="POST">
 		<input id="file" name="action" type="hidden" value="uploadHeader" />
@@ -43,26 +44,26 @@ class woocsvImportAdminHeader
 		<?php
 	}
 
-	public function checkHeader()
+	public static function checkHeader()
 	{
-		$currentHeader = get_option('woocsv-header');
+		global $woocsvImport;
 
-		if ($currentHeader) {
+		if ($woocsvImport->header) {
 			echo '<h2>Your current header is:</h2>';
 			echo '<p>';
-			foreach ($currentHeader as $field) {
+			foreach ($woocsvImport->header as $field) {
 				echo $field.'; ';
 			}
 			echo '</p>';
 		} else {
-		?>
+?>
 			<h2>You have not created a header yet!</h2>
 			<p>Upload your csv file and map the columns to the right fields and press load!</p>
 		<?php
 		}
 	}
 
-	public function showHeaderPreview()
+	public static function showHeaderPreview()
 	{
 		global $woocsvImport;
 		$handle = fopen($_FILES['file']['tmp_name'], 'r');
@@ -79,7 +80,6 @@ class woocsvImportAdminHeader
 			return;
 		}
 		fclose($handle);
-		
 		$length = count($csvcontent[0]);
 ?>
 			<h2>Header preview</h2>
@@ -123,8 +123,9 @@ class woocsvImportAdminHeader
 	}
 
 
-	public function saveHeader()
+	public static function saveHeader()
 	{
+		global $woocsvImport;
 		$headerOrder = '';
 		foreach ($_POST as $key=>$value) {
 			if (preg_match("/fields_[0-9]/", $key, $matches)) {
@@ -132,10 +133,8 @@ class woocsvImportAdminHeader
 			}
 		}
 		update_option('woocsv-header', $headerOrder);
+		$woocsvImport->header = $headerOrder;
 	}
-	
-	public function hasHeader() {
-		
-	}
+
 
 }

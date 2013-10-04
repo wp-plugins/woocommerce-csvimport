@@ -1,108 +1,30 @@
 <?php
-$woocsvHandleImport = new woocsvHandleImport();
-
-class woocsvHandleImport 
+class woocsvAdminImport 
 {
-	public $options = array ();
 
-	public $csvContent = array();
-	
-	public function __construct() {
-		$this->options = get_option('woocsv-options');
-	}
-	
-	public function runImport()
+	public static function start()
 	{
-		wp_suspend_cache_invalidation ( true );
-		$postData = $_POST;
-		for ($i = 1; $i <= $this->options['blocksize']; $i++) {
-			$product = new woocsvImportProduct;
-			if ($postData['currentrow'] >= $postData['rows'] ) {
-				ob_get_clean();
-				do_action('woocsv_after_import_finished');
-				die('done');
-			}
-
-			if (!$this->csvContent) {
-				$handle = fopen($postData['filename'], 'r');
-				while (($line = fgetcsv($handle, 0, $this->options['seperator'])) !== FALSE) {
-					$this->csvContent[] = $line;
-				}
-			}
-
-			if ($this->options['skipfirstline'] ==  1 && $postData['currentrow'] == 0) {
-				$postData['currentrow'] ++;
-				ob_get_clean();
-				echo json_encode($postData);
-				die();
-			}
-
-
-			if ($this->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0)
-				$product->rawData = $this->csvContent[0];
-
-			if ($postData['currentrow'] > 0)
-				$product->rawData = $this->csvContent[$postData['currentrow']];
-
-			$postData['currentrow'] ++;
-
-			//create a new product
-
-
-			//parse all data
-			$product->fillInData();
-
-			//save it
-			try {
-				$id = $product->save();
-			} catch (Exception $e) {
-				$id = '';
-			}
-
-			$postData['ID'] = $id;
-			$postData['sku'] = $product->meta['_sku'];
-			$postData['product'] = $product;
-		}
-		
-		delete_option('category_children');
-		wp_suspend_cache_invalidation ( false );
-		ob_get_clean();
-		echo json_encode($postData);
-		die();
-	}
-
-	function handleUpload($from_location, $filename)
-	{
-		do_action('woocsv_before_csv_upload',$filename);
-		$upload_dir = wp_upload_dir();
-		$to_location = $upload_dir['basedir'] .'/csvimport/'.$filename;
-		if (@move_uploaded_file($from_location, $to_location)) {
-			do_action('woocsv_after_csv_upload',$filename);
-			return $to_location;
-		} else return false;
-	}
-
-	public function import()
-	{
+		global $woocsvImport;
 		if (isset($_REQUEST['action']) && check_admin_referer('woocsv', 'uploadCsvFile')) {
-			$options = get_option('woocsv-options');
-			$filename = $this->handleUpload($_FILES['file']['tmp_name'], $_FILES['file']['name']);
+
+			$filename = self::handleUpload($_FILES['file']['tmp_name'], $_FILES['file']['name']);
 			if (!$filename) wp_die('<h2>Could not upload file.</h2>');
+
 			$handle = fopen($filename, 'r');
 			$row = 0;
 			$csvcontent = '';
-			while (($line = fgetcsv($handle, 0, $options['seperator'])) !== FALSE) {
+			while (($line = fgetcsv($handle, 0, $woocsvImport->options['seperator'])) !== FALSE) {
 				$csvcontent[] = $line;
 				$row ++;
 			}
 			$length = count($csvcontent[0]);
 			
 			if (count($csvcontent[0]) == 1 ) {
-			echo '<h2>I think you have the wrong seperator</h2>';
-			echo '<p>Please goto the settings page and change your seperator!</p>';
-			return;
-		}
-?>			
+				echo '<h2>I think you have the wrong seperator</h2>';
+				echo '<p>Please goto the settings page and change your seperator!</p>';
+				return;
+			}
+			?>			
 			<div id="importPreview"> 
 			<h2>Import preview</h2>
 			<table class="widefat">
@@ -129,6 +51,7 @@ class woocsvHandleImport
 
 			<form id="runImportForm"  method="POST">
 				<input type="hidden" name="currentrow" value="0" />
+				<input type="hidden" name="blocksize" value="<?php echo $woocsvImport->options['blocksize']; ?>" />
 				<input type="hidden" name="rows" value="<?php echo $row;?>" />
 				<input type="hidden" name="filename" value="<?php echo $filename; ?>" />
 				<input type="hidden" name="action" value="runImport">
@@ -142,6 +65,7 @@ class woocsvHandleImport
 				</div>
 			</div>
 			<?php
+			unset($csvcontent,$line);
 		} else {
 ?>			
 			<h2>Let's import!</h2>
@@ -154,7 +78,101 @@ class woocsvHandleImport
 				<button type="submit" class="button button-primary button-hero">Load</button>
 			</fieldset>
 			</form>
+			<hr>
+			<?php 
+			if ($options = get_option('woocsv-lastrun')) {
+				echo 'Last run: '.$options['date'].'<br/>';
+				echo 'filename: '.$options['filename'].'<br/>';
+				echo 'Number of rows: '.$options['rows'].'<br/>';
+			}
+			?>	
 		<?php
 		}
+	}
+
+	public static function runImport()
+	{
+		global $wooProduct, $woocsvImport;
+
+		wp_suspend_cache_invalidation ( true );
+		$postData = $_POST;
+		
+		$count = 0;
+		$csvcontent = '';
+		$handle = fopen($postData['filename'], 'r');
+		
+		//loop through file and only import the needed block
+		while (($line = fgetcsv($handle, 0, $woocsvImport->options['seperator'])) !== FALSE) {
+			if ( $count >= $postData['currentrow'] && $count < ( (int)$postData['currentrow'] + (int)$postData['blocksize'])  )
+				$csvContent[$count] = $line;
+			$count ++;
+		}
+		
+		unset($handle,$line);
+		
+		for ($i = 1; $i <= $woocsvImport->options['blocksize']; $i++) {
+			$wooProduct = new woocsvImportProduct;
+			$wooProduct->header = $woocsvImport->header;
+			if ($postData['currentrow'] >= $postData['rows'] ) {
+				ob_get_clean();
+				
+				update_option('woocsv-lastrun',array('date'=>date("Y-m-d H:i:s"),'filename'=>basename($postData['filename']),'rows'=>$postData['rows']));
+				do_action('woocsv_after_import_finished');
+				die('done');
+			}
+
+			if ($woocsvImport->options['skipfirstline'] ==  1 && $postData['currentrow'] == 0) {
+				$postData['currentrow'] ++;
+				ob_get_clean();
+				echo json_encode($postData);
+				die();
+			}
+
+
+			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0)
+				$wooProduct->rawData = $csvContent[0];
+
+			if ($postData['currentrow'] > 0)
+				$wooProduct->rawData = $csvContent[$postData['currentrow']];
+
+			$postData['currentrow'] ++;
+
+			//create a new product
+			do_action('woocsv_before_fill_in_data' );
+			
+			//fill all data
+			$wooProduct->fillInData();
+			do_action('woocsv_after_fill_in_data' );	
+			
+			//save it
+			try {
+				$id = $wooProduct->save();
+			} catch (Exception $e) {
+				$id = '';
+			}
+
+			$postData['ID'] = $id;
+			$postData['sku'] = $wooProduct->meta['_sku'];
+			$postData['memory'] = round(memory_get_usage()/1024/1024,2);
+		}
+		
+		
+		wp_suspend_cache_invalidation ( false );
+		ob_get_clean();
+		$wooProduct = null;
+		echo json_encode($postData);
+		die();
+	}
+
+	static function handleUpload($from_location, $filename)
+	{
+		do_action('woocsv_before_csv_upload',$filename);
+		$upload_dir = wp_upload_dir();
+		$to_location = $upload_dir['basedir'] .'/csvimport/'.$filename;
+		
+		if (@move_uploaded_file($from_location, $to_location)) {
+			do_action('woocsv_after_csv_upload',$filename);
+			return $to_location;
+		} else return false;
 	}
 }

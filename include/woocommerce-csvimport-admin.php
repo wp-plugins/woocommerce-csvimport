@@ -1,49 +1,45 @@
 <?php
-class woocsvImportAdmin extends woocsvImport
+class woocsvAdmin
 {
-	public $options = array();
 
-	public function __construct()
+	public static function start()
 	{
-		global $woocsvHandleImport;
-		add_action('admin_menu', array($this, 'adminMenu'));
-		ini_set('auto_detect_line_endings', true);
-		add_action('wp_ajax_runImport', array($woocsvHandleImport, 'runImport'));
-		$this->options = get_option('woocsv-options');
+		add_action('admin_menu', 'woocsvAdmin::adminMenu');
+		add_action('wp_ajax_runImport', 'woocsvAdminImport::runImport');
 	}
 
-	public function adminMenu()
+	static function adminMenu()
 	{
-		$page=add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', array($this, 'mainPage'), '', 58);
-		add_action('admin_print_scripts-' .$page, array(&$this, 'initJsCss'));
-		$this->handleRequest();
+		$page = add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', 'woocsvAdmin::mainPage', '', '58.1501');
+		add_action( 'admin_print_scripts-' .$page, 'woocsvAdmin::initJs');
+		add_action( 'admin_print_styles-' . $page, 'woocsvAdmin::initCss' );
 	}
 
-	public function initJsCss()
+	static function initJs()
 	{
 		wp_enqueue_script('jquery');
 		wp_register_script( 'woocsv-script', plugins_url( '/woocommerce-csvimport/js/woocsv.js' ) );
 		wp_enqueue_script( 'woocsv-script' );
 	}
 
-	public function handleRequest()
+	static function initCss()
 	{
-		add_action('woocsv_admin_menu' , array(&$this, 'mainPageContent'));
+		wp_register_style( 'woocsv-css', plugins_url('/woocommerce-csvimport/css/woocsv.css') );
+		wp_enqueue_style( 'woocsv-css' );
 	}
 
-	public function mainPage()
+	static function mainPage()
 	{
 		echo '<div class="wrap">';
 		echo '<div id="woocsv_warning" style="display:none" class="updated"></div>';
-		$this->mainPageContent();
+		self::mainPageContent();
 		echo '</div>';
 	}
 
-	public function mainPageContent()
+	static function mainPageContent()
 	{
-	global $woocsvHandleImport;
 		$tab = (isset($_REQUEST['tab']))?$_REQUEST['tab']:'main';
-		?>
+?>
 		<div id="icon-themes" class="icon32"><br></div>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import');?>"
@@ -57,59 +53,30 @@ class woocsvImportAdmin extends woocsvImport
 		</h2>
 		<div id="woocsvSidebar" class="welcome-panel" style="width:20%;float:right;">
 			<h2>Add-ons</h2>
-			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out <a href="http://allaerd.org">allaerd.org</a></p><p>There are add-ons for every type!</p>
+			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out 			<a href="http://allaerd.org/shop">Allaerd.org</a></p>
+			<p>Also check out the tutorials on my site!</p>
 		</div>
 		<div style="width:70%;float:left;">
 		<?php
 		switch ($tab) {
-		case 'main':	
-			$woocsvHandleImport->import();
-		break;
+		case 'main':
+			woocsvAdminImport::start();
+			break;
 		case 'header':
-			$header = new woocsvImportAdminHeader();
+			woocsvAdminHeader::start();
 			break;
 		case 'settings':
-			$settings = new woocsvImportAdminSettings();
+			woocsvAdminSettings::start();
 			break;
 		case 'info':
-			$this->info();
+			woocsvAdminInfo::info();
 			break;
 		default:
-			$this->import();
+			woocsvAdminImport::start();
 		}
 
 ?>
 		</div>
 		<?php
 	}
-
-	public function addons()
-	{
-		do_action('woocsv_add_addons_to_menu');
-	}
-
-	
-	public function info()
-	{
-?>		<h2>How to use this plugin?</h2>
-		<ul>
-			<li>Step 1. Goto the settings page and set the appropriate settings</li>
-			<li>Step 2. Goto the header page and import a CSV file</li>
-			<li>Step 3. Link the right fields to the right columns and press save</li>
-			<li>Step 4. Goto the import section and upload the same CSV file</li>
-			<li>Step 5. Check out the import preview and check if it OK!</li>
-			<li>Step 6. Press go and wait until the import is finished!</li>
-		</ul>
-			
-		<h2>Support the free plugin</h2>
-		Want to support the free version. Please consider a donation :-)
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick" />
-<input type="hidden" name="hosted_button_id" value="PGEBD4BHNH6W4" />
-<input type="image" alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif" />
-<img alt="" src="https://www.paypalobjects.com/nl_NL/i/scr/pixel.gif" width="1" height="1" border="0" /></form>
-
-		<?php
-	}
-
-
 }

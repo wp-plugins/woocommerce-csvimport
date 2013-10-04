@@ -25,15 +25,17 @@ When you have mapped the right fields, it is time to import!
 1. Import custom fields
 2. Import attributes
 3. Import variable products
-4. Import all other fields and product types
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
-== How do i use it ==
+If you have questions about the add-ons, please fill in my [contact form](http://allaerd.org/contact/). If you have questions about the free part, you can post them in the forum.
 
-[youtube http://www.youtube.com/watch?v=RBLyoGCqa0Y]
 
 == Frequently Asked Questions ==
+
+= How do i use it =
+
+[youtube http://www.youtube.com/watch?v=RBLyoGCqa0Y]
 
 = I get the error "something went wrong" =
 
@@ -42,6 +44,7 @@ Change the number of rows to process at the same time. You might have run into t
 = What fields can i import? =
 
 * sku
+* post_name (permalink)
 * post_status
 * post_title
 * post_content
@@ -56,14 +59,18 @@ Change the number of rows to process at the same time. You might have run into t
 * length
 * width
 * height
-* images
+* images (depreciated)
+* featured_image
+* product_gallery
 * tax_status
 * tax_class
 * stock_status
 * visibility
 * backorder
 * featured
-* manage_stock (yes/no)
+* manage_stock
+* shipping_class
+
 
 = Max number of files in a directory = 
 
@@ -86,9 +93,17 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
-= 1.1.3 =
-* small bug fixes. 
-* added some actions hooks
+= 1.2.0 =
+* Change position for menu, sometimes it confilicts with other plugins
+* Added setting to merge products
+* Added new image fields for featured image and product gallery. They used to be both in the images field.
+* Added more info, descriptions and help texts. 
+* Mayor code, speed and memory improvements
+* Added post_name support
+* Added shipping_class support
+* Added options for category handling
+* Added support for multi-site
+
 
 = 1.1.2 =
 * fixed a bug with the multiple categories. Now all categories are linked to the product instead of the last
