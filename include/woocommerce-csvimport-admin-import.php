@@ -81,6 +81,7 @@ class woocsvAdminImport
 			<hr>
 			<?php 
 			if ($options = get_option('woocsv-lastrun')) {
+				echo 'If you are merging products, please be sure you have the right header!<br/>';
 				echo 'Last run: '.$options['date'].'<br/>';
 				echo 'filename: '.$options['filename'].'<br/>';
 				echo 'Number of rows: '.$options['rows'].'<br/>';
