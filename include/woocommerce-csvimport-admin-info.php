@@ -53,7 +53,7 @@ class woocsvAdminInfo {
 			<dl>You can add the featured image by adding the URL to it or the filename. If you enter the filename, you MUST upload it in advance with the media manager of wordpress</dl>
 			<dt>product_gallery</dt>
 			<dl>You can add multiple images to your product gallery. Add them in a pipe separated list. <code>image1.jpg|image2.jpg</code> You can put in valid URL's or filenames.</dl>
-			<dt>shippinp_class</dt>
+			<dt>shipping_class</dt>
 			<dl>You can add your custom shipping class. If the class does not exists it will be added.</dl>
 		</dl>	
 

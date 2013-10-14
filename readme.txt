@@ -93,6 +93,12 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.2.1 =
+* added some info about the max file size
+* warning for ini_set resolved
+* solved bug that product gallery was not shown when images field was used.
+* solved bug that did not find images from the media manager that contain spaces
+
 = 1.2.0 =
 * Change position for menu, sometimes it confilicts with other plugins
 * Added setting to merge products
@@ -103,7 +109,6 @@ Version 1.+  is very different. Please make a backup first before you upgrade! Y
 * Added shipping_class support
 * Added options for category handling
 * Added support for multi-site
-
 
 = 1.1.2 =
 * fixed a bug with the multiple categories. Now all categories are linked to the product instead of the last

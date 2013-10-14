@@ -1,10 +1,11 @@
 <?php
 class woocsvAdminImport 
 {
-
+	
 	public static function start()
 	{
-		global $woocsvImport;
+		
+		global $woocsvImport,$upload_mb;
 		if (isset($_REQUEST['action']) && check_admin_referer('woocsv', 'uploadCsvFile')) {
 
 			$filename = self::handleUpload($_FILES['file']['tmp_name'], $_FILES['file']['name']);
@@ -71,7 +72,7 @@ class woocsvAdminImport
 			<h2>Let's import!</h2>
 			<form name="loadPreview" method="POST" enctype="multipart/form-data">
 			<fieldset>
-				<input id="file" name="file" type="file" accept="text/csv" />
+				<input id="file" name="file" type="file" accept="text/csv" /><sup><?php echo "Max file size: $upload_mb";?></sup>
 				<input type="hidden" name="action" value="runImport">
 				<?php wp_nonce_field('woocsv', 'uploadCsvFile'); ?>
 				<br/><br/>

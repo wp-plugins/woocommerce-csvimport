@@ -136,11 +136,13 @@ class woocsvImportProduct
 		if ($this->images)
 			$this->saveImages($post_id);
 
-
-		if ($this->featuredImage)
+		/* !version 1.2.1 */
+		// added empty() else it overrrides the above function)	
+			
+		if (!empty($this->featuredImage))
 			$this->saveFeaturedImage();
 
-		if ($this->productGallery)
+		if (!empty($this->productGallery))
 			$this->saveProductGallery();
 
 		do_action( 'woocsv_product_before_shipping_save');
@@ -235,7 +237,9 @@ class woocsvImportProduct
 			} else {
 				$imageID = $this->saveImageWithName($image);
 			}
-			$gallery[] = $imageID;
+			
+			if ($imageID)
+				$gallery[] = $imageID;
 		}
 
 		if ($gallery) {
@@ -282,17 +286,17 @@ class woocsvImportProduct
 	public function saveImageWithName($image)
 	{
 		global $wpdb;
-		$upload_dir = wp_upload_dir();
 
-		//check if the filename is not already uploaded...and if yes, pick th latest
+		//check if the filename is not already uploaded...and if yes, pick the latest
 		$already_there= $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT max(ID) as maxid ,COUNT(*) as amount 
-					FROM $wpdb->posts 
-					where post_type='attachment' 
-					and guid like %s or post_title like %s",
-					'%'.$image.'%','%'.$image.'%'
-				));
+			
+			"select  max(post_id) as maxid ,COUNT(*) as amount 
+				from wp_postmeta 
+				where meta_key = '_wp_attached_file' 
+				and lower(meta_value) like %s",
+				'%'.sanitize_file_name($image).'%'
+			));
 				
 		if ( $already_there->amount > 0 ) {
 			return $already_there->maxid;

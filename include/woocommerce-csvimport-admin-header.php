@@ -4,6 +4,8 @@ class woocsvAdminHeader
 
 	public static function start()
 	{
+	
+		/* 		!1.2.1		 */		
 		if ( !empty($_POST) && $_POST['action'] === 'uploadHeader' &&
 			!empty($_FILES['file']['name']) &&
 			check_admin_referer('uploadHeaderFile', 'uploadHeaderFile')
@@ -23,6 +25,7 @@ class woocsvAdminHeader
 
 	public static function headerUpload()
 	{
+	global $upload_mb;
 ?>
 		<h2>Create a header</h2>
 		<form name="headerFileForm" id="headerFileForm" enctype="multipart/form-data" method="POST">
@@ -30,7 +33,7 @@ class woocsvAdminHeader
 		<table class="form-table">
 		<tbody>
 			<tr>
-				<th scope="row" class="titledesc"><label for="file">Select your csv file</label></th>
+				<th scope="row" class="titledesc"><label for="file">Select your csv file <sup><?php echo "Max file size: $upload_mb";?></sup></label></th>
 				<td><input id="file" name="file" type="file" accept="text/csv" /></td>
 			</tr>
 			<tr>
@@ -66,6 +69,8 @@ class woocsvAdminHeader
 	public static function showHeaderPreview()
 	{
 		global $woocsvImport;
+		
+				
 		$handle = fopen($_FILES['file']['tmp_name'], 'r');
 		$row = 1;
 		$csvcontent = '';
