@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.4.0
 Tested up to: 3.5.0
-Stable tag: 1.1.2
+Stable tag: 1.2.1
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -70,6 +70,7 @@ Change the number of rows to process at the same time. You might have run into t
 * featured
 * manage_stock
 * shipping_class
+* comment_status
 
 
 = Max number of files in a directory = 
@@ -92,6 +93,13 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+
+= 1.2.2 =
+* Solve image problem by using cURL to get the images with an URL, file_get_contents is sometimes disabled on certain servers
+* Start chaging some file names to be more in the wordpress standard
+* Added some hooks and filters
+* Some minor improvments
+* added comment_status
 
 = 1.2.1 =
 * added some info about the max file size
