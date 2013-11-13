@@ -318,20 +318,35 @@ class woocsvImportProduct
 	{
 		global $wpdb;
 
-		//check if the filename is not already uploaded...and if yes, pick the latest
-		$already_there= $wpdb->get_row(
-			$wpdb->prepare(
-			
-			"select  max(post_id) as maxid ,COUNT(*) as amount 
-				from wp_postmeta 
-				where meta_key = '_wp_attached_file' 
-				and lower(meta_value) like %s",
-				'%'.sanitize_file_name($image).'%'
-			));
-				
-		if ( $already_there->amount > 0 ) {
-			return $already_there->maxid;
-		} else return false;
+		/* !version 1.2.3 */
+		/* use  get_posts to retreive image instead of query direct!*/
+		
+		//set up the args
+		$args = array(
+            'numberposts'	=> 1,
+            'orderby'		=> 'post_date',
+			'order'			=> 'DESC',
+            'post_type'		=> 'attachment',
+            'post_mime_type'=> 'image',
+            'post_status' =>'any',
+		    'meta_query' => array(
+		        array(
+		            'key' => '_wp_attached_file',
+		            'value' => sanitize_file_name($image),
+		            'compare' => 'LIKE'
+		        )
+		    )
+		);
+		//get the images
+        $images = get_posts($args);
+
+        if (!empty($images)) {
+        //we found a match, return it!
+	        return (int)$images[0]->ID;
+        } else {
+        //no image found with the same name, return false
+	        return false;
+        }
 		
 	}
 
