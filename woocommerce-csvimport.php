@@ -21,7 +21,6 @@ include dirname( __FILE__ ) . '/include/class-woocsv-admin-settings.php';
 include dirname( __FILE__ ) . '/include/class-woocsv-admin-import.php';
 include dirname( __FILE__ ) . '/include/class-woocsv-product.php';
 
-
 //global stuff
 $woocsvImport = new woocsvImport();
 $wooProduct = '';
@@ -61,6 +60,5 @@ if (class_exists('woocsvWPML')) {
 if (class_exists('woocsvCustom')) {
 	$woocsvCustom = new woocsvCustom();
 }
-
 
 ?>
