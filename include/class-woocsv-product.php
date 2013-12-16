@@ -91,7 +91,16 @@ class woocsvImportProduct
 		foreach ($post_meta as $key=>$value) {
 			$this->meta[$key] = maybe_unserialize($value[0]);
 		}
-
+		
+		//get product_tpe
+		$product_types = wp_get_object_terms( $this->body['ID'], 'product_type' );
+		
+		if ( !is_wp_error($product_types) ){
+			foreach ($product_types as $product_type) {
+				$this->product_type = $product_type->name;
+			}
+		}
+			
 	}
 
 	public function getProductId($sku)
@@ -121,8 +130,10 @@ class woocsvImportProduct
 
 		/* !version 1.2.2 */
 		//new add product type for more efficient save
-		if ($this->new = true)
-			wp_set_object_terms( $post_id, $this->product_type , 'product_type', true );
+		
+		/* !version 1.2.4 */
+		// fixed bug with if condition
+		wp_set_object_terms( $post_id, $this->product_type , 'product_type', false );
 
 		do_action( 'woocsv_product_before_meta_save');
 
