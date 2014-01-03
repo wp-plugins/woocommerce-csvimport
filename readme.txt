@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.4.0
 Tested up to: 3.5.0
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -93,6 +93,9 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
+
+= 1.2.5 =
+* delete transients during import
 
 = 1.2.4 =
 * Solved a bug with new products (thanks Niall Walsh)
