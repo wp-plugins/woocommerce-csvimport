@@ -127,12 +127,17 @@ class woocsvAdminImport
 				$postData['currentrow'] ++;
 				ob_get_clean();
 				echo json_encode($postData);
+				/* !1.2.5 delete trancient */
+				$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");
 				die();
 			}
 
 
-			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0)
+			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0) {
 				$wooProduct->rawData = $csvContent[0];
+				/* !1.2.5 delete trancient */
+				$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");			
+			}
 
 			if ($postData['currentrow'] > 0)
 				$wooProduct->rawData = $csvContent[$postData['currentrow']];
