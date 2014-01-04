@@ -94,6 +94,9 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.2.6 =
+* added global wpdb. Could get an error.
+
 = 1.2.5 =
 * delete transients during import
 * typos.....

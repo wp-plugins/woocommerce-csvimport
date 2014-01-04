@@ -94,6 +94,7 @@ class woocsvAdminImport
 
 	public static function runImport()
 	{
+		/* !1.2.6 added $wpdb to globals*/
 		global $wooProduct, $woocsvImport,$wpdb;
 
 		wp_suspend_cache_invalidation ( true );
