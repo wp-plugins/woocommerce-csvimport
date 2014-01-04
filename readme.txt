@@ -96,6 +96,7 @@ Version 1.+  is very different. Please make a backup first before you upgrade! Y
 
 = 1.2.5 =
 * delete transients during import
+* typos.....
 
 = 1.2.4 =
 * Solved a bug with new products (thanks Niall Walsh)
