@@ -1,11 +1,11 @@
 <?php
-class woocsvAdminImport 
+class woocsvAdminImport
 {
-	
+
 	public static function start()
 	{
-		
-		global $woocsvImport,$upload_mb;
+
+		global $woocsvImport, $upload_mb;
 		if (isset($_REQUEST['action']) && check_admin_referer('woocsv', 'uploadCsvFile')) {
 
 			$filename = self::handleUpload($_FILES['file']['tmp_name'], $_FILES['file']['name']);
@@ -19,14 +19,14 @@ class woocsvAdminImport
 				$row ++;
 			}
 			$length = count($csvcontent[0]);
-			
+
 			if (count($csvcontent[0]) == 1 ) {
 				echo '<h2>I think you have the wrong seperator</h2>';
 				echo '<p>Please goto the settings page and change your seperator!</p>';
 				return;
 			}
-			?>			
-			<div id="importPreview"> 
+?>
+			<div id="importPreview">
 			<h2>Import preview</h2>
 			<table class="widefat">
 			<thead>
@@ -66,9 +66,9 @@ class woocsvAdminImport
 				</div>
 			</div>
 			<?php
-			unset($csvcontent,$line);
+			unset($csvcontent, $line);
 		} else {
-?>			
+?>
 			<h2>Let's import!</h2>
 			<form name="loadPreview" method="POST" enctype="multipart/form-data">
 			<fieldset>
@@ -80,45 +80,45 @@ class woocsvAdminImport
 			</fieldset>
 			</form>
 			<hr>
-			<?php 
+			<?php
 			if ($options = get_option('woocsv-lastrun')) {
 				echo 'If you are merging products, please be sure you have set the right header!<br/>';
 				echo 'Last run: '.$options['date'].'<br/>';
 				echo 'filename: '.$options['filename'].'<br/>';
 				echo 'Number of rows: '.$options['rows'].'<br/>';
 			}
-			?>	
+?>
 		<?php
 		}
 	}
 
 	public static function runImport()
 	{
-		global $wooProduct, $woocsvImport;
+		global $wooProduct, $woocsvImport,$wpdb;
 
 		wp_suspend_cache_invalidation ( true );
 		$postData = $_POST;
-				
+
 		$count = 0;
 		$csvcontent = '';
 		$handle = fopen($postData['filename'], 'r');
-		
+
 		//loop through file and only import the needed block
 		while (($line = fgetcsv($handle, 0, $woocsvImport->options['seperator'])) !== FALSE) {
 			if ( $count >= $postData['currentrow'] && $count < ( (int)$postData['currentrow'] + (int)$postData['blocksize'])  )
 				$csvContent[$count] = $line;
 			$count ++;
 		}
-		
-		unset($handle,$line);
-		
+
+		unset($handle, $line);
+
 		for ($i = 1; $i <= $woocsvImport->options['blocksize']; $i++) {
 			$wooProduct = new woocsvImportProduct;
 			$wooProduct->header = $woocsvImport->header;
 			if ($postData['currentrow'] >= $postData['rows'] ) {
 				ob_get_clean();
-				
-				update_option('woocsv-lastrun',array('date'=>date("Y-m-d H:i:s"),'filename'=>basename($postData['filename']),'rows'=>$postData['rows']));
+
+				update_option('woocsv-lastrun', array('date'=>date("Y-m-d H:i:s"), 'filename'=>basename($postData['filename']), 'rows'=>$postData['rows']));
 				do_action('woocsv_after_import_finished');
 				die('done');
 			}
@@ -136,7 +136,7 @@ class woocsvAdminImport
 			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0) {
 				$wooProduct->rawData = $csvContent[0];
 				/* !1.2.5 delete trancient */
-				$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");			
+				$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");
 			}
 
 			if ($postData['currentrow'] > 0)
@@ -146,11 +146,11 @@ class woocsvAdminImport
 
 			//create a new product
 			do_action('woocsv_before_fill_in_data' );
-			
+
 			//fill all data
 			$wooProduct->fillInData();
-			do_action('woocsv_after_fill_in_data' );	
-			
+			do_action('woocsv_after_fill_in_data' );
+
 			//save it
 			try {
 				$id = $wooProduct->save();
@@ -160,19 +160,19 @@ class woocsvAdminImport
 
 			$postData['ID'] = $id;
 			$postData['sku'] = $wooProduct->meta['_sku'];
-			$postData['memory'] = round(memory_get_usage()/1024/1024,2);
+			$postData['memory'] = round(memory_get_usage()/1024/1024, 2);
 		}
-		
-		
+
+
 		wp_suspend_cache_invalidation ( false );
-		
+
 		/* !new added for debug */
 		if ( 0 == $woocsvImport->options['debug'])
 			ob_get_clean();
-		
+
 		if ( 1 == $woocsvImport->options['debug'])
 			$postData['product'] = $wooProduct;
-			
+
 		$wooProduct = null;
 		echo json_encode($postData);
 		die();
@@ -180,12 +180,12 @@ class woocsvAdminImport
 
 	static function handleUpload($from_location, $filename)
 	{
-		do_action('woocsv_before_csv_upload',$filename);
+		do_action('woocsv_before_csv_upload', $filename);
 		$upload_dir = wp_upload_dir();
 		$to_location = $upload_dir['basedir'] .'/csvimport/'.$filename;
-		
+
 		if (@move_uploaded_file($from_location, $to_location)) {
-			do_action('woocsv_after_csv_upload',$filename);
+			do_action('woocsv_after_csv_upload', $filename);
 			return $to_location;
 		} else return false;
 	}
