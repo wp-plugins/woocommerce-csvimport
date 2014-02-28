@@ -1,0 +1,2 @@
+$woocommerce->clear_product_transients( $post_id );
+
