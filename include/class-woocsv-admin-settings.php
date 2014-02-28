@@ -98,7 +98,7 @@ class woocsvAdminSettings
 				</td>
 			</tr>
 			<tr>
-				<td><button type="submit" class="button-primary">Save</button></td>
+				<td><button type="submit" class="button button-primary button-hero"">Save</button></td>
 			</tr>
 		</tbody>
 		</table>

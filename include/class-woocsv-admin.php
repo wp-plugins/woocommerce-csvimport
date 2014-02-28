@@ -53,8 +53,8 @@ class woocsvAdmin
 		</h2>
 		<div id="woocsvSidebar" class="welcome-panel" style="width:20%;float:right;">
 			<h2>Add-ons</h2>
-			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out <a target "_blank" href="http://allaerd.org/shop">Allaerd.org</a></p>
-			<p>You can find documentation <a target "_blank" href="http://allaerd.org/documentation">here</a></p>
+			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out 			<a href="http://allaerd.org/shop">Allaerd.org</a></p>
+			<p>Also check out the tutorials on my site!</p>
 		</div>
 		<div style="width:70%;float:left;">
 		<?php

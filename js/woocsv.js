@@ -12,7 +12,7 @@ function doAjaxImport(formData)
 			console.log(data);
 			if (data != 'done')
 			{
-				var newFormData = jQuery.parseJSON(data);
+				var newFormData = JSON.parse(data);
 				jQuery('#import_log').prepend('<p> row: ' + newFormData.currentrow + ' / ' + newFormData.rows + '</p>');
 				doAjaxImport(newFormData);
 			}

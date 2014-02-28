@@ -1,7 +1,11 @@
 <?php
 class woocsvImport
 {
+	public $version = '1.27';
+	
 	public $options;
+	
+	public $plugin_url;
 	
 	public $header;
 
@@ -17,7 +21,7 @@ class woocsvImport
 		'merge_products'=>1,
 		'add_to_categories'=>1,
 		'debug'=>0,
-		'version' =>'1.2.2'
+		'version' =>'1.2.7'
 	);
 
 	public $fields = array (
@@ -49,6 +53,7 @@ class woocsvImport
 		25 => 'product_gallery',
 		26 => 'shipping_class',
 		27 => 'comment_status', //closed, open
+		//28 => 'change_stock', // +1 -1 + 5 -8
 	);
 
 
@@ -64,6 +69,14 @@ class woocsvImport
 		$this->checkOptions();
 		$this->fillHeader();
 	}
+
+	/* !1.2.7 plugins url */
+	
+	public function plugin_url() {
+		if ( $this->plugin_url ) return $this->plugin_url;
+		return $this->plugin_url = untrailingslashit( plugins_url( '/', __FILE__ ) );
+	}
+
 
 	public function install()
 	{

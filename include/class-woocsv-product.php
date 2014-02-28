@@ -245,7 +245,7 @@ class woocsvImportProduct
 		} else {
 			$imageID = $this->saveImageWithName($this->featuredImage);
 		}
-		
+$imageID = $this->saveImageWithUrl($this->featuredImage);
 		if ($imageID)
 			set_post_thumbnail( $this->body['ID'], $imageID );	
 	}
@@ -279,7 +279,7 @@ class woocsvImportProduct
 		$upload_dir = wp_upload_dir();
 		
 		
-		/* !version1.2.1 */
+		/* !version 1.2.1 */
 		/*
 		use curl to get image instead of
 		$image_data = file_get_contents($image);
@@ -290,12 +290,17 @@ class woocsvImportProduct
 		// curl set options
 		curl_setopt ($ch, CURLOPT_URL, $image);
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		/* !version 1.2.7 */
+		curl_setopt ($ch, CURLOPT_AUTOREFERER, true);
+		
 		
 		// Getting binary data
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 		
+		
 		$image_data = curl_exec($ch);
+
 		curl_close($ch);
 
 		//get the filename
@@ -496,6 +501,15 @@ class woocsvImportProduct
 			}
 		} 
 		
+		/* 1.2.7 change_stock 
+		if (in_array('change_stock', $woocsvImport->header)) {
+			$key = array_search('change_stock', $woocsvImport->header);
+			$change_stock = $this->rawData[$key];
+			if ($this->new = false)
+				
+		}
+		*/
+		
 		/* !--DEPRECIATED */
 		//check if there are images
 		if (in_array('images', $woocsvImport->header)) {
@@ -527,6 +541,15 @@ class woocsvImportProduct
 	public function isValidUrl($url)
 	{
 		return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+
+		/* !version 1.2.7
+		if(filter_var($url, FILTER_VALIDATE_URL) === FALSE)
+			{
+			        return false;
+			}else{
+					return true;
+			}
+		*/ 
 	}
 
 }

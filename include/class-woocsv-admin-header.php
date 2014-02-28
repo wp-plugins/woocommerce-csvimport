@@ -40,7 +40,7 @@ class woocsvAdminHeader
 				<td><input id="file" name="file" type="file" accept="text/csv" /></td>
 			</tr>
 			<tr>
-				<td><button type="submit" class="button-primary">Load</button></td>
+				<td><button type="submit" class="button button-primary button-hero"">Load</button></td>
 				<td></td>
 			</tr>
 		</tbody>
@@ -123,7 +123,7 @@ class woocsvAdminHeader
 			</tr>
 			<?php endfor;?>
 			<tfoot>
-				<tr><th><button type="submit" class="button-primary button-hero">Safe</button></th></tr>
+				<tr><th><button type="submit" class="button button-primary button-hero"">Save</button></th></tr>
 			</tfoot>
 			</tbody>
 			</table>

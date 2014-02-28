@@ -3,12 +3,21 @@
 Plugin Name: Woocommerce CSV Import
 Plugin URI: http://allaerd.org/
 Description: Import CSV files in Woocommerce
-Version: 1.2.6
+Version: 1.2.7
 Author: Allaerd Mensonides
 License: GPLv2 or later
 Author URI: http://allaerd.org
 parent: woocommerce
 */
+
+//add_action ( 'save_post' , 'woocsv_test_post' );
+
+function woocsv_test_post () {
+	echo '<pre>';
+	echo var_dump($_POST);
+	echo '</pre>';
+} 
+
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -37,6 +46,9 @@ unset($max_upload,$max_post, $memory_limit );
 
 woocsvAdmin::start();
 
+/* ! 1.2.7 add extra hook*/
+do_action ('woocsvBeforeInit');
+
 //add-ons
 if (class_exists('woocsvCustomFields')) {
 	$woocsvCustomfields = new woocsvCustomFields();
@@ -61,6 +73,7 @@ if (class_exists('woocsvWPML')) {
 if (class_exists('woocsvCustom')) {
 	$woocsvCustom = new woocsvCustom();
 }
-
+/* ! 1.2.7 add extra hook*/
+do_action ('woocsvAfterInit');
 
 ?>
