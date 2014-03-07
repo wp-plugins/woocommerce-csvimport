@@ -94,6 +94,10 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
 == Changelog ==
 
+= 1.2.8 =
+* stock to '' as default instead of 0
+* solved bug with featured image not working if you use names. ( thanks testcase Daniel Zenklusen )
+
 = 1.2.7 =
 * typo's
 * changed the way the filename is used. Windows users experienced problems.
