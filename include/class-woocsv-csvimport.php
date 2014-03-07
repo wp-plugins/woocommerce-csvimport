@@ -1,7 +1,7 @@
 <?php
 class woocsvImport
 {
-	public $version = '1.27';
+	public $version = '1.2.8';
 	
 	public $options;
 	
@@ -21,7 +21,7 @@ class woocsvImport
 		'merge_products'=>1,
 		'add_to_categories'=>1,
 		'debug'=>0,
-		'version' =>'1.2.7'
+		'version' =>'1.2.8'
 	);
 
 	public $fields = array (
