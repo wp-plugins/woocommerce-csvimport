@@ -48,7 +48,8 @@ class woocsvImportProduct
 		'_virtual'   => 'no',
 		'_price'   => '',
 		'_visibility' => 'visible',
-		'_stock'   => 0,
+		/* ! 1.2.8 stock default value to '' instead of 0 */
+		'_stock'   => '',
 		'_stock_status' => 'instock',
 		'_backorders' => 'no',
 		'_manage_stock' => 'yes',
@@ -245,7 +246,7 @@ class woocsvImportProduct
 		} else {
 			$imageID = $this->saveImageWithName($this->featuredImage);
 		}
-$imageID = $this->saveImageWithUrl($this->featuredImage);
+
 		if ($imageID)
 			set_post_thumbnail( $this->body['ID'], $imageID );	
 	}
