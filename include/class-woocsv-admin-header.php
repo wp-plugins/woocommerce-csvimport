@@ -89,6 +89,12 @@ class woocsvAdminHeader
 		}
 		fclose($handle);
 		$length = count($csvcontent[0]);
+		
+		//===================================
+		//! action before fields are filled
+		//===================================
+		do_action('woocsvOutputHeader', $woocsvImport->header);
+
 ?>
 			<h2>Header preview</h2>
 			<form id="headerForm" method="POST">
