@@ -232,9 +232,8 @@ class woocsvImportProduct
 
 	public function save()
 	{
-		global $woocommerce;
 		//save the post
-		/* !version 1.2.2 */
+
 		$this->body = apply_filters('woocsv_product_before_body', $this->body,$this->new);
 		$this->meta = apply_filters('woocsv_product_before_meta', $this->meta,$this->new);
 		
@@ -244,11 +243,7 @@ class woocsvImportProduct
 		do_action( 'woocsv_before_save', $this);
 
 		do_action( 'woocsv_product_after_body_save');
-
-		/* !version 1.2.2 */
-		//new add product type for more efficient save
 		
-		/* !version 1.2.4 */
 		// fixed bug with if condition
 		wp_set_object_terms( $post_id, $this->product_type , 'product_type', false );
 
@@ -277,7 +272,6 @@ class woocsvImportProduct
 		if ($this->images)
 			$this->saveImages($post_id);
 
-		/* !version 1.2.2 */
 		// added empty() else it overrrides the above function)	
 			
 		if (!empty($this->featuredImage))
@@ -294,7 +288,8 @@ class woocsvImportProduct
 		do_action( 'woocsv_after_save', $this);
 		
 		/* !version 2.0.0 */
-		$woocommerce->clear_product_transients( $post_id );
+		wc_delete_product_transients ($post_id);	
+
 		
 		//and return the ID		
 		return $post_id;
@@ -399,20 +394,14 @@ class woocsvImportProduct
 		$upload_dir = wp_upload_dir();
 		
 		
-		/* !version 1.2.1 */
-		/*
-		use curl to get image instead of
-		$image_data = file_get_contents($image);
-		*/
-		
+		/* use curl to get image instead of $image_data = file_get_contents($image);*/
 		$ch = curl_init();
 		$timeout = 0;
+
 		// curl set options
 		curl_setopt ($ch, CURLOPT_URL, $image);
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		/* !version 1.2.7 */
 		curl_setopt ($ch, CURLOPT_AUTOREFERER, true);
-		
 		
 		// Getting binary data
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -454,7 +443,6 @@ class woocsvImportProduct
 	{
 		global $wpdb;
 
-		/* !version 1.2.3 */
 		/* use  get_posts to retreive image instead of query direct!*/
 		
 		//set up the args
@@ -558,6 +546,7 @@ class woocsvImportProduct
 	public function fillInData()
 	{
 		global $woocsvImport;
+				
 		do_action( 'woocsv_product_before_fill_in_data');
 		
 		$id = false;
@@ -572,11 +561,13 @@ class woocsvImportProduct
 			if ($tempID) {			
 			 	$testID = get_posts( array('post_type' => 'product','p'=> $tempID));
 			 	if ($testID) {
-				 	$woocsvImport->importLog[] = 'Product found, ID is: '.$tempID;
+				 	$woocsvImport->importLog[] = 'Product found (ID), ID is: '.$tempID;
 				 	$id = $tempID;
 					$this->new = false;
-			 	} else {
-			 		$this->rawData[array_search('ID', $woocsvImport->header)] = '';
+			 	} else {	 	
+					/* ! version 2.0.1 set the ID to null */
+				 	$this->rawData[array_search('ID', $woocsvImport->header)] = '';
+		
 				 	$woocsvImport->importLog[] = 'ID :'.$tempID . ' not found!';
 			 	}
 		 	}
@@ -584,26 +575,41 @@ class woocsvImportProduct
 		}
 		
 		//check if the product already exists by checking it's sku
-		if (in_array('sku', $woocsvImport->header) )  
+		if (empty($id) && in_array('sku', $woocsvImport->header) )  
 		{
 			$sku = $this->rawData[array_search('sku', $woocsvImport->header)];
-			/* !version 1.2.2 */
 			
 			if (!empty($sku)) {
 				$id = $this->getProductId($sku);
 				if ( !empty( $id ) ) {
 					$this->new = false;
-					$woocsvImport->importLog[] = 'Product found, ID is: '. $id;
+					$woocsvImport->importLog[] = 'Product found (SKU), ID is: '. $id;
 				} else {
 					$woocsvImport->importLog[] = "New product";
 				}
 			}
-
-			//check for if we need to merge the product
-			if ($id && $woocsvImport->options['merge_products'] == 1) {
-				$this->mergeProduct($id);
-			}
-
+		}
+		
+		//check if the product already exists by checking it's post title		
+		if (empty($id) && in_array('post_title', $woocsvImport->header) )  
+		{
+			$post_title = $this->rawData[array_search('post_title', $woocsvImport->header)];
+			
+			if ($post_title) {			
+			 	$testID = get_page_by_title( $post_title,ARRAY_A , 'product' );
+			 	if ($testID) {
+				 	$woocsvImport->importLog[] = 'Product found (TITLE), ID is: '.$testID['ID'];
+				 	$id = $testID['ID'];
+					$this->new = false;
+			 	} else {
+				 	$woocsvImport->importLog[] = 'ID :'.$testID['ID'] . ' not found!';
+			 	}
+		 	}
+		}
+				
+		//check for if we need to merge the product
+		if ($id && $woocsvImport->options['merge_products'] == 1) {
+			$this->mergeProduct($id);
 		}
 
 		//fill in the product body
@@ -624,7 +630,7 @@ class woocsvImportProduct
 				$this->meta[$key] = $this->rawData[array_search(substr($key, 1), $woocsvImport->header)];
 			}
 		}
-
+		
 		//check if there are tags
 		if (in_array('tags', $woocsvImport->header)) {
 			foreach ($woocsvImport->header as $key=>$value) {

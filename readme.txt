@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 3.9.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -72,7 +72,8 @@ Change the number of rows to process at the same time. You might have run into t
 * manage_stock
 * shipping_class
 * comment_status
-
+* ping_status
+* menu_order
 
 = Max number of files in a directory = 
 
@@ -89,12 +90,15 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 1. Upload to the plugins directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-
 == Upgrade Notice ==
 
 Version 2.+  is mayor release..... Please make a backup first before you upgrade! 
 
 == Changelog ==
+
+= 2.0.1 =
+* you can use post_title as well to find products. Order is look for ID, look by SKU, look by post_title. It takes the lowest product it can find if there are mutliple
+* fix for updating by ID first field in the csv was deleted
 
 = 2.0.0 =
 * added parsing of data. It checks a lot of values and correct them if they are wrong

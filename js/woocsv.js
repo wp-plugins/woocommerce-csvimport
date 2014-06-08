@@ -13,21 +13,21 @@ function doAjaxImport(formData)
 			var newFormData = JSON.parse(data);
 
 			if (newFormData.done !=1)
-			{
-								
+			{								
 				if (newFormData.log && newFormData.log.length > 0) {
-
 					jQuery.each(newFormData.log, function( index, value ) {
 						jQuery('#import_log').prepend('<p> '+value+' </p>');
 					});
-					
-
 				}
-				
 				doAjaxImport(newFormData);
 			}
 			else
 			{
+				if (newFormData.log && newFormData.log.length > 0) {
+					jQuery.each(newFormData.log, function( index, value ) {
+						jQuery('#import_log').prepend('<p> '+value+' </p>');
+					});
+				}
 				jQuery('#import_log').prepend('<p><h2>Done!</h2></p>');
 			}
 		},
