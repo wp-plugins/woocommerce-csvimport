@@ -10,21 +10,31 @@ function doAjaxImport(formData)
 		success: function(data)
 		{ 
 			console.log(data);
-			if (data != 'done')
+			var newFormData = JSON.parse(data);
+
+			if (newFormData.done !=1)
 			{
-				var newFormData = JSON.parse(data);
-				jQuery('#import_log').prepend('<p> row: ' + newFormData.currentrow + ' / ' + newFormData.rows + '</p>');
+								
+				if (newFormData.log && newFormData.log.length > 0) {
+
+					jQuery.each(newFormData.log, function( index, value ) {
+						jQuery('#import_log').prepend('<p> '+value+' </p>');
+					});
+					
+
+				}
+				
 				doAjaxImport(newFormData);
 			}
 			else
 			{
-				jQuery('#import_log').prepend('<p>Done!</p>');
+				jQuery('#import_log').prepend('<p><h2>Done!</h2></p>');
 			}
 		},
 		error: function(data)
 		{
 		console.log(data);
-			alert('something went wrong');
+			alert('Something went wrong... We could not make a connection with your server.... Check your permissions and rights the do ajax requests!');
 		}
 	});
 }
