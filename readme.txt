@@ -1,9 +1,9 @@
 === Woocommerce CSV importer ===
 Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
-Requires at least: 3.4.0
-Tested up to: 3.5.0
-Stable tag: 1.2.8
+Requires at least: 3.7.0
+Tested up to: 3.9.1
+Stable tag: 2.0.0
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,15 +16,16 @@ Import and manage products in Woocommerce. Upload your csv file, create your cus
 
 First step is to look at your settings, select the right field separator and take a look at the other settings as well. 
 
-When you have done that it's time to link the right columns to the right fields. Upload your CSV file in the header section and link them. If the plugin can map the fields it will do so automatically.
+When you have done that it's time to link the right columns to the right fields. Upload your CSV file in the header tab and link them. If the plugin can map the fields it will do so automatically.
 
 When you have mapped the right fields, it is time to import!
 
 = There are a few nice add-ons: =
 
-1. Import custom fields
+1. Import variable products
 2. Import attributes
-3. Import variable products
+3. Import custom fields
+4. Import premium
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
@@ -59,7 +60,7 @@ Change the number of rows to process at the same time. You might have run into t
 * length
 * width
 * height
-* images (depreciated)
+* images (deprecated)
 * featured_image
 * product_gallery
 * tax_status
@@ -91,11 +92,21 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 
 == Upgrade Notice ==
 
-Version 1.+  is very different. Please make a backup first before you upgrade! You can find older version at [allaerd.org] (http://allaerd.org/shop “the shop”)
+Version 2.+  is mayor release..... Please make a backup first before you upgrade! 
+
 == Changelog ==
 
+= 2.0.0 =
+* added parsing of data. It checks a lot of values and correct them if they are wrong
+* changed the price functionality to use regular or sales price and not price anymore
+* fixed a terrible bug with featured image importing
+* changes the JS to give feedback on every row and not on the last raw of the current block
+* a lot of tweaks for deleting cache stuff
+* added the ID field, you can now use the current ID of a product to update it.
+* added ping_status and menu_order fields
+
 = 1.2.8 =
-* add some hooks for future use
+* add some hooks for future add-on (import custom taxonomies like brands)
 
 = 1.2.7 =
 * typo's
