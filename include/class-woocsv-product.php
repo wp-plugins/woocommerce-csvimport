@@ -294,7 +294,7 @@ class woocsvImportProduct
 		do_action( 'woocsv_after_save', $this);
 		
 		/* !version 2.0.0 */
-		$woocommerce->clear_product_transients( $post_id );
+		// $woocommerce->clear_product_transients( $post_id );
 		
 		//and return the ID		
 		return $post_id;
