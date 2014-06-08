@@ -575,7 +575,7 @@ class woocsvImportProduct
 		}
 		
 		//check if the product already exists by checking it's sku
-		if (empty($id) && in_array('sku', $woocsvImport->header) )  
+		if (empty($id) && in_array('sku', $woocsvImport->header) && $woocsvImport->options['match_by'] == 'sku' )  
 		{
 			$sku = $this->rawData[array_search('sku', $woocsvImport->header)];
 			
@@ -591,7 +591,7 @@ class woocsvImportProduct
 		}
 		
 		//check if the product already exists by checking it's post title		
-		if (empty($id) && in_array('post_title', $woocsvImport->header) )  
+		if (empty($id) && in_array('post_title', $woocsvImport->header) && $woocsvImport->options['match_by'] == 'title' )  
 		{
 			$post_title = $this->rawData[array_search('post_title', $woocsvImport->header)];
 			
