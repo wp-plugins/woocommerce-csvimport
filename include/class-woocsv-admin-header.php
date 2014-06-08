@@ -57,6 +57,7 @@ class woocsvAdminHeader
 		if ($woocsvImport->header) {
 			echo '<h2>Your current header is:</h2>';
 			echo '<p>';
+			
 			foreach ($woocsvImport->header as $field) {
 				echo $field.'; ';
 			}
@@ -89,12 +90,11 @@ class woocsvAdminHeader
 		}
 		fclose($handle);
 		$length = count($csvcontent[0]);
-		
 		//===================================
-		//! action before fields are filled
+		//! 2.0.0 create a hook for the header
 		//===================================
 		do_action('woocsvOutputHeader', $woocsvImport->header);
-
+		
 ?>
 			<h2>Header preview</h2>
 			<form id="headerForm" method="POST">
@@ -114,13 +114,11 @@ class woocsvAdminHeader
 				<td>
 				<select name="fields_<?php echo $i;?>">
 					<option value="skip">Skip</option>
-					<optgroup label="Body">
 					<?php foreach ($woocsvImport->fields as $field) :?>
 						<option value="<?php echo $field;?>" <?php if ( $field === $csvcontent[0][$i] ) echo 'selected'; ?>>
 							<?php echo $field;?>
 						</option>
 					<?php endforeach; ?>
-					</optgroup>
 				</select>
 				</td>
 				<td><?php if (isset($csvcontent[0][$i])) echo $csvcontent[0][$i];?></td>
