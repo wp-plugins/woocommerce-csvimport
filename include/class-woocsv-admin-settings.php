@@ -60,7 +60,7 @@ class woocsvAdminSettings
 				</td>
 			</tr>
 			<tr>
-				<th scope="row" class="titledesc"><label for="add_to_gallery">Add images to the product gallery<b> (DEPRECIATED)</b></label></th>
+				<th scope="row" class="titledesc"><label for="add_to_gallery">Add images to the product gallery<b> (deprecated)</b></label></th>
 				<td>
 					<select id="add_to_gallery" name="add_to_gallery">
 						<option value="0" <?php if ($woocsvImport->options['add_to_gallery']=='0') echo 'selected';?>>No</option>

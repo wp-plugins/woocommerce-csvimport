@@ -1,7 +1,10 @@
 <?php
 class woocsvImport
 {
-	public $version = '1.2.8';
+
+	public $importLog;
+	
+	public $version = '2.0.0';
 	
 	public $options;
 	
@@ -21,29 +24,29 @@ class woocsvImport
 		'merge_products'=>1,
 		'add_to_categories'=>1,
 		'debug'=>0,
-		'version' =>'1.2.8'
+		'version' =>'2.0.0'
 	);
 
 	public $fields = array (
-		0 =>'sku',
-		1 =>'post_name',
-		2 =>'post_status',
-		3 =>'post_title',
-		4 =>'post_content',
-		5 =>'post_excerpt',
-		6 =>'category',
-		7 =>'tags',
-		8 =>'stock',
-		9 =>'price',
-		10 =>'regular_price',
-		11 =>'sale_price',
-		12 =>'weight' ,
-		13 =>'length',
-		14 =>'width' ,
-		15 =>'height' ,
-		16 =>'images', //depreciated since 1.2.0, will be removed in 1.4.0
-		17 =>'tax_status',
-		18 =>'tax_class' ,
+		0 =>  'sku',
+		1 =>  'post_name',
+		2 =>  'post_status',
+		3 =>  'post_title',
+		4 =>  'post_content',
+		5 =>  'post_excerpt',
+		6 =>  'category',
+		7 =>  'tags',
+		8 =>  'stock',
+		9 =>  'price', /* ! 2.0.0 deprecated. Use regular_price or/and sale_price */
+		10 => 'regular_price',
+		11 => 'sale_price',
+		12 => 'weight' ,
+		13 => 'length',
+		14 => 'width' ,
+		15 => 'height' ,
+		16 => 'images', //deprecated since 1.2.0, will be removed in 1.4.0
+		17 => 'tax_status',
+		18 => 'tax_class' ,
 		19 => 'stock_status', 	// instock, outofstock
 		20 => 'visibility', 	// visible, catelog, search, hidden
 		21 => 'backorders', 	// yes,no
@@ -54,6 +57,9 @@ class woocsvImport
 		26 => 'shipping_class',
 		27 => 'comment_status', //closed, open
 		//28 => 'change_stock', // +1 -1 + 5 -8
+		29 =>'ID',
+		30 =>'ping_status',
+		31 => 'menu_order',		// open,closed
 	);
 
 
