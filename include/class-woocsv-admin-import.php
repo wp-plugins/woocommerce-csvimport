@@ -138,7 +138,7 @@ class woocsvAdminImport
 			$wooProduct = new woocsvImportProduct;
 			$wooProduct->header = $woocsvImport->header;
 			$realRow = $postData['currentrow'] +1;
-			$woocsvImport->importLog[] = "--> row:". $realRow ." / ". $postData['rows'] ;
+			$woocsvImport->importLog[] = "--> row:". $realRow ." / ". ((int)$postData['rows'] + 1) ;
 			
 			//===================
 			//! We are finished
@@ -182,7 +182,7 @@ class woocsvAdminImport
 			//=========================
 
 			do_action('woocsv_before_fill_in_data' );
-
+			
 			$wooProduct->fillInData();
 
 			do_action('woocsv_after_fill_in_data' );
