@@ -98,6 +98,16 @@ class woocsvAdminSettings
 				</td>
 			</tr>
 			<tr>
+				<th scope="row" class="titledesc"><label for="debug">Match product by SKU or post title</label></th>
+				<td>
+					<select id="match_by" name="match_by">
+						<option value="sku" <?php if ($woocsvImport->options['match_by']=='sku') echo 'selected';?>>sku</option>
+						<option value="title" <?php if ($woocsvImport->options['match_by']=='title') echo 'selected';?>>title</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
 				<td><button type="submit" class="button button-primary button-hero"">Save</button></td>
 			</tr>
 		</tbody>
@@ -120,6 +130,7 @@ class woocsvAdminSettings
 			'merge_products' => empty($_POST['merge_products'])?'':$_POST['merge_products'],
 			'add_to_categories' => empty($_POST['add_to_categories'])?'':$_POST['add_to_categories'],
 			'debug' => empty($_POST['debug'])?'':$_POST['debug'],
+			'match_by' => empty($_POST['match_by'])?'':$_POST['match_by'],
 		);
 		update_option('woocsv-options', $options);
 		$woocsvImport->options = $options;

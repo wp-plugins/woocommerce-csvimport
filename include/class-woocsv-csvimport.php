@@ -4,7 +4,7 @@ class woocsvImport
 
 	public $importLog;
 	
-	public $version = '2.0.0';
+	public $version = '2.0.1';
 	
 	public $options;
 	
@@ -24,7 +24,8 @@ class woocsvImport
 		'merge_products'=>1,
 		'add_to_categories'=>1,
 		'debug'=>0,
-		'version' =>'2.0.0'
+		'version' =>'2.0.1',
+		'match_by' => 'sku',
 	);
 
 	public $fields = array (
