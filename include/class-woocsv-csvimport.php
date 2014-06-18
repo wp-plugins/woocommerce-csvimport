@@ -4,7 +4,7 @@ class woocsvImport
 
 	public $importLog;
 	
-	public $version = '2.0.1';
+	public $version = '2.0.2';
 	
 	public $options;
 	
@@ -57,7 +57,7 @@ class woocsvImport
 		25 => 'product_gallery',
 		26 => 'shipping_class',
 		27 => 'comment_status', //closed, open
-		//28 => 'change_stock', // +1 -1 + 5 -8
+		28 => 'change_stock', // +1 -1 + 5 -8
 		29 =>'ID',
 		30 =>'ping_status',
 		31 => 'menu_order',		// open,closed

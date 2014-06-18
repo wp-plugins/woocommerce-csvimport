@@ -114,7 +114,7 @@ class woocsvAdminHeader
 				<td>
 				<select name="fields_<?php echo $i;?>">
 					<option value="skip">Skip</option>
-					<?php foreach ($woocsvImport->fields as $field) :?>
+					<?php foreach (array_unique($woocsvImport->fields) as $field) :?>
 						<option value="<?php echo $field;?>" <?php if ( $field === $csvcontent[0][$i] ) echo 'selected'; ?>>
 							<?php echo $field;?>
 						</option>

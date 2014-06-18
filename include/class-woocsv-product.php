@@ -6,7 +6,8 @@ class woocsvImportProduct
 
 	public $new = true;
 	
-	public $log = array();
+	/* ! 2.0.2 deleted */
+	//public $log = array();
 	
 	public $header = array();
 
@@ -98,13 +99,15 @@ class woocsvImportProduct
 		//check the post_status
 		$post_status = array('publish','pending','draft','auto-draft','future','private','inherit','trash');
 		
+
 		if ( !in_array( $this->body['post_status'], $post_status) ) {
 			$woocsvImport->importLog[] = 'post status changed from '. $this->body['post_status'] .' to publish';
 			$this->body['post_status'] = 'publish';
 		}
 		
 		//check if there is a name or a title, else put status to draft
-		if (empty($this->body['post_title']) ) {
+		/* !2.0.2 added product type check to make sure only to check for simple products  */
+		if (empty($this->body['post_title']) && $this->body['post_type'] == 'product'  ) {
 			$woocsvImport->importLog[] = 'title is empty status changed to draft';
 			$this->body['post_status'] = 'draft';
 		}
@@ -653,14 +656,26 @@ class woocsvImportProduct
 			}
 		} 
 		
-		/* 1.2.7 change_stock 
+		/* ! 2.0.2 change_stock */
 		if (in_array('change_stock', $woocsvImport->header)) {
 			$key = array_search('change_stock', $woocsvImport->header);
 			$change_stock = $this->rawData[$key];
-			if ($this->new = false)
-				
+			
+			//get the stock
+			$stock = get_post_meta($this->body['ID'],'_stock', true);
+			
+			//if the stock is empty set it to 0
+			if (!$stock) $stock = 0;
+			
+			//calculate the new stock level
+			$new_stock = $stock + $change_stock;
+
+			//set new stock in the meta
+			$this->meta['_stock'] = $new_stock;
+
+			//set log
+			$woocsvImport->importLog[] = "Change stock modus: stock changed from $stock to $new_stock";
 		}
-		*/
 		
 		/* !--deprecated */
 		//check if there are images
@@ -694,14 +709,6 @@ class woocsvImportProduct
 	{
 		return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 
-		/* !version 1.2.7
-		if(filter_var($url, FILTER_VALIDATE_URL) === FALSE)
-			{
-			        return false;
-			}else{
-					return true;
-			}
-		*/ 
 	}
 
 }

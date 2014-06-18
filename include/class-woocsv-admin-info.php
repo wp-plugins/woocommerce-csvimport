@@ -24,9 +24,9 @@ class woocsvAdminInfo {
 			</ol>
 			Check out <a href="http://allaerd.org/shop/">Allaerd.org</a> to find all the add-ons.		
 		</p>
-		
+	
 		<h2>Example CSV</h2>
-		Check out the example CSV file <a href="<?php echo plugin_dir_url(__file__);?>example.csv">here</a></p>
+		<p>Check out the example CSV file <a href="<?php echo plugin_dir_url(__file__);?>example.csv">here</a></p>
 		
 		<h2>What fields are available</h2>
 		<dl>
@@ -80,6 +80,10 @@ class woocsvAdminInfo {
 			<dl>You can enable the ping status the following values: <code>open, closed</code></dl>
 			<dt>menu_order</dt>
 			<dl>you can change the menu order with an given number. the default is <code>0</code></dl>
+			<dt>change_stock</dt>
+			<dl>
+			Here you can enter the stock adjustment. It will be used to calculate the stock of an existing product. It does not work for new products. If you want to decrease the stock by 2 you enter <code>-2</code>.
+			</dl>
 		</dl>	
 		<?php
 	}

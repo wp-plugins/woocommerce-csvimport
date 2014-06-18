@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 3.9.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -74,6 +74,7 @@ Change the number of rows to process at the same time. You might have run into t
 * comment_status
 * ping_status
 * menu_order
+* change_stock
 
 = Max number of files in a directory = 
 
@@ -95,6 +96,10 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 2.+  is mayor release..... Please make a backup first before you upgrade! 
 
 == Changelog ==
+
+= 2.0.2 =
+* added change_stock field. You can now add a stick adjustment and it will calculate the stock for an existing product. 
+* bug fix for parsing of post title field for variable products (they do not need a title)
 
 = 2.0.1 =
 * you can use post_title as well to find products. Order is look for ID, look by SKU, look by post_title. It takes the lowest product it can find if there are mutliple
