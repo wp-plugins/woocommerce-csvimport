@@ -169,9 +169,10 @@ class woocsvImportProduct
 		//  
 		//=======================
 
-		$regular_price = (in_array('regular_price', $this->header) && !empty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : 0 ;
-		$sale_price = (in_array('sale_price', $this->header) && !empty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : 0 ;
-		$price = (in_array('price', $this->header) && !empty($this->meta['_price'] )) ? $this->meta['_price'] : 0 ;
+		/* !2.0.3 changed 0 to '' */
+		$regular_price = (in_array('regular_price', $this->header) && !empty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '' ;
+		$sale_price = (in_array('sale_price', $this->header) && !empty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
+		$price = (in_array('price', $this->header) && !empty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
 		
 		//old way
 		if ($price && !$sale_price && !$regular_price){
