@@ -99,7 +99,6 @@ class woocsvImportProduct
 		//check the post_status
 		$post_status = array('publish','pending','draft','auto-draft','future','private','inherit','trash');
 		
-
 		if ( !in_array( $this->body['post_status'], $post_status) ) {
 			$woocsvImport->importLog[] = 'post status changed from '. $this->body['post_status'] .' to publish';
 			$this->body['post_status'] = 'publish';
@@ -144,7 +143,7 @@ class woocsvImportProduct
 		}
 
 		//check backorders
-		if (in_array('backorders', $this->header) && !in_array($this->meta['_backorders'], array('yes','no'))) { 
+		if (in_array('backorders', $this->header) && !in_array($this->meta['_backorders'], array('yes','no','notify'))) { 
 			$woocsvImport->importLog[] = 'backorders changed from '.$this->meta['_backorders'].' to no';
 			$this->meta['_backorders'] = 'no';
 		}

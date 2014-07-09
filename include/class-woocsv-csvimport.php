@@ -4,7 +4,7 @@ class woocsvImport
 
 	public $importLog;
 	
-	public $version = '2.0.2';
+	public $version = '2.0.3';
 	
 	public $options;
 	
