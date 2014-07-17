@@ -137,7 +137,7 @@ class woocsvImportProduct
 		}
 
 		//check visibility
-		if (in_array('visibility', $this->header) && !in_array($this->meta['_visibility'], array('visible', 'catelog', 'search', 'hidden'))) { 
+		if (in_array('visibility', $this->header) && !in_array($this->meta['_visibility'], array('visible', 'catalog', 'search', 'hidden'))) { 
 			$woocsvImport->importLog[] = 'visibility changed from '.$this->meta['_visibility'].' to visible';
 			$this->meta['_visibility'] = 'visible';
 		}
