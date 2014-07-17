@@ -97,6 +97,9 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+= 2.0.4 =
+* fixed typo in parsing of visibility data  "catelog must be catalog"
+
 = 2.0.3 =
 * small bug when price in the header but is empty. It was set to 0 now it will be empty again.
 * added notify to backorder parsing array as allow value
