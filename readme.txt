@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 3.9.1
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -99,6 +99,7 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 = 2.0.4 =
 * fixed typo in parsing of visibility data  "catelog must be catalog"
+* check if a wc_delete_product_transients exists or not to prevent error on older installs of Woocommerce
 
 = 2.0.3 =
 * small bug when price in the header but is empty. It was set to 0 now it will be empty again.
