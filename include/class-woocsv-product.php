@@ -290,8 +290,9 @@ class woocsvImportProduct
 
 		do_action( 'woocsv_after_save', $this);
 		
-		/* !version 2.0.0 */
-		wc_delete_product_transients ($post_id);	
+		/* !version 2.0.4 */
+		if ( function_exists('wc_delete_product_transients') )
+			wc_delete_product_transients ($post_id);	
 
 		
 		//and return the ID		
