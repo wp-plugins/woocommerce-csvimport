@@ -97,6 +97,9 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+= 2.0.5 =
+* update parsing when to prevent prices from being cleared
+
 = 2.0.4 =
 * fixed typo in parsing of visibility data  "catelog must be catalog"
 * check if a wc_delete_product_transients exists or not to prevent error on older installs of Woocommerce
