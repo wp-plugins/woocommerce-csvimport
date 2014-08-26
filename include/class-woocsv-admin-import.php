@@ -169,7 +169,8 @@ class woocsvAdminImport
 			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0) {
 				$wooProduct->rawData = $csvContent[0];
 				/* ! 1.2.5 delete trancient */
-				$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");
+				/* ! 2.0.6 added prefix for options table */
+				$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%_transient_%'");
 			}
 
 			if ($postData['currentrow'] > 0)

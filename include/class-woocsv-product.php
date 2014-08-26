@@ -168,25 +168,11 @@ class woocsvImportProduct
 		//  
 		//=======================
 
-		/* !2.0.3 changed 0 to '' 
-		$regular_price = (in_array('regular_price', $this->header) && !empty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '' ;
-		$sale_price = (in_array('sale_price', $this->header) && !empty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
-		$price = (in_array('price', $this->header) && !empty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
-		*/
-		
-		// !2.0.5 check for if we are merging
-		if ($woocsvImport->options['merge_products'] == 0) {
-		//we are NOT merging
-			$regular_price = (in_array('regular_price', $this->header) && !empty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '' ;
-			$sale_price = (in_array('sale_price', $this->header) && !empty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
-			$price = (in_array('price', $this->header) && !empty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
-		} else {
-		//we are merging
-			$regular_price = $this->meta['_regular_price'];
-			$sale_price = $this->meta['_sale_price'];
-			$price = $this->meta['_price'];
-		}
-		
+		/* !2.0.3 changed 0 to '' */
+		/* !2.0.5 empty function to notempty to allow 0 values */
+		$regular_price = (in_array('regular_price', $this->header) && notempty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '' ;
+		$sale_price = (in_array('sale_price', $this->header) && notempty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
+		$price = (in_array('price', $this->header) && notempty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
 		
 		//old way
 		if ($price && !$sale_price && !$regular_price){

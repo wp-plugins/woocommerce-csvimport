@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 3.9.1
-Stable tag: 2.0.4
+Stable tag: 2.0.6
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -97,8 +97,13 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+
+= 2.0.6 =
+* fixed an error while deleting trancients (credits: Stephen Weir)
+
 = 2.0.5 =
-* update parsing when to prevent prices from being cleared
+* allow prices to be 0
+* added prefix for options table when deleting trancients (credits: Olivier Sazos)
 
 = 2.0.4 =
 * fixed typo in parsing of visibility data  "catelog must be catalog"
