@@ -107,7 +107,7 @@ class woocsvImportProduct
 		//check if there is a name or a title, else put status to draft
 		/* !2.0.2 added product type check to make sure only to check for simple products  */
 		if (empty($this->body['post_title']) && $this->body['post_type'] == 'product'  ) {
-			$woocsvImport->importLog[] = 'title is empty status changed to draft';
+			$woocsvImport->importLog[] = __('title is empty status changed to draft','woocsv-import');
 			$this->body['post_status'] = 'draft';
 		}
 		
@@ -170,10 +170,17 @@ class woocsvImportProduct
 
 		/* !2.0.3 changed 0 to '' */
 		/* !2.0.5 empty function to notempty to allow 0 values */
-		$regular_price = (in_array('regular_price', $this->header) && notempty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '' ;
-		$sale_price = (in_array('sale_price', $this->header) && notempty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
-		$price = (in_array('price', $this->header) && notempty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
 		
+
+		if ($woocsvImport->options['merge_products'] == 1) {	
+			$regular_price = (in_array('regular_price', $this->header) && notempty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price']:$this->meta['_regular_price'];
+			$sale_price = (in_array('sale_price', $this->header) && notempty($this->meta['_sale_price'] )) ? $this->meta['_sale_price']:$this->meta['_sale_price'];
+			$price = (in_array('price', $this->header) && notempty($this->meta['_price'] )) ? $this->meta['_price']:$this->meta['_price'];
+		} else {
+			$regular_price = (in_array('regular_price', $this->header) && notempty($this->meta['_regular_price'] )) ?  $this->meta['_regular_price'] : '';
+			$sale_price = (in_array('sale_price', $this->header) && notempty($this->meta['_sale_price'] )) ? $this->meta['_sale_price'] : '' ;
+			$price = (in_array('price', $this->header) && notempty($this->meta['_price'] )) ? $this->meta['_price'] : '' ;
+		}
 		//old way
 		if ($price && !$sale_price && !$regular_price){
 			$woocsvImport->importLog[] = 'Old price field used!!!! Please use regular_price and sale_price in stead';
