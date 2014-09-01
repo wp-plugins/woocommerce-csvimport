@@ -419,8 +419,9 @@ class woocsvImportProduct
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 		
-		
 		$image_data = curl_exec($ch);
+		
+		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
 		curl_close($ch);
 
@@ -436,6 +437,14 @@ class woocsvImportProduct
 
 		if (file_put_contents($file, $image_data)) {
 			$wp_filetype = wp_check_filetype($filename, null );
+			
+			if (!$wp_filetype['type'] && !empty($mime_type)) {
+				$allowed_content_types = wp_get_mime_types();
+				if (in_array($mime_type, $allowed_content_types)){
+					$wp_filetype['type'] = $mime_type;
+				}
+			}
+			
 			$attachment = array(
 				'post_mime_type' => $wp_filetype['type'],
 				'post_title' => sanitize_file_name($filename),
