@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 3.9.1
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -96,6 +96,9 @@ If you have a FAT32 filesystem you can run into troubles when you are trying to 
 Version 2.+  is mayor release..... Please make a backup first before you upgrade! 
 
 == Changelog ==
+
+= 2.0.8 =
+* fixed an issue in the roles
 
 = 2.0.7 =
 * Added role support. admin's can now select which roles are allowed to import
