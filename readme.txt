@@ -97,6 +97,9 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+= development =
+* if an image is uploaded with an URL and does not have an extension use CURLINFO_CONTENT_TYPE to determine the mime type
+
 = 2.0.8 =
 * fixed an issue in the roles
 
