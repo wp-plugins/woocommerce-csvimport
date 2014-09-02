@@ -10,15 +10,47 @@ class woocsvAdmin
 
 	static function adminMenu()
 	{
-		$page = add_menu_page('CSV Import', 'CSV Import', 'manage_options', 'woocsv_import', 'woocsvAdmin::mainPage', '', '58.1501');
+		global $woocsvImport;
+		
+		//======================================
+		//!2.1.0 added role support 
+		//======================================
+		$user = wp_get_current_user();
+		$current_role = $user->roles;
+		$allowed_roles = $woocsvImport->options['roles'];
+		
+		
+		if (is_admin() &&  ( count( array_intersect($current_role, $allowed_roles)) > 0 || current_user_can( 'manage_options' ) ) ) {
+			$page = add_menu_page('CSV Import', 'CSV Import', current($current_role), 'woocsv_import', 'woocsvAdmin::mainPage', '', '58.1501');			
+		}
+
 		add_action( 'admin_print_scripts-' .$page, 'woocsvAdmin::initJs');
 		add_action( 'admin_print_styles-' . $page, 'woocsvAdmin::initCss' );
 	}
 
 	static function initJs()
 	{
+	
+		//======================================
+		// register the scripts
+		//======================================
 		wp_enqueue_script('jquery');
 		wp_register_script( 'woocsv-script', plugins_url( '/woocommerce-csvimport/js/woocsv.js' ) );
+
+		//======================================
+		//! localize javascript
+		//======================================
+		$strings = array (
+			'error' => __( 'Something went wrong. We could not make a connection with the server. Check your permissions and rights the do ajax requests!' ),
+			'done' 	=> __( 'Done' ),
+			'start' => __( 'Starting'),
+		);
+		
+		wp_localize_script( 'woocsv-script', 'strings', $strings );
+	
+		//======================================
+		// enqueue the javascript
+		//======================================
 		wp_enqueue_script( 'woocsv-script' );
 	}
 
@@ -43,20 +75,15 @@ class woocsvAdmin
 		<div id="icon-themes" class="icon32"><br></div>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import');?>"
-				class="nav-tab <?php echo ($tab==='main')?'nav-tab-active':''; ?>">Import</a>
+				class="nav-tab <?php echo ($tab==='main')?'nav-tab-active':''; ?>"><?php echo __('Import','woocsv-import'); ?></a>
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=header');?>"
-				class="nav-tab <?php echo ($tab==='header')?'nav-tab-active':''; ?>">Header</a>
+				class="nav-tab <?php echo ($tab==='header')?'nav-tab-active':''; ?>"><?php echo __('Header','woocsv-import'); ?></a>
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=settings');?>"
-				class="nav-tab <?php echo ($tab==='settings')?'nav-tab-active':''; ?>">Settings</a>
+				class="nav-tab <?php echo ($tab==='settings')?'nav-tab-active':''; ?>"><?php echo __('Settings','woocsv-import'); ?></a>
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=info');?>"
-				class="nav-tab <?php echo ($tab==='info')?'nav-tab-active':''; ?>">Info</a>
+				class="nav-tab <?php echo ($tab==='info')?'nav-tab-active':''; ?>"><?php echo __('Documentation','woocsv-import'); ?></a>
 		</h2>
-		<div id="woocsvSidebar" class="welcome-panel" style="width:20%;float:right;">
-			<h2>Add-ons</h2>
-			<p>If you want to import custom fields, attributes, variable products, grouped products and all other types of products and fields check out 			<a href="http://allaerd.org/shop">Allaerd.org</a></p>
-			<p>Also check out the tutorials on my site!</p>
-		</div>
-		<div style="width:70%;float:left;">
+		<div>
 		<?php
 		switch ($tab) {
 		case 'main':

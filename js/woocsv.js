@@ -1,4 +1,4 @@
-var d = Date.now();
+
 
 function doAjaxImport(formData)
 {
@@ -28,13 +28,13 @@ function doAjaxImport(formData)
 						jQuery('#import_log').prepend('<p> '+value+' </p>');
 					});
 				}
-				jQuery('#import_log').prepend('<p><h2>Done!</h2></p>');
+				jQuery('#import_log').prepend('<p><h2>'+strings.done+'</h2></p>');
 			}
 		},
 		error: function(data)
 		{
 		console.log(data);
-			alert('Something went wrong... We could not make a connection with your server.... Check your permissions and rights the do ajax requests!');
+			alert(strings.error);
 		}
 	});
 }
@@ -48,7 +48,7 @@ jQuery(document).ready(function()
 			scrollTop: 0
 		}, 'slow');
 		jQuery('#importPreview').slideUp();
-		jQuery('#import_log').prepend('<p>Starting.....</p>');
+		jQuery('#import_log').prepend('<p>'+strings.start+'</p>');
 		var formData = jQuery(this).serialize();
 		doAjaxImport(formData);
 		e.preventDefault();

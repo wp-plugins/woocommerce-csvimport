@@ -42,7 +42,6 @@ class woocsvImportProduct
 		'post_parent' => 0,
 		'post_password' => '',
 		'comment_status'=> 'open',
-		/* !version 2.0.0 extra fields */
 		'ping_status'=>'open',
 		'menu_order'=> 0,
 	);
@@ -81,7 +80,7 @@ class woocsvImportProduct
 		'_download_expiry' => '',
 		'_product_url' => '',
 		'_button_text' => '',
-		'total_sales'=>0,
+//		'total_sales'=>0,
 	);
 
 	public function parseData(){
@@ -100,7 +99,7 @@ class woocsvImportProduct
 		$post_status = array('publish','pending','draft','auto-draft','future','private','inherit','trash');
 		
 		if ( !in_array( $this->body['post_status'], $post_status) ) {
-			$woocsvImport->importLog[] = 'post status changed from '. $this->body['post_status'] .' to publish';
+			$woocsvImport->importLog[] = sprintf(__('post status changed from %s to publish','woocsv-import'),$this->body['post_status']);
 			$this->body['post_status'] = 'publish';
 		}
 		
@@ -113,13 +112,13 @@ class woocsvImportProduct
 		
 		//check ping status
 		if ( !in_array( $this->body['ping_status'], array('open','closed')) ) {
-			$woocsvImport->importLog[] = 'ping status changed from '. $this->body['ping_status'] .' to ping';
+			$woocsvImport->importLog[] = sprintf(__('ping status changed from %s to ping','woocsv-import'),$this->body['ping_status']);
 			$this->body['ping_status'] = 'open';
 		}	
 	
 		//check menu_order
 		if ( !is_numeric ( $this->body['menu_order'] )) {
-			$woocsvImport->importLog[] = 'menu order changed from '. $this->body['menu_order'] .' to 0';
+			$woocsvImport->importLog[] = sprintf(__('menu order changed from %s to 0','woocsv-import'),$this->body['menu_order']);
 			$this->body['menu_order'] = 0;
 		}	
 		
@@ -132,31 +131,31 @@ class woocsvImportProduct
 		
 		//check stock status
 		if (in_array('stock_status', $this->header) && !in_array($this->meta['_stock_status'], array('instock', 'outofstock'))) { 
-			$woocsvImport->importLog[] = 'stock status changed from '.$this->meta['_stock_status'].' to instock';
+			$woocsvImport->importLog[] = sprintf(__('stock status changed from %s to instock','woocsv-import'),$this->meta['_stock_status']);
 			$this->meta['_stock_status'] = 'instock';
 		}
 
 		//check visibility
 		if (in_array('visibility', $this->header) && !in_array($this->meta['_visibility'], array('visible', 'catalog', 'search', 'hidden'))) { 
-			$woocsvImport->importLog[] = 'visibility changed from '.$this->meta['_visibility'].' to visible';
+			$woocsvImport->importLog[] = sprintf(__('visibility changed from %s to visible','woocsv-import'),$this->meta['_visibility']);
 			$this->meta['_visibility'] = 'visible';
 		}
 
 		//check backorders
 		if (in_array('backorders', $this->header) && !in_array($this->meta['_backorders'], array('yes','no','notify'))) { 
-			$woocsvImport->importLog[] = 'backorders changed from '.$this->meta['_backorders'].' to no';
+			$woocsvImport->importLog[] = sprintf(__('backorders changed from %s to no','woocsv-import'),$this->meta['_backorders']);
 			$this->meta['_backorders'] = 'no';
 		}
 
 		//check featured
 		if (in_array('featured', $this->header) && !in_array($this->meta['_featured'], array('yes','no'))) { 
-			$woocsvImport->importLog[] = 'featured changed from '.$this->meta['_featured'].' to no';
+			$woocsvImport->importLog[] = sprintf(__('featured changed from %s to no','woocsv-import'),$this->meta['_featured']);
 			$this->meta['_featured'] = 'no';
 		}
 
 		//check manage_stock
 		if (in_array('manage_stock', $this->header) && !in_array($this->meta['_manage_stock'], array('yes','no'))) { 
-			$woocsvImport->importLog[] = 'manage_stock changed from '.$this->meta['_manage_stock'].' to no';
+			$woocsvImport->importLog[] = sprintf(__('manage_stock changed from %s to no','woocsv-import'),$this->meta['_manage_stock']);
 			$this->meta['_manage_stock'] = 'no';
 		}
 				
@@ -183,14 +182,14 @@ class woocsvImportProduct
 		}
 		//old way
 		if ($price && !$sale_price && !$regular_price){
-			$woocsvImport->importLog[] = 'Old price field used!!!! Please use regular_price and sale_price in stead';
+			$woocsvImport->importLog[] = __('Old price field used!!!! Please use regular_price and sale_price in stead','woocsv-import');
 			$regular_price = $price;
 		}
 		
 		//new way
 		//product on sale
 		if ($sale_price >0 && $sale_price < $regular_price) {
-			$woocsvImport->importLog[] = 'Product is on sale';
+			$woocsvImport->importLog[] = __('Product is on sale','woocsv-import');
 			$price = $sale_price;
 		} else {
 		//the product is not on sale
@@ -420,7 +419,8 @@ class woocsvImportProduct
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 		
 		$image_data = curl_exec($ch);
-		
+
+		/* !2.1.0 get the mime type incase there is no extension */
 		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
 		curl_close($ch);
@@ -438,8 +438,10 @@ class woocsvImportProduct
 		if (file_put_contents($file, $image_data)) {
 			$wp_filetype = wp_check_filetype($filename, null );
 			
+			/* ! 2.1.0 added mime type */
 			if (!$wp_filetype['type'] && !empty($mime_type)) {
 				$allowed_content_types = wp_get_mime_types();
+				
 				if (in_array($mime_type, $allowed_content_types)){
 					$wp_filetype['type'] = $mime_type;
 				}
@@ -454,7 +456,7 @@ class woocsvImportProduct
 
 			$attach_id = wp_insert_attachment( $attachment, $file); //,$this->body['ID'] );
 			require_once ABSPATH . 'wp-admin/includes/image.php';
-			$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+			$attach_data = @wp_generate_attachment_metadata( $attach_id, $file );
 			wp_update_attachment_metadata( $attach_id, $attach_data );	
 		}
 		return $attach_id;

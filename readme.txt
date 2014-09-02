@@ -60,7 +60,6 @@ Change the number of rows to process at the same time. You might have run into t
 * length
 * width
 * height
-* images (deprecated)
 * featured_image
 * product_gallery
 * tax_status
@@ -99,6 +98,7 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 = development =
 * if an image is uploaded with an URL and does not have an extension use CURLINFO_CONTENT_TYPE to determine the mime type
+* language support
 
 = 2.0.8 =
 * fixed an issue in the roles

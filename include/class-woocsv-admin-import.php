@@ -9,7 +9,7 @@ class woocsvAdminImport
 		if (isset($_REQUEST['action']) && check_admin_referer('woocsv', 'uploadCsvFile')) {
 
 			$filename = self::handleUpload($_FILES['file']['tmp_name'], $_FILES['file']['name']);
-			if (!$filename) wp_die('<h2>Could not upload file.</h2>');
+			if (!$filename) wp_die(__('Could not upload file','woocsv-import'));
 
 			$handle = fopen($filename, 'r');
 			$row = 0;
@@ -21,20 +21,20 @@ class woocsvAdminImport
 			$length = count($csvcontent[0]);
 
 			if (count($csvcontent[0]) == 1 ) {
-				echo '<h2>I think you have the wrong seperator</h2>';
-				echo '<p>Please goto the settings page and change your seperator!</p>';
+				echo '<h2>'.__('I think you have the wrong seperator','woocsv-import').'</h2>';
+				echo '<p>'.__('Please goto the settings page and change your seperator!','woocsv-import').'</p>';
 				return;
 			}
 ?>
 			<div id="importPreview">
-			<h2>Import preview</h2>
+			<h2><?php echo __('Import preview','woocsv-import'); ?></h2>
 			<table class="widefat">
 			<thead>
 				<tr>
-					<th>Row 1</th>
-					<th>Row 2</th>
-					<th>Row 3</th>
-					<th>Row 4</th>
+					<th><?php echo __('Row 1','woocsv-import'); ?></th>
+					<th><?php echo __('Row 2','woocsv-import'); ?></th>
+					<th><?php echo __('Row 3','woocsv-import'); ?></th>
+					<th><?php echo __('Row 4','woocsv-import'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -56,7 +56,7 @@ class woocsvAdminImport
 				<input type="hidden" name="rows" value="<?php echo $row;?>" />
 				<input type="hidden" name="filename" value="<?php echo $filename; ?>" />
 				<input type="hidden" name="action" value="runImport">
-				<button type="submit" class="button button-primary button-hero">Run</button>
+				<button type="submit" class="button button-primary button-hero"><?php echo __('start','woocsv-import'); ?></button>
 			</form>
 			</div>
 			<div class="postbox" style="margin:1em 0 0 0;">
@@ -69,26 +69,25 @@ class woocsvAdminImport
 			unset($csvcontent, $line);
 		} else {
 ?>
-			<h2>Let's import!</h2>
+			<h2><?php echo __('Import','woocsv-import'); ?></h2>
 			<form name="loadPreview" method="POST" enctype="multipart/form-data">
 			<fieldset>
-				<input id="file" name="file" type="file" accept="text/csv" /><sup><?php echo "Max file size: $upload_mb";?></sup>
+				<input id="file" name="file" type="file" accept="text/csv" />
+				<sup><?php printf (__('Max file size: %d','woocsv-import'), $upload_mb);?></sup>
 				<input type="hidden" name="action" value="runImport">
 				<?php wp_nonce_field('woocsv', 'uploadCsvFile'); ?>
 				<br/><br/>
-				<button type="submit" class="button button-primary button-hero">Load</button>
+				<button type="submit" class="button button-primary button-hero"><?php echo __('start','woocsv-import'); ?></button>
 			</fieldset>
 			</form>
 			<hr>
 			<?php
 			if ($options = get_option('woocsv-lastrun')) {
-				echo 'If you are merging products, please be sure you have set the right header!<br/>';
-				echo 'Last run: '.$options['date'].'<br/>';
-				echo 'filename: '.$options['filename'].'<br/>';
-				echo 'Number of rows: '.$options['rows'].'<br/>';
+				echo __('If you are merging products, please be sure you have set the right header!','woocsv-import').'<br/>';
+				echo sprintf(__('Last run: %s','woocsv-import'),$options['date']) .'<br/>';
+				echo sprintf(__('Filename: ','woocsv-import'),$options['filename']) .'<br/>';
+				echo sprintf(__('Number of rows: ','woocsv-import'),$options['rows']) .'<br/>';
 			}
-?>
-		<?php
 		}
 	}
 
@@ -138,7 +137,7 @@ class woocsvAdminImport
 			$wooProduct = new woocsvImportProduct;
 			$wooProduct->header = $woocsvImport->header;
 			$realRow = $postData['currentrow'] +1;
-			$woocsvImport->importLog[] = "--> row:". $realRow ." / ". ((int)$postData['rows'] + 1) ;
+			$woocsvImport->importLog[] = "--> ".__('row','woocsv-import').":". $realRow ." / ". ((int)$postData['rows'] + 1) ;
 			
 			//===================
 			//! We are finished
@@ -158,7 +157,7 @@ class woocsvAdminImport
 
 			if ($woocsvImport->options['skipfirstline'] ==  1 && $postData['currentrow'] == 0) {
 				$postData['currentrow'] ++;
-				$woocsvImport->importLog[] = 'Skipping the first row';
+				$woocsvImport->importLog[] = __('Skipping the first row','woocsv-import');
 				self::dieNice($postData);
 			}
 
@@ -168,9 +167,6 @@ class woocsvAdminImport
 
 			if ($woocsvImport->options['skipfirstline'] ==  0 && $postData['currentrow'] == 0) {
 				$wooProduct->rawData = $csvContent[0];
-				/* ! 1.2.5 delete trancient */
-				/* ! 2.0.6 added prefix for options table */
-				$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%_transient_%'");
 			}
 
 			if ($postData['currentrow'] > 0)
@@ -232,7 +228,7 @@ class woocsvAdminImport
 		//===================
 		//! Clear transients
 		//===================
-		$wpdb->query("DELETE FROM wp_options WHERE option_name LIKE '%_transient_%'");
+		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '%_transient_%'");
 		
 		//=============================
 		//! Check if we need to debug

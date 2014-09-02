@@ -1,14 +1,12 @@
 <?php
 class woocsvImport
 {
-
+	
+	protected $text_domain = 'woocsv-import';
+	
 	public $importLog;
 	
-	public $version = '2.0.3';
-	
 	public $options;
-	
-	public $plugin_url;
 	
 	public $header;
 
@@ -24,8 +22,8 @@ class woocsvImport
 		'merge_products'=>1,
 		'add_to_categories'=>1,
 		'debug'=>0,
-		'version' =>'2.0.1',
 		'match_by' => 'sku',
+		'roles' => array('shop_manager'), 
 	);
 
 	public $fields = array (
@@ -45,7 +43,7 @@ class woocsvImport
 		13 => 'length',
 		14 => 'width' ,
 		15 => 'height' ,
-		16 => 'images', //deprecated since 1.2.0, will be removed in 1.4.0
+//2.1.0		16 => 'images', //deprecated since 1.2.0, will be removed in 1.4.0
 		17 => 'tax_status',
 		18 => 'tax_class' ,
 		19 => 'stock_status', 	// instock, outofstock
@@ -66,14 +64,19 @@ class woocsvImport
 
 	public function __construct()
 	{
+		// activation hook
 		register_activation_hook( __FILE__, array($this, 'install' ));
-		$options = get_option('woocsv-options');
-		if (empty($options)) {
-			update_option('woocsv-options', $this->options_default);
-		}
-		$this->options = get_option('woocsv-options');
+
+		// Ready for translation
+		load_plugin_textdomain( $this->text_domain, false, dirname( untrailingslashit( plugin_basename( __FILE__ ) ) ) . '/languages' );
+		
+		//check install
 		$this->checkInstall();
+
+		//load options
 		$this->checkOptions();
+		
+		//fill header
 		$this->fillHeader();
 	}
 
@@ -110,9 +113,11 @@ class woocsvImport
 			}
 		}
 		if ($update) {
-			update_option('woocsv-options',$options);			
-			$this->options = $options;
+			update_option('woocsv-options',$options);
 		}
+		
+		$options = get_option('woocsv-options');
+		$this->options = $options;
 	}
 
 	public function checkInstall()
@@ -120,7 +125,7 @@ class woocsvImport
 		$message = $this->message;
 
 		if (!get_option('woocsv-options'))
-			$message .= '<p>Please save your settings!</p>';
+			$message .= __('Please save your settings!','woocsv-import');
 
 		$upload_dir = wp_upload_dir();
 		$dir = $upload_dir['basedir'] .'/csvimport/';
@@ -128,7 +133,7 @@ class woocsvImport
 			@mkdir($dir);
 		
 		if (!is_writable($upload_dir['basedir'] .'/csvimport/'))
-			$message .= '<p>Upload directory is not writable, please check you permissions</p>';
+			$message .= __('Upload directory is not writable, please check you permissions','woocsv-import');
 
 		$this->message = $message;
 		if ($message)
