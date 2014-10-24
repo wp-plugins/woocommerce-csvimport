@@ -84,6 +84,10 @@ class woocsvAdminInfo {
 			<dl>
 			Here you can enter the stock adjustment. It will be used to calculate the stock of an existing product. It does not work for new products. If you want to decrease the stock by 2 you enter <code>-2</code>.
 			</dl>
+			<dt>post_author</dt>
+			<dl>
+				You can attach an author to a product by matching him by <code>id, slug, email, login</code>. ID is the actual id in the users table, slug is the nice name of the user, email is the email adres of the user and login is the login name.
+			</dl>
 		</dl>	
 		<?php
 	}

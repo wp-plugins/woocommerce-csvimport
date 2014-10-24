@@ -8,18 +8,19 @@ class woocsvAdminHeader
 	public static function start()
 	{
 	
-		/* 		!1.2.1		 */		
-		if ( !empty($_POST) && $_POST['action'] === 'uploadHeader' &&
-			!empty($_FILES['file']['name']) &&
-			check_admin_referer('uploadHeaderFile', 'uploadHeaderFile')
+		//upload preview file		
+		if ( !empty($_POST) && $_POST['action'] === 'uploadHeader' && 
+			!empty($_FILES['file']['name']) && check_admin_referer('uploadHeaderFile', 'uploadHeaderFile')
 		) {
 			self::showHeaderPreview();
+		//save header fields
 		} elseif ( !empty($_POST) && $_POST['action'] === 'saveHeader' &&
 			check_admin_referer('saveHeaderFields', 'saveHeaderFields')
 		) {
 			self::saveHeader();
 			self::checkHeader();
 			self::headerUpload();
+		//show start
 		} else {
 			self::checkHeader();
 			self::headerUpload();
@@ -35,7 +36,7 @@ class woocsvAdminHeader
 		<fieldset>
 			<input id="file" name="action" type="hidden" value="uploadHeader" />
 			<input id="file" name="file" type="file" accept="text/csv" />
-			<sup><?php printf (__('Max file size: %d','woocsv-import'), $upload_mb);?></sup>
+			<sup><?php printf (__('Max file size: %d mb','woocsv-import'), $upload_mb);?></sup>
 			<br/><br/>
 			<button type="submit" class="button button-primary button-hero"><?php echo __('start','woocsv-import'); ?></button>
 		<?php wp_nonce_field('uploadHeaderFile', 'uploadHeaderFile'); ?>
@@ -68,25 +69,31 @@ class woocsvAdminHeader
 	{
 		global $woocsvImport;
 		
-				
+		//open the temp file	
 		$handle = fopen($_FILES['file']['tmp_name'], 'r');
 		$row = 1;
 		$csvcontent = '';
+		
+		// loop through the first 4 lines
 		while ($row < 4) {
 			$csvcontent[] = @fgetcsv($handle, 0, $woocsvImport->options['seperator']);
 			$row ++;
 		}
 
+		//check to see if the we might have the wrong seperator
 		if (count($csvcontent[0]) == 1 ) {
 			echo '<h2>'. __('I think you have the wrong seperator','woocsv-import').'</h2>';
 			echo '<p>'.__('Please goto the settings page and change your seperator!','woocsv-import').'</p>';
 			return;
 		}
+		
+		//close the file
 		fclose($handle);
+		
+		//cset the amount of rows
 		$length = count($csvcontent[0]);
-		//===================================
-		//! 2.0.0 create a hook for the header
-		//===================================
+		
+		//hook after header is done
 		do_action('woocsvOutputHeader', $woocsvImport->header);
 		
 ?>
@@ -100,6 +107,7 @@ class woocsvAdminHeader
 					<th><?php echo __('Row 1','woocsv-import'); ?></th>
 					<th><?php echo __('Row 2','woocsv-import'); ?></th>
 					<th><?php echo __('Row 3','woocsv-import'); ?></th>
+					<th><?php echo __('Row 4','woocsv-import'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -108,15 +116,19 @@ class woocsvAdminHeader
 				<td>
 				<select name="fields_<?php echo $i;?>">
 					<option value="skip">Skip</option>
-					<?php foreach (array_unique($woocsvImport->fields) as $field) :?>
-						<option value="<?php echo $field;?>" <?php if ( $field === $csvcontent[0][$i] ) echo 'selected'; ?>>
-							<?php echo $field;?>
+					<?php 
+					// loop through the fields and check if the match the defined ones.
+					foreach (array_unique($woocsvImport->fields) as $field) : ?> 
+					<script>console.log(<?php echo $field;?>);</script>
+						<option value="<?php echo $field;?>" <?php if ( trim(strtolower($field)) == trim(strtolower($csvcontent[0][$i])) ) echo 'selected'; ?>>
+							<?php echo trim($field);?>
 						</option>
 					<?php endforeach; ?>
 				</select>
 				</td>
 				<td><?php if (isset($csvcontent[0][$i])) echo $csvcontent[0][$i];?></td>
 				<td><?php if (isset($csvcontent[1][$i])) echo $csvcontent[1][$i];?></td>
+				<td><?php if (isset($csvcontent[2][$i])) echo $csvcontent[2][$i];?></td>
 				<td><?php if (isset($csvcontent[2][$i])) echo $csvcontent[2][$i];?></td>
 			</tr>
 			<?php endfor;?>

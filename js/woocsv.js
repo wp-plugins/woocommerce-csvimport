@@ -11,7 +11,7 @@ function doAjaxImport(formData)
 		{ 
 			console.log(data);
 			var newFormData = JSON.parse(data);
-
+			console.log(newFormData);
 			if (newFormData.done !=1)
 			{								
 				if (newFormData.log && newFormData.log.length > 0) {

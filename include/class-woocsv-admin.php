@@ -13,7 +13,7 @@ class woocsvAdmin
 		global $woocsvImport;
 		
 		//======================================
-		//!2.1.0 added role support 
+		//role support 
 		//======================================
 		$user = wp_get_current_user();
 		$current_role = $user->roles;
@@ -21,7 +21,7 @@ class woocsvAdmin
 		
 		
 		if (is_admin() &&  ( count( array_intersect($current_role, $allowed_roles)) > 0 || current_user_can( 'manage_options' ) ) ) {
-			$page = add_menu_page('CSV Import', 'CSV Import', current($current_role), 'woocsv_import', 'woocsvAdmin::mainPage', '', '58.1501');			
+			$page = add_menu_page('CSV Import', 'CSV Import', current($current_role), 'woocsv_import', 'woocsvAdmin::mainPage', 'dashicons-randomize', '58.1501');			
 		}
 
 		add_action( 'admin_print_scripts-' .$page, 'woocsvAdmin::initJs');

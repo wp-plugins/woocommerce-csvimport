@@ -114,7 +114,20 @@ class woocsvAdminSettings
 					</select>
 				</td>
 			</tr>
-
+			
+			<tr>
+				<th><?php echo __('Match authors by there id, slug, email, or login','woocsv-import'); ?></th>
+				<td>
+					<select id="match_author_by" name="match_author_by">
+						<option value="id" <?php if ($woocsvImport->options['match_author_by']=='id') echo 'selected';?>>id</option>
+						<option value="slug" <?php if ($woocsvImport->options['match_author_by']=='slug') echo 'selected';?>>slug</option>
+						<option value="email" <?php if ($woocsvImport->options['match_author_by']=='email') echo 'selected';?>>email</option>
+						<option value="login" <?php if ($woocsvImport->options['match_author_by']=='login') echo 'selected';?>>login</option>
+					</select>
+				</td>
+			</tr>
+			
+			
 			<tr>
 				<td><button type="submit" class="button button-primary button-hero"><?php echo __('save','woocsv-import'); ?></button></td>
 			</tr>
@@ -128,7 +141,6 @@ class woocsvAdminSettings
 
 	static function saveSettings()
 	{
-		/* !new added debug option */
 		global $woocsvImport;
 		$options = array (
 			'seperator'=> empty($_POST['seperator'])?'':$_POST['seperator'],
@@ -140,6 +152,7 @@ class woocsvAdminSettings
 			'debug' => empty($_POST['debug'])?'':$_POST['debug'],
 			'match_by' => empty($_POST['match_by'])?'':$_POST['match_by'],
 			'roles' => empty($_POST['roles'])?'':$_POST['roles'],
+			'match_author_by' => empty($_POST['match_author_by'])?'':$_POST['match_author_by'],
 		);
 		update_option('woocsv-options', $options);
 		$woocsvImport->options = $options;

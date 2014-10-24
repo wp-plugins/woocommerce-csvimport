@@ -73,7 +73,7 @@ class woocsvAdminImport
 			<form name="loadPreview" method="POST" enctype="multipart/form-data">
 			<fieldset>
 				<input id="file" name="file" type="file" accept="text/csv" />
-				<sup><?php printf (__('Max file size: %d','woocsv-import'), $upload_mb);?></sup>
+				<sup><?php printf (__('Max file size: %d mb','woocsv-import'), $upload_mb);?></sup>
 				<input type="hidden" name="action" value="runImport">
 				<?php wp_nonce_field('woocsv', 'uploadCsvFile'); ?>
 				<br/><br/>
@@ -85,8 +85,8 @@ class woocsvAdminImport
 			if ($options = get_option('woocsv-lastrun')) {
 				echo __('If you are merging products, please be sure you have set the right header!','woocsv-import').'<br/>';
 				echo sprintf(__('Last run: %s','woocsv-import'),$options['date']) .'<br/>';
-				echo sprintf(__('Filename: ','woocsv-import'),$options['filename']) .'<br/>';
-				echo sprintf(__('Number of rows: ','woocsv-import'),$options['rows']) .'<br/>';
+				echo sprintf(__('Filename: %s','woocsv-import'),$options['filename']) .'<br/>';
+				echo sprintf(__('Number of rows: %s','woocsv-import'),$options['rows']) .'<br/>';
 			}
 		}
 	}
@@ -137,7 +137,7 @@ class woocsvAdminImport
 			$wooProduct = new woocsvImportProduct;
 			$wooProduct->header = $woocsvImport->header;
 			$realRow = $postData['currentrow'] +1;
-			$woocsvImport->importLog[] = "--> ".__('row','woocsv-import').":". $realRow ." / ". ((int)$postData['rows'] + 1) ;
+			
 			
 			//===================
 			//! We are finished
@@ -150,6 +150,9 @@ class woocsvAdminImport
 				do_action('woocsv_after_import_finished');
 				self::dieNice($postData,true);
 			}
+
+			// count the rows here else we have a row and than die.
+			$woocsvImport->importLog[] = "--> ".__('row','woocsv-import').":". $realRow ." / ". ((int)$postData['rows']) ;
 
 			//==================================
 			//! We want to skip the first line
@@ -206,6 +209,7 @@ class woocsvAdminImport
 			//===============================================
 
 			$postData['memory'] = round(memory_get_usage()/1024/1024, 2);
+
 		}
 
 
@@ -249,7 +253,7 @@ class woocsvAdminImport
 
 		//unset the product to be sure it's reset for the next run
 		unset($wooProduct);
-				
+			
 		//echo the json and die nice
 		echo json_encode($postData);
 		die();

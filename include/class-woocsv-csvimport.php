@@ -2,8 +2,6 @@
 class woocsvImport
 {
 	
-	protected $text_domain = 'woocsv-import';
-	
 	public $importLog;
 	
 	public $options;
@@ -24,6 +22,7 @@ class woocsvImport
 		'debug'=>0,
 		'match_by' => 'sku',
 		'roles' => array('shop_manager'), 
+		'match_author_by' => 'login',
 	);
 
 	public $fields = array (
@@ -59,6 +58,7 @@ class woocsvImport
 		29 =>'ID',
 		30 =>'ping_status',
 		31 => 'menu_order',		// open,closed
+		32 => 'post_author', //user name or nice name of an user
 	);
 
 
@@ -67,9 +67,6 @@ class woocsvImport
 		// activation hook
 		register_activation_hook( __FILE__, array($this, 'install' ));
 
-		// Ready for translation
-		load_plugin_textdomain( $this->text_domain, false, dirname( untrailingslashit( plugin_basename( __FILE__ ) ) ) . '/languages' );
-		
 		//check install
 		$this->checkInstall();
 

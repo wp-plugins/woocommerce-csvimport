@@ -1,13 +1,18 @@
 <?php
 /*
-Plugin Name: Woocommerce CSV Import
-Plugin URI: http://allaerd.org/
-Description: Import CSV files in Woocommerce
-Version: 2.1.0
-Author: Allaerd Mensonides
-License: GPLv2 or later
-Author URI: http://allaerd.org
-parent: woocommerce
+	Plugin Name: Woocommerce CSV Import
+	Plugin URI: http://allaerd.org/
+	Description: Import CSV files in Woocommerce
+	
+	Version: 2.1.0
+	
+	License: GPLv2 or later
+	
+	Author: Allaerd Mensonides
+	Author URI: http://allaerd.org
+	
+	Text Domain: woocsv-import
+	Domain Path: /languages
 */
 
 
@@ -29,6 +34,18 @@ if (!function_exists('notempty')) {
 	    return ($var==="0"||$var);
 	}
 }
+
+//lnaguages
+add_action('init', 'woocsv_load_plugin_textdomain');
+
+if (!function_exists('woocsv_load_plugin_textdomain')) {
+
+function woocsv_load_plugin_textdomain()
+	{
+	    load_plugin_textdomain('woocsv-import', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
+	}
+}
+
 
 //global stuff
 $woocsvImport = new woocsvImport();

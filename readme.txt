@@ -2,8 +2,8 @@
 Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
-Tested up to: 3.9.1
-Stable tag: 2.0.8
+Tested up to: 4.0
+Stable tag: 2.1.0
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +29,7 @@ When you have mapped the right fields, it is time to import!
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
-If you have questions about the add-ons, please fill in my [contact form](http://allaerd.org/contact/). If you have questions about the free part, you can post them in the forum.
+I do not answer questions on the forum anymore. If you have questions about the add-ons or the free importer, fill in my [contact form](http://allaerd.org/contact/). Before asking questions please read the [documentation](http://allaerd.org/documentation/).
 
 
 == Frequently Asked Questions ==
@@ -74,6 +74,9 @@ Change the number of rows to process at the same time. You might have run into t
 * ping_status
 * menu_order
 * change_stock
+* post_author
+
+and the other fields? They are in the several cool [add-on's](http://allaerd.org/shop).
 
 = Max number of files in a directory = 
 
@@ -96,9 +99,12 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
-= development =
+= 2.1.0 =
+* fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename
 * if an image is uploaded with an URL and does not have an extension use CURLINFO_CONTENT_TYPE to determine the mime type
-* language support
+* language support dutch,english
+* added some smartness when mapping header fields
+* added post_author field
 
 = 2.0.8 =
 * fixed an issue in the roles

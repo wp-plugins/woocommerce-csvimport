@@ -44,6 +44,7 @@ class woocsvImportProduct
 		'comment_status'=> 'open',
 		'ping_status'=>'open',
 		'menu_order'=> 0,
+		'post_author' => '',
 	);
 
 	public $meta = array(
@@ -243,9 +244,9 @@ class woocsvImportProduct
 	public function save()
 	{
 		//save the post
-
-		$this->body = apply_filters('woocsv_product_before_body', $this->body,$this->new);
-		$this->meta = apply_filters('woocsv_product_before_meta', $this->meta,$this->new);
+		/* ! 2.1.0 - remove filters.... you can use the global $wooProduct and the hooks to alter */
+		//$this->body = apply_filters('woocsv_product_before_body', $this->body,$this->new);
+		//$this->meta = apply_filters('woocsv_product_before_meta', $this->meta,$this->new);
 		
 		$post_id = wp_insert_post($this->body);
 		$this->body['ID'] = $post_id;
@@ -342,8 +343,11 @@ class woocsvImportProduct
 			$cats = explode( '|', $category );
 			foreach ($cats as $cat) {
 				$cat_taxs = explode( '->', $cat );
-				$parent = false;
+				
+				$parent = 0;
+				
 				foreach ( $cat_taxs as $cat_tax) {
+					
 					$new_cat = term_exists( $cat_tax, 'product_cat', $parent );
 					if ( ! is_array( $new_cat ) ) {
 						$new_cat = wp_insert_term( $cat_tax, 'product_cat', array( 'slug' => $cat_tax, 'parent'=> $parent) );
@@ -433,6 +437,21 @@ class woocsvImportProduct
 			$file = $upload_dir['path'] . '/' . $filename;
 		} else {
 			$file = $upload_dir['basedir'] . '/' . $filename;
+		}
+
+
+		/* !2.2.0 check if file is already there and rename it if needed */
+		$i= 1;
+		
+		//split it up
+		list($directory, , $extension, $filename) = array_values(pathinfo($file));
+		
+		//loop until it works
+		while (file_exists($file))
+		{
+			//create a new filename
+			$file = $directory . '/' . $filename . '-' . $i . '.' . $extension;
+			$i++;
 		}
 
 		if (file_put_contents($file, $image_data)) {
@@ -641,6 +660,19 @@ class woocsvImportProduct
 				$this->body[$key] = $this->rawData[array_search($key, $woocsvImport->header)];
 			}
 		}
+		
+		// ! 2.1 get the author
+		if (isset($this->body['post_author'])) {
+			
+			$user = get_user_by( ($woocsvImport->options['match_author_by'])?$woocsvImport->options['match_author_by']:'login', $this->body['post_author'] );
+			if ($user) {
+				$this->body['post_author'] = $user->ID;				
+			} else {
+				$this->body['post_author'] = '';
+			} 
+
+		}
+		
 
 		//fill in the ID if the product already exists
 		if ($id) {
