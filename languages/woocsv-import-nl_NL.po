@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Woocommerce CSV Import\n"
+"POT-Creation-Date: 2014-09-03 10:24+0100\n"
+"PO-Revision-Date: 2014-09-03 10:50+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: include/class-woocsv-admin-header.php:33
+msgid "Create a header"
+msgstr "Maak een header"
+
+#: include/class-woocsv-admin-header.php:38
+#: include/class-woocsv-admin-import.php:76
+#, php-format
+msgid "Max file size: %d"
+msgstr "Maximale bestand grote: %d"
+
+#: include/class-woocsv-admin-header.php:40
+#: include/class-woocsv-admin-import.php:59
+#: include/class-woocsv-admin-import.php:80
+msgid "start"
+msgstr "start"
+
+#: include/class-woocsv-admin-header.php:52
+msgid "Your current header is:"
+msgstr "Je huidige header is:"
+
+#: include/class-woocsv-admin-header.php:61
+msgid "You have not created a header yet!"
+msgstr "Je hebt nog geen header gemaakt!"
+
+#: include/class-woocsv-admin-header.php:62
+msgid ""
+"Upload your csv file and map the columns to the right fields and press load!"
+msgstr ""
+"Upload the CSV bestand en link de juiste kolommen aan de juiste velden en "
+"druk op start!"
+
+#: include/class-woocsv-admin-header.php:81
+#: include/class-woocsv-admin-import.php:24
+msgid "I think you have the wrong seperator"
+msgstr "Je gebruikt het verkeerde scheidingsteken"
+
+#: include/class-woocsv-admin-header.php:82
+#: include/class-woocsv-admin-import.php:25
+msgid "Please goto the settings page and change your seperator!"
+msgstr "Ga naar de settings pagina om je scheidingsteken aan te passen!"
+
+#: include/class-woocsv-admin-header.php:93
+msgid "Header preview"
+msgstr "Header voorbeeld"
+
+#: include/class-woocsv-admin-header.php:99
+msgid "Fields"
+msgstr "velden"
+
+#: include/class-woocsv-admin-header.php:100
+#: include/class-woocsv-admin-import.php:34
+msgid "Row 1"
+msgstr "regel 1"
+
+#: include/class-woocsv-admin-header.php:101
+#: include/class-woocsv-admin-import.php:35
+msgid "Row 2"
+msgstr "regel 2"
+
+#: include/class-woocsv-admin-header.php:102
+#: include/class-woocsv-admin-import.php:36
+msgid "Row 3"
+msgstr "regel 3"
+
+#: include/class-woocsv-admin-header.php:124
+#: include/class-woocsv-admin-settings.php:119
+msgid "save"
+msgstr "opslaan"
+
+#: include/class-woocsv-admin-import.php:12
+msgid "Could not upload file"
+msgstr "Kan het bestand niet uploaden"
+
+#: include/class-woocsv-admin-import.php:30
+msgid "Import preview"
+msgstr "Import voorbeeld"
+
+#: include/class-woocsv-admin-import.php:37
+msgid "Row 4"
+msgstr "regel 4"
+
+#: include/class-woocsv-admin-import.php:72 include/class-woocsv-admin.php:78
+msgid "Import"
+msgstr "Import"
+
+#: include/class-woocsv-admin-import.php:86
+msgid ""
+"If you are merging products, please be sure you have set the right header!"
+msgstr "Als je producten update, zorg ervoor dat je een goede header hebt!"
+
+#: include/class-woocsv-admin-import.php:87
+#, php-format
+msgid "Last run: %s"
+msgstr "Laatste keer: %s"
+
+#: include/class-woocsv-admin-import.php:88
+msgid "Filename: "
+msgstr "Bestandsnaam: "
+
+#: include/class-woocsv-admin-import.php:89
+msgid "Number of rows: "
+msgstr "Aantal regels:"
+
+#: include/class-woocsv-admin-import.php:140
+msgid "row"
+msgstr "regel"
+
+#: include/class-woocsv-admin-import.php:160
+msgid "Skipping the first row"
+msgstr "Eerste regel wordt overgeslagen"
+
+#: include/class-woocsv-admin-settings.php:18
+msgid "Import Settings"
+msgstr "Import settings"
+
+#: include/class-woocsv-admin-settings.php:24
+msgid "Allowed Roles:"
+msgstr "Geautoriseerde rollen:"
+
+#: include/class-woocsv-admin-settings.php:41
+msgid "Separator"
+msgstr "scheidingsteken"
+
+#: include/class-woocsv-admin-settings.php:50
+msgid "Skip the first line"
+msgstr "Sla de eerste regel over"
+
+#: include/class-woocsv-admin-settings.php:59
+msgid "Merge products"
+msgstr "Producten updaten"
+
+#: include/class-woocsv-admin-settings.php:66
+msgid ""
+"When you merge products, existing values of the product will be preserved. "
+"Only values that are in your CSV will be updated. With this option you can "
+"update only the price and stock for example!"
+msgstr ""
+"Wanneer je producten update worden bestaande waardes behouden en alleen de "
+"waarde die in je header staan gewijzigd. Met deze optie kan je bijvoorbeeld "
+"alleen de prijs of voorraad aanpassen."
+
+#: include/class-woocsv-admin-settings.php:71
+msgid "Add product to all categories"
+msgstr "Voeg dit product toe aan alle categorieën"
+
+#: include/class-woocsv-admin-settings.php:78
+msgid ""
+"If you enable this, products will be added to all categories on not only the "
+"latest. Example :<code>cat1->subcat1</code> , if the option is enabled, the "
+"product belongs to both else it will only belong to the sub categorie."
+msgstr ""
+"Als je deze optie aan zet worden alle categorieën toegevoegd en niet alleen "
+"de laatste. Voorbeeld: <code>cat1->subcat1</code> Als deze optie aanstaan "
+"wordt je product aan cat1 en subcat1 toegekend. Als de optie uitstaat alleen "
+"aan subcat1."
+
+#: include/class-woocsv-admin-settings.php:83
+msgid "How many rows to process in one call"
+msgstr "Hoeveel regels worden er tegelijk verwerkt"
+
+#: include/class-woocsv-admin-settings.php:96
+msgid ""
+"The importer works with AJAX calls to prevent timeouts on large datasets. "
+"With this setting you can adjust how many rows will be handled during ONE "
+"AJAX call. If you set this number to high, you can still have timeouts!"
+msgstr ""
+"De importer werkt met AJAX. Dit zorgt ervoor dat je geen time-outs krijgt "
+"bij grote bestanden. Je kan met deze setting aanpassen hoeveel regels de "
+"importer tegelijk verwerkt. Zet deze waarde niet te hoog anders kan je nog "
+"steeds time-outs krijgen!"
+
+#: include/class-woocsv-admin-settings.php:100
+msgid "Enable debug"
+msgstr "Zet debug aan"
+
+#: include/class-woocsv-admin-settings.php:109
+msgid "Match product by SKU or post title"
+msgstr "Zoek bestaande producten op via de SKU of via de title"
+
+#: include/class-woocsv-admin.php:44
+msgid ""
+"Something went wrong. We could not make a connection with the server. Check "
+"your permissions and rights the do ajax requests!"
+msgstr "Er ging iets verkeerd of er is een time-out opgetreden. "
+
+#: include/class-woocsv-admin.php:45
+msgid "Done"
+msgstr "Klaar"
+
+#: include/class-woocsv-admin.php:46
+msgid "Starting"
+msgstr "Start"
+
+#: include/class-woocsv-admin.php:80
+msgid "Header"
+msgstr "Header"
+
+#: include/class-woocsv-admin.php:82
+msgid "Settings"
+msgstr "Voorkeuren"
+
+#: include/class-woocsv-admin.php:84
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: include/class-woocsv-csvimport.php:128
+msgid "Please save your settings!"
+msgstr "Sla je voorkeuren op!"
+
+#: include/class-woocsv-csvimport.php:136
+msgid "Upload directory is not writable, please check you permissions"
+msgstr ""
+"De upload directory is niet toegankelijk. Check of de schrijfrechten goed "
+"staan."
+
+#: include/class-woocsv-product.php:102
+#, php-format
+msgid "post status changed from %s to publish"
+msgstr "De post status is aangepast van %s naar publish."
+
+#: include/class-woocsv-product.php:109
+msgid "title is empty status changed to draft"
+msgstr "De titel is aangepast naar draft"
+
+#: include/class-woocsv-product.php:115
+#, php-format
+msgid "ping status changed from %s to ping"
+msgstr "De ping status is aangepast van %s naar ping"
+
+#: include/class-woocsv-product.php:121
+#, php-format
+msgid "menu order changed from %s to 0"
+msgstr "De menu volgorder is aangepast van %s naar 0"
+
+#: include/class-woocsv-product.php:134
+#, php-format
+msgid "stock status changed from %s to instock"
+msgstr "De voorraad status is aangepast van %s naar instock"
+
+#: include/class-woocsv-product.php:140
+#, php-format
+msgid "visibility changed from %s to visible"
+msgstr "De visibility is aangepast van %s naar visible"
+
+#: include/class-woocsv-product.php:146
+#, php-format
+msgid "backorders changed from %s to no"
+msgstr "De backorder zijn aangepast van %s naar no"
+
+#: include/class-woocsv-product.php:152
+#, php-format
+msgid "featured changed from %s to no"
+msgstr "De featured zijn aangepast van %s naar no"
+
+#: include/class-woocsv-product.php:158
+#, php-format
+msgid "manage_stock changed from %s to no"
+msgstr "De manage_stock is aangepast van %s naar no"
+
+#: include/class-woocsv-product.php:185
+msgid ""
+"Old price field used!!!! Please use regular_price and sale_price in stead"
+msgstr ""
+"Het oude PRICE veld wordt gebruikt. Deze functie  wordt binnenkort "
+"verwijderd. Gebruik regular_price en sale_price in plaats van price!"
+
+#: include/class-woocsv-product.php:192
+msgid "Product is on sale"
+msgstr "Het product is in de uitverkoop"
