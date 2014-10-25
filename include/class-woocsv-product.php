@@ -309,6 +309,11 @@ class woocsvImportProduct
 
 	public function saveTags($post_id)
 	{
+		global $woocsvImport;
+		//2.1.1 If merging do not delete else clear currrent tag
+		if (!$woocsvImport->options['merge_products'])
+			wp_set_object_terms( $this->body['ID'], null, 'product_tag' );
+		
 		//handle tags
 		foreach ($this->tags as $tags) {
 			$tags = explode('|', $tags);
@@ -318,6 +323,12 @@ class woocsvImportProduct
 
 	public function saveShippingClass()
 	{
+		global $woocsvImport;
+		
+		//2.1.1 If merging do not delete else clear currrent tag
+		if (!$woocsvImport->options['merge_products'])
+			wp_set_object_terms( $this->body['ID'], null, 'product_shipping_class' );
+		
 		$term = term_exists($this->shippingClass, 'product_shipping_class');
 
 		if (!$term) {
@@ -337,7 +348,9 @@ class woocsvImportProduct
 		delete_option("product_cat_children");
 
 		//clear currrent
-		wp_set_object_terms( $this->body['ID'], null, 'product_cat' );
+		//2.1.1 If merging do not delete else clear currrent category
+		if (!$woocsvImport->options['merge_products'])
+			wp_set_object_terms( $this->body['ID'], null, 'product_cat' );
 
 		foreach ($this->categories as $category) {
 			$cats = explode( '|', $category );

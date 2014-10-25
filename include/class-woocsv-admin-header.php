@@ -119,7 +119,6 @@ class woocsvAdminHeader
 					<?php 
 					// loop through the fields and check if the match the defined ones.
 					foreach (array_unique($woocsvImport->fields) as $field) : ?> 
-					<script>console.log(<?php echo $field;?>);</script>
 						<option value="<?php echo $field;?>" <?php if ( trim(strtolower($field)) == trim(strtolower($csvcontent[0][$i])) ) echo 'selected'; ?>>
 							<?php echo trim($field);?>
 						</option>

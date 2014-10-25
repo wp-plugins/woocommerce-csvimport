@@ -99,6 +99,9 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+= development =
+* if merging keep current tags, attributes and shipping class.
+
 = 2.1.0 =
 * fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename
 * if an image is uploaded with an URL and does not have an extension use CURLINFO_CONTENT_TYPE to determine the mime type
