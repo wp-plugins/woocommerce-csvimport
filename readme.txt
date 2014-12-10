@@ -101,6 +101,7 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 = development =
 * if merging keep current tags, attributes and shipping class.
+*
 
 = 2.1.0 =
 * fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename
