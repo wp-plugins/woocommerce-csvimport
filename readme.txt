@@ -101,7 +101,12 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 = development =
 * if merging keep current tags, attributes and shipping class.
+<<<<<<< .mine
+* change the way how to validate an url. Not all url's where validated and therefor not all images where uploaded
+* solved a bug when spaces or %20 where in filenames of urls. Added sanitize_file_name name to clean the name.
+=======
 *
+>>>>>>> .r1073228
 
 = 2.1.0 =
 * fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename
@@ -109,6 +114,7 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 * language support dutch,english
 * added some smartness when mapping header fields
 * added post_author field
+* price is not supported anymore. Use regular_price and/or sale_price
 
 = 2.0.8 =
 * fixed an issue in the roles

@@ -35,14 +35,14 @@ class woocsvImport
 		6 =>  'category',
 		7 =>  'tags',
 		8 =>  'stock',
-		9 =>  'price', /* ! 2.0.0 deprecated. Use regular_price or/and sale_price */
+		//9 =>  'price', /* ! 2.0.0 deprecated. Use regular_price or/and sale_price */
 		10 => 'regular_price',
 		11 => 'sale_price',
 		12 => 'weight' ,
 		13 => 'length',
 		14 => 'width' ,
 		15 => 'height' ,
-//2.1.0		16 => 'images', //deprecated since 1.2.0, will be removed in 1.4.0
+		//16 => 'images', 	//deprecated since 1.2.0, will be removed in 1.4.0
 		17 => 'tax_status',
 		18 => 'tax_class' ,
 		19 => 'stock_status', 	// instock, outofstock
@@ -54,11 +54,11 @@ class woocsvImport
 		25 => 'product_gallery',
 		26 => 'shipping_class',
 		27 => 'comment_status', //closed, open
-		28 => 'change_stock', // +1 -1 + 5 -8
+		28 => 'change_stock', 	// +1 -1 + 5 -8
 		29 =>'ID',
 		30 =>'ping_status',
 		31 => 'menu_order',		// open,closed
-		32 => 'post_author', //user name or nice name of an user
+		32 => 'post_author',    //user name or nice name of an user
 	);
 
 
@@ -83,7 +83,6 @@ class woocsvImport
 		if ( $this->plugin_url ) return $this->plugin_url;
 		return $this->plugin_url = untrailingslashit( plugins_url( '/', __FILE__ ) );
 	}
-
 
 	public function install()
 	{
