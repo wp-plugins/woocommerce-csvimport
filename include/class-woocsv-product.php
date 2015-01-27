@@ -404,7 +404,6 @@ class woocsvImportProduct
 		$images = explode('|', $this->productGallery);
 		$gallery = false;
 		foreach ($images as $image) {
-			
 			if ($this->isValidUrl($image)) {
 				$imageID = $this->saveImageWithUrl($image);
 			} else {
@@ -441,16 +440,19 @@ class woocsvImportProduct
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 		
+		//exec curl command
 		$image_data = curl_exec($ch);
-
+		
 		/* !2.1.0 get the mime type incase there is no extension */
 		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
+		//close the curl command
 		curl_close($ch);
 
 		//get the filename
 		/* ! development add sanatize filename if name has spaces or %20 */
-		$filename =  sanitize_file_name( basename($image) );
+		$filename =  sanitize_file_name( basename(urldecode($image)) );
+
 
 		//create the dir or take the current one
 		if (wp_mkdir_p($upload_dir['path'])) {
@@ -458,7 +460,6 @@ class woocsvImportProduct
 		} else {
 			$file = $upload_dir['basedir'] . '/' . $filename;
 		}
-
 
 		/* !2.2.0 check if file is already there and rename it if needed */
 		$i= 1;

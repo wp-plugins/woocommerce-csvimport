@@ -101,12 +101,8 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 = development =
 * if merging keep current tags, attributes and shipping class.
-<<<<<<< .mine
 * change the way how to validate an url. Not all url's where validated and therefor not all images where uploaded
-* solved a bug when spaces or %20 where in filenames of urls. Added sanitize_file_name name to clean the name.
-=======
-*
->>>>>>> .r1073228
+* solved a bug when spaces or %20 where in filenames of urls. Added sanitize_file_name and url_decode to to clean the name.
 
 = 2.1.0 =
 * fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename
