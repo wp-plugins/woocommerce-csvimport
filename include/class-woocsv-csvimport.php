@@ -2,6 +2,8 @@
 class woocsvImport
 {
 	
+	public $addons;
+	
 	public $importLog;
 	
 	public $options;
