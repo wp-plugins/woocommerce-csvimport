@@ -128,7 +128,7 @@ class woocsvAdminHeader
 				<td><?php if (isset($csvcontent[0][$i])) echo $csvcontent[0][$i];?></td>
 				<td><?php if (isset($csvcontent[1][$i])) echo $csvcontent[1][$i];?></td>
 				<td><?php if (isset($csvcontent[2][$i])) echo $csvcontent[2][$i];?></td>
-				<td><?php if (isset($csvcontent[2][$i])) echo $csvcontent[2][$i];?></td>
+				<td><?php if (isset($csvcontent[3][$i])) echo $csvcontent[3][$i];?></td>
 			</tr>
 			<?php endfor;?>
 			<tfoot>
