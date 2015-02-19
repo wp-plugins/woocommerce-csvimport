@@ -3,6 +3,8 @@ class woocsvImport
 {
 	
 	public $addons;
+
+	public $api_url = 'http://allaerd.org/api/wc-api/check_for_updates';	
 	
 	public $importLog;
 	

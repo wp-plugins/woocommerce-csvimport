@@ -103,6 +103,9 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 * if merging keep current tags, attributes and shipping class.
 * change the way how to validate an url. Not all url's where validated and therefor not all images where uploaded
 * solved a bug when spaces or %20 where in filenames of urls. Added sanitize_file_name and url_decode to to clean the name.
+* solved the header preview, showed row 2 3 times
+* add add-on section and preparations for version control
+
 
 = 2.1.0 =
 * fixed an issue when images have the same name and are stored in the same location. The image was overridden instead of appending -X to the filename

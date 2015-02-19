@@ -82,6 +82,9 @@ class woocsvAdmin
 				class="nav-tab <?php echo ($tab==='settings')?'nav-tab-active':''; ?>"><?php echo __('Settings','woocsv-import'); ?></a>
 			<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=info');?>"
 				class="nav-tab <?php echo ($tab==='info')?'nav-tab-active':''; ?>"><?php echo __('Documentation','woocsv-import'); ?></a>
+			
+			<a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=addons');?>"
+				class="nav-tab <?php echo ($tab==='addons')?'nav-tab-active':''; ?>"><?php echo __('Add-ons','woocsv-import'); ?></a>
 		</h2>
 		<div>
 		<?php
@@ -97,6 +100,9 @@ class woocsvAdmin
 			break;
 		case 'info':
 			woocsvAdminInfo::info();
+			break;
+		case 'addons':
+			woocsvAdminInfo::addons();
 			break;
 		default:
 			woocsvAdminImport::start();
