@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 4.0
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -99,7 +99,7 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
-= development =
+= 2.2.0 =
 * if merging keep current tags, attributes and shipping class.
 * change the way how to validate an url. Not all url's where validated and therefor not all images where uploaded
 * solved a bug when spaces or %20 where in filenames of urls. Added sanitize_file_name and url_decode to to clean the name.
