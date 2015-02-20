@@ -334,8 +334,9 @@ class woocsvImportProduct
 			wp_set_object_terms( $this->body['ID'], null, 'product_shipping_class' );
 		
 		$term = term_exists($this->shippingClass, 'product_shipping_class');
-
-		if (!$term) {
+		
+		
+		if (!$term && isset( $this->shippingClass ) ) {
 			$term=wp_insert_term( $this->shippingClass, 'product_shipping_class');
 			wp_set_object_terms( $this->body['ID'], array ((int)$term['term_id']) , 'product_shipping_class' );
 		}
@@ -718,7 +719,7 @@ class woocsvImportProduct
 		//check if there is a shipping
 		if (in_array('shipping_class', $woocsvImport->header)) {
 			$key = array_search('shipping_class', $woocsvImport->header);
-			$this->shippingClass = $this->rawData[$key];
+			$this->shippingClass = trim($this->rawData[$key]);
 		}
 
 		//check if there are categories
