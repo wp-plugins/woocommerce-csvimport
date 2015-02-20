@@ -59,8 +59,9 @@ class woocsvAdminInfo {
 		}
 		
 	</style>
-<!--
 	<?php
+/*
+
 		 if ( isset ( $woocsvImport->addons ) ) {
 			 echo "<h1>Installed Add-on's</h1>";
 			 echo '<table class="widefat"><thead><tr><th class="row-title">add-on</th><th>Version</th><th>Status</th></tr></thead><tbody>';
@@ -96,8 +97,8 @@ class woocsvAdminInfo {
 			 echo '<tbody></table>';
 		 }
 		
+*/
 	?>
--->
 	<div class="wrap">
 	
 	<div id="icon-options-general" class="icon32"></div>
