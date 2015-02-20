@@ -75,7 +75,7 @@ class woocsvAdminHeader
 		$csvcontent = '';
 		
 		// loop through the first 4 lines
-		while ($row < 4) {
+		while ($row < 5) {
 			$csvcontent[] = @fgetcsv($handle, 0, $woocsvImport->options['seperator']);
 			$row ++;
 		}
