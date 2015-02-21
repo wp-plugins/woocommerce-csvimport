@@ -329,20 +329,20 @@ class woocsvImportProduct
 	{
 		global $woocsvImport;
 		
-		//2.1.1 If merging do not delete else clear currrent tag
-		if (!$woocsvImport->options['merge_products'])
+		//2.2.2 If merging do not delete else clear currrent tag
+		if ( ! $woocsvImport->options['merge_products'] ) {
 			wp_set_object_terms( $this->body['ID'], null, 'product_shipping_class' );
-		
+		}
 		$term = term_exists($this->shippingClass, 'product_shipping_class');
 		
-		
-		if (!$term && isset( $this->shippingClass ) ) {
-			$term=wp_insert_term( $this->shippingClass, 'product_shipping_class');
-			wp_set_object_terms( $this->body['ID'], array ((int)$term['term_id']) , 'product_shipping_class' );
+		// @since  2.2.2 beter handling for shipping class
+		if ( ! is_array( $term ) ) {
+			$term = wp_insert_term( $this->shippingClass, 'product_shipping_class');
 		}
 
-		wp_set_object_terms( $this->body['ID'], array ( (int)$term['term_id'] ) , 'product_shipping_class' );
-
+		if ( ! is_wp_error( $term ) ) {
+			wp_set_object_terms( $this->body['ID'] , array ( (int)$term['term_id'] ) , 'product_shipping_class' );			
+		}
 	}
 
 	public function saveCategories()
