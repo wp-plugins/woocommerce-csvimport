@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 3.7.0
 Tested up to: 4.0
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -99,8 +99,11 @@ Version 2.+  is mayor release..... Please make a backup first before you upgrade
 
 == Changelog ==
 
+= 2.2.2 = 
+* changes the shipping class a bit more to be more inline with categories *
+
 = 2.2.1 = 
-* fixed bug if sipping class was empty or contained spaces
+* fixed bug if shipping class was empty or contained spaces
 
 = 2.2.0 =
 * if merging keep current tags, attributes and shipping class.
