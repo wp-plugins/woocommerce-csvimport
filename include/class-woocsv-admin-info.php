@@ -149,7 +149,7 @@ class woocsvAdminInfo {
 				<a href="http://allaerd.org/shop/woocommerce-import-custom-fields">
 					<h3>Custom Fields</h3>
 					<p>
-						Custom fields are used to store all kind of information. Lots of other extensions and other plugins use it to store there data. Use this add-on to fill all that data using your CSV.
+						Custom fields are used to store all kind of information. Lots of other extensions and other plugins use it to store their data. Use this add-on to fill all that data using your CSV.
 					</p>
 				</a>
 			</li>
