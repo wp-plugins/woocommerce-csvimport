@@ -68,9 +68,15 @@ class woocsvAdmin
 		echo '</div>';
 	}
 
-	static function mainPageContent()
-	{
+	static function mainPageContent() {
+		global $woocsvImport; 
+	
 		$tab = (isset($_REQUEST['tab']))?$_REQUEST['tab']:'main';
+		
+		//@since 2.2.3 redirect to header if no header is there yet.
+		if (! isset ($woocsvImport->header )) {
+			$tab = 'header';
+		}
 ?>
 		<div id="icon-themes" class="icon32"><br></div>
 		<h2 class="nav-tab-wrapper">
