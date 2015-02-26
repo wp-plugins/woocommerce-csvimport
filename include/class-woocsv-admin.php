@@ -74,7 +74,7 @@ class woocsvAdmin
 		$tab = (isset($_REQUEST['tab']))?$_REQUEST['tab']:'main';
 		
 		//@since 2.2.3 redirect to header if no header is there yet.
-		if (! isset ($woocsvImport->header )) {
+		if (! isset ($woocsvImport->header ) && $tab == 'main' ) {
 			$tab = 'header';
 		}
 ?>
