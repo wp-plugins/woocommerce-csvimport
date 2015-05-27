@@ -1,6 +1,0 @@
-ID,sku,post_status,post_title,post_content,post_excerpt,category,tags,stock,regular_price,sale_price,weight,length,width,height,tax_status,tax_class,stock_status,visibility,backorders,featured,manage_stock,featured_image,product_gallery,shipping_class,comment_status,ping_status,menu_order
-1111,,publish,product 1,product 1,product 1,cat1->subcat1->subsubcat3,tag1,1,10,10,1,1,1,1,none,,instock,,yes,yes,yes,logo.png,,class1,open,open,1
-,sku2,publish,product 2,product 2,product 2,cat2->subcat2,tag2,2,5,10,1,1,1,1,taxable,custom_tax_class,instock,search,yes,yes,yes,http://allaerd.org/wp-content/uploads/2013/06/logo.png,,class2,closed,closed,2
-,sku3,publish,product 3,product 3,product 3,cat3|cat4,tag3,3,10,5,1,1,1,1,taxable,reduced-rate,outofstock,hidden,no,no,no,,http://allaerd.org/wp-content/uploads/2013/06/logo.png|logo.png,shipping class,open,open,3
-,sku4,publish,product 4,product 4,product 4,cat4,tag4|tag5,4,5,10,1,1,1,1,taxable,zero-rate,outofstock,visible,yes,yes,no,,,class3,closed,closed,4
-,sku5,publish,product 5,product 5,product 5,cat5|cat6->subcat3,tag6| tag7,5,10,5,1,1,1,1,none,,outofstock,catelog,no,no,yes,,,class4,open,open,5
