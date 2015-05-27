@@ -26,6 +26,7 @@ When you have mapped the right fields, it is time to import!
 2. Import attributes
 3. Import custom fields
 4. Import premium
+5. import taxonomies
 
 You can find them at [allaerd.org](http://allaerd.org/shop)
 
