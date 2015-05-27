@@ -42,7 +42,7 @@ global $woocsv_import;
 		$length = count($csvcontent[0]);
 		
 		//hook after header is done
-		do_action('woocsvOutputHeader', $woocsv_import->header);
+		do_action('woocsv_header_preview', $woocsv_import->header);
 		
 ?>
 			<h2><?php echo __('Header preview','woocsv-import'); ?></h2>
