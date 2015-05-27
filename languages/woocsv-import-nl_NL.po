@@ -51,12 +51,12 @@ msgstr ""
 
 #: include/class-woocsv-admin-header.php:81
 #: include/class-woocsv-admin-import.php:24
-msgid "I think you have the wrong seperator"
+msgid "I think you have the wrong separator"
 msgstr "Je gebruikt het verkeerde scheidingsteken"
 
 #: include/class-woocsv-admin-header.php:82
 #: include/class-woocsv-admin-import.php:25
-msgid "Please goto the settings page and change your seperator!"
+msgid "Please goto the settings page and change your separator!"
 msgstr "Ga naar de settings pagina om je scheidingsteken aan te passen!"
 
 #: include/class-woocsv-admin-header.php:93
