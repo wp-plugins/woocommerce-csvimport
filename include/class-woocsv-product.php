@@ -430,6 +430,10 @@ class woocsv_import_product
 		$ch = curl_init();
 		$timeout = 0;
 
+
+		//special chars
+		$image = htmlspecialchars($image);
+
 		// curl set options
 		curl_setopt ($ch, CURLOPT_URL, $image);
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
