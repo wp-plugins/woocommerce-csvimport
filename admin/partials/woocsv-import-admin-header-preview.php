@@ -1,6 +1,8 @@
 <?php
 /*
+	*
 	* header preview
+	*
 */
 ?>
 
@@ -90,6 +92,7 @@ global $woocsv_import;
 			<?php wp_nonce_field('save_header_preview', 'save_header_preview'); ?>
 			</form>
 </div>
+
 <script>
 	
 jQuery( '#header_name, select' ).keypress(function (e) {

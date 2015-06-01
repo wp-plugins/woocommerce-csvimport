@@ -25,8 +25,10 @@ global $woocsv_import;
 		<tr>
 			<th><?php echo __('name','woocsv-import'); ?></th>
 			<th><?php echo __('header','woocsv-import'); ?></th>
+			<!--
+				<th>&nbsp;</th>
+			-->
 			<th>&nbsp;</th>
-			<th><?php echo __('action','woocsv-import'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,9 +37,11 @@ global $woocsv_import;
 		<tr class="<?php echo ($i % 2 == 0)?:'alt';?>" id="<?php echo $key;?>">
 			<td><?php echo $key; ?></td>
 			<td><?php echo implode($woocsv_import->get_separator().' ', $value);?></td>
+			<!-- 
 			<td><span class="dashicons dashicons-arrow-up-alt2 up" data-header-name="<?php echo $key; ?>"></span></td>
 			<td><span class="dashicons dashicons-arrow-down-alt2 down" data-header-name="<?php echo $key; ?>"></span></td>
-			<td><button class="button-primary" data-header-name="<?php echo $key; ?>">delete</button></td>
+			-->
+			<td><button class="button-primary delete" data-header-name="<?php echo $key; ?>">delete</button></td>
 		</tr>
 	<?php $i++; ?>
 	<?php endforeach;?>
@@ -69,15 +73,15 @@ jQuery ('td span.dashicons.up').click(function() {
 
 });
 	
-jQuery('td button').click(function() {
-
+jQuery('td button.delete').click(function() {
+	
     var data = {
         action: 'delete_header',
         header_name: jQuery(this).data('header-name')
     };
     
     jQuery.post(ajaxurl, data, function(response) {
-
+	    
        jQuery(this).closest('.tr').remove();       
        if (response) {
 			jQuery("table#headertable tr[id='"+response+"']").remove();   

@@ -12,10 +12,12 @@ class woocsv_import_admin
 		add_action( 'wp_ajax_delete_header', array( $this,'delete_header' ) );
 		
 		//move header up
-		add_action( 'wp_ajax_header_up', array( $this,'header_up' ) );
+		//@todo
+		//add_action( 'wp_ajax_header_up', array( $this,'header_up' ) );
 	
 		//move header down
-		add_action( 'wp_ajax_header_down', array( $this,'header_down' ) );		
+		//@todo
+		//add_action( 'wp_ajax_header_down', array( $this,'header_down' ) );		
 	}
 
 	public function header_down() {
