@@ -91,10 +91,11 @@ and the other fields? They are in the several cool [add-on's](http://allaerd.org
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Upgrade Notice ==
-
 Version 3.+  is mayor release. Please make a backup first before you upgrade! And be sure to upgrade you add-ons to version 3+.
 
-== roadmap ==
+
+== Roadmap ==
+
 * schedule option
 * sorting of headers
 * add-ons versions will be visible in add-ons part and upgrade notices
@@ -110,6 +111,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * settings part
 * documentation part
 * add-on part
+* special chars allowed in url for images. (htmlspecialchars added to parse url)
 
 = 2.2.3 =
 * redirect to header tab if no header is present
