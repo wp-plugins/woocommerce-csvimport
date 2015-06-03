@@ -17,7 +17,7 @@ class woocsv_import
 
 	public $message;
 	
-	public $version = '3.0.0';
+	public $version = '3.0.1';
 
 	public $options_default = array (
 		'woocsv_separator'=>',',
