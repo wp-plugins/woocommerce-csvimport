@@ -33,7 +33,7 @@
 			$csvcontent[] = $line;
 			$row ++;
 		}
-		
+	
 		$length = count($csvcontent[0]);
 
 		if (count($csvcontent[0]) == 1 ) {
@@ -88,11 +88,12 @@
 			<button type="submit" class="button-primary"><?php echo __('start','woocsv-import'); ?></button>
 		</form>
 </div>
-<progress max="100" value="80"></progress>
+
 <div class="postbox" style="margin:1em 0 0 0;">
 	<div class="inside">
+		<progress id="woocsv_import_progress" style="width:100%;" max="<?php echo $row; ?>" value="0"></progress>
 		<div id="import_log">
-		</textarea>
+		</div>
 	</div>
 </div>
 

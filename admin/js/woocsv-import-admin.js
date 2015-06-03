@@ -21,6 +21,8 @@ function doAjaxImport(formData)
 				if (newFormData.log && newFormData.log.length > 0) {
 					jQuery.each(newFormData.log, function( index, value ) {
 						jQuery('#import_log').prepend('<p> '+value+' </p>');
+						
+						jQuery('#woocsv_import_progress').val(newFormData.currentrow);
 					});
 				}
 				doAjaxImport(newFormData);
@@ -30,6 +32,8 @@ function doAjaxImport(formData)
 				if (newFormData.log && newFormData.log.length > 0) {
 					jQuery.each(newFormData.log, function( index, value ) {
 						jQuery('#import_log').prepend('<p> '+value+' </p>');
+						
+						jQuery('#woocsv_import_progress').val(newFormData.currentrow);
 					});
 				}
 				jQuery('#import_log').prepend('<p><h2>'+strings.done+'</h2></p>');
