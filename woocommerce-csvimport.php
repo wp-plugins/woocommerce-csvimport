@@ -6,6 +6,9 @@
 	
 	Version: 2.2.2
 	
+	Requires at least: 	4.0
+	Tested up to: 4.2.2
+	
 	License: GPLv2 or later
 	
 	Author: Allaerd Mensonides
