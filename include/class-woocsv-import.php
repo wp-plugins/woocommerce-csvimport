@@ -29,6 +29,7 @@ class woocsv_import
 		'woocsv_match_by' => 'sku',
 		'woocsv_roles' => array('shop_manager'), 
 		'woocsv_match_author_by' => 'login',
+		'woocsv_convert_to_utf8' => 1,
 	);
 
 	public $fields = array (
@@ -258,6 +259,11 @@ class woocsv_import
 		while (($line = fgetcsv($handle, 0, $this->get_separator() )) !== FALSE) {
 		
 			if ( $count >= $post_data['currentrow'] && $count < ( (int)$post_data['currentrow'] + (int)$post_data['blocksize'])  ) {
+				//utf-8 support
+				if ( get_option('woocsv_convert_to_utf8') ) {
+					$line = array_map("utf8_encode", $line);
+				}
+
 				$csvContent[$count] = $line;
 			}
 			$count ++;

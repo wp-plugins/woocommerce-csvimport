@@ -112,6 +112,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * documentation part
 * add-on part
 * special chars allowed in url for images. (htmlspecialchars added to parse url)
+* convert to UTF-08 during import setting
 
 = 2.2.3 =
 * redirect to header tab if no header is present

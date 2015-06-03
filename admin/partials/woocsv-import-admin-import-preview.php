@@ -19,14 +19,21 @@
 		$filename = $woocsv_import->handle_file_upload($_FILES['csvfile']['tmp_name'], $_FILES['csvfile']['name']);
 		if (!$filename) wp_die(__('Could not upload file','woocsv-import'));
 
-		
 		$handle = fopen($filename, 'r');
+	
 		$row = 0;
 		$csvcontent = '';
 		while ( ( $line = fgetcsv( $handle, 0 ,$woocsv_import->get_separator() ) ) !== FALSE ) {
+			
+			//utf-8 support
+			if ( get_option('woocsv_convert_to_utf8') ) {
+				$line = array_map("utf8_encode", $line);
+			}
+				
 			$csvcontent[] = $line;
 			$row ++;
 		}
+		
 		$length = count($csvcontent[0]);
 
 		if (count($csvcontent[0]) == 1 ) {
@@ -81,6 +88,7 @@
 			<button type="submit" class="button-primary"><?php echo __('start','woocsv-import'); ?></button>
 		</form>
 </div>
+<progress max="100" value="80"></progress>
 <div class="postbox" style="margin:1em 0 0 0;">
 	<div class="inside">
 		<div id="import_log">

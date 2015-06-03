@@ -49,6 +49,10 @@ class woocsv_import_settings {
 		//match_author_by
 		add_settings_field('woocsv_match_author_by', 'Match authors by', array($this,'match_author_by'), 'woocsv-settings','woocsv-settings');
 		register_setting( 'woocsv-settings', 'woocsv_match_author_by', array($this,'options_validate') );
+		
+		//convert to utf8
+		add_settings_field('woocsv_convert_to_utf8', 'Convert to UTF-08', array($this,'convert_to_utf8'), 'woocsv-settings','woocsv-settings');
+		register_setting( 'woocsv-settings', 'woocsv_convert_to_utf8', array($this,'options_validate') );
 	}
 	
 	//sections callback
@@ -146,6 +150,16 @@ class woocsv_import_settings {
 		}
 		echo '</select>';
 		echo '<p class="description">These roles are allowed to import and change settings.</p>';
+	}
+	
+	
+	public function convert_to_utf8 () {
+		$value = get_option('woocsv_convert_to_utf8');
+		echo '<select id="woocsv_convert_to_utf8" name="woocsv_convert_to_utf8">';
+			echo '<option '. selected("0",$value).' value="0">No</option>';
+			echo '<option '. selected("1",$value).' value="1">Yes</option>';
+		echo '</select>';
+		echo '<p class="description">Convert to UTF-08 during import?</p>';	
 	}
 
 	//! validation
