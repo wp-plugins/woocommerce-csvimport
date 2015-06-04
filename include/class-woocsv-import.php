@@ -237,7 +237,7 @@ class woocsv_import
 		wp_defer_term_counting( true ) ;
 
 		$post_data = $_POST;
-
+		
 		/* solve escape problem when running on windows */
 		if (isset($post_data['filename'])) {
 			//get the filename and save it
@@ -246,6 +246,19 @@ class woocsv_import
 			unset($post_data['filename']);
 		} else {
 			$filename = get_option('woocsv_importfile');
+		}
+
+		$post_data['batch_filename'] = $filename;
+
+		//we are starting - first time around	
+		if (empty($post_data['batch'])) {
+		
+			do_action ('woocsv_start_import');
+						
+			$post_data['batch'] = $this->unique_number ();
+			
+			//create a new batch
+			$this->update_batch ($post_data,'running');
 		}
 
 		$count = 0;
@@ -291,6 +304,8 @@ class woocsv_import
 				update_option('woocsv_lastrun', array('date'=>date("Y-m-d H:i:s"), 'filename'=>basename($filename), 'rows'=>$post_data['rows']));
 				delete_option('woocsv_importfile');
 				do_action('woocsv_after_import_finished');
+				
+				//finish a new batch
 				$this->die_nice($post_data,true);
 			}
 
@@ -364,11 +379,16 @@ class woocsv_import
 
 	public function die_nice($post_data,$done=false)
 	{
-		global $wpdb,$woocsv_product;
+		global $wpdb,$woocsv_product,$woocsv_import ;
+	
 		//===================
 		// Clear transients
 		//===================
-		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '%_transient_%'");
+		if ( function_exists('wc_delete_product_transients')) {
+			wc_delete_product_transients($woocsv_product->body['ID']);
+		} else {
+			$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '%_transient_%'");
+		}
 		
 		//turn it on
 		wp_suspend_cache_invalidation ( false );
@@ -389,8 +409,13 @@ class woocsv_import
 		$post_data['log'] = $this->import_log;
 
 		//add done flag
-		if ($done) $post_data['done'] = 1; else $post_data['done']= 0;
-
+		if ($done) {
+			$post_data['done'] = 1;
+			$this->update_batch ($post_data, 'done');
+		} else { 
+			$post_data['done']= 0;
+			$this->update_batch ($post_data, 'paused');
+		}
 		//unset the product to be sure it's reset for the next run
 		unset($woocsv_product);
 			
@@ -399,9 +424,25 @@ class woocsv_import
 		die();
 	}
 
-	
-	
-	
-	
-	
+	public function unique_number() {
+    	return substr(md5(uniqid(mt_rand(), true)), 0, 10);
+    }
+    
+    public function update_batch ($post_data = array (), $status= 'new') {
+		$batches = array ();
+		$batches = get_option('woocsv_batches');
+		
+		$batch_data= array(
+			'currentrow' 	=> $post_data['currentrow'],
+			'blocksize' 	=> $post_data['blocksize'],
+			'rows' 			=> $post_data['rows'],
+			'filename' 		=> $post_data['batch_filename'],
+			'batch_status' 	=> "$status",
+			'batch' 		=> $post_data['batch'],
+			'timestamp'		=> time(),
+		);
+		
+		$batches[$post_data['batch']] = $batch_data;
+		update_option('woocsv_batches', $batches);
+    }
 }

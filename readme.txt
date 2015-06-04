@@ -1,8 +1,8 @@
 === Woocommerce CSV importer ===
 Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
-Requires at least: 4.0.0
-Tested up to: 4.2
+Requires at least: 	4.0
+Tested up to: 4.2.2
 Stable tag: 2.2.2
 Donate link: http://allaerd.org
 License: GPLv2 or later 
@@ -106,6 +106,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 = 3.0.1 =
 * convert to UTF-08 during import setting
 * added progress bar during import
+* each imports creates a batch to track it's progress. needed for future scheduling option and fire and forget option.
 
 = 3.0.0 =
 * multiple headers
