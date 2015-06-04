@@ -107,6 +107,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * convert to UTF-08 during import setting
 * added progress bar during import
 * each imports creates a batch to track it's progress. needed for future scheduling option and fire and forget option.
+* use wc_delete_product_transients if the function is available
 
 = 3.0.0 =
 * multiple headers
