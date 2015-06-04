@@ -7,8 +7,8 @@
 <div class="wrap">
 	<h2>Documentation</h2>
 	<hr>
-	<h3>Woocommerce CSV importer</h3>
-	Documentation is available in the <a href="https://allaerd.org/knowledgebase">knowledgebase</a> or in the <a href="https://allaerd.org/documentation">old documentation</a>. If you still have problems, feel free to drop me a mail at <a href-"mailto:info@allaerd.org">info@allaerd.org</a>
+	<h2>Woocommerce CSV importer</h2>
+	Documentation is available in the <a href="https://allaerd.org/knowledgebase">knowledgebase</a>. If you still have problems, feel free to drop me a mail at <a href-"mailto:support@allaerd.org">support@allaerd.org</a>
 	
 	<h3>Common questions</h3>
 	<h4>Text is is cut during import or when i use special characters.</h4>
