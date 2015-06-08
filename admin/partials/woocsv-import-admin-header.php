@@ -34,7 +34,7 @@ global $woocsv_import;
 	<tbody>
 	<?php $i=0; ?>
 	<?php foreach ($woocsv_import->headers as $key => $value) : ?>
-		<tr class="<?php echo ($i % 2 == 0)?:'alt';?>" id="<?php echo $key;?>">
+		<tr class="<?php echo ($i % 2 == 0)?'':'alt';?>" id="<?php echo $key;?>">
 			<td><?php echo $key; ?></td>
 			<td><?php echo implode($woocsv_import->get_separator().' ', $value);?></td>
 			<!-- 
