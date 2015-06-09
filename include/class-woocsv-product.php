@@ -430,10 +430,12 @@ class woocsv_import_product
 		$ch = curl_init();
 		$timeout = 0;
 
-
 		//special chars
-		$image = htmlspecialchars($image);
-
+		// @ since 3.0.1
+		$parse = parse_url($image);
+		$parse['path'] = urlencode($parse['path']);
+		$image = $parse['scheme'].'://'.$parse['host'].'/'.$parse['path'];
+		
 		// curl set options
 		curl_setopt ($ch, CURLOPT_URL, $image);
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
@@ -445,6 +447,8 @@ class woocsv_import_product
 		
 		//exec curl command
 		$image_data = curl_exec($ch);
+		
+		var_dump($image_data);
 		
 		/* get the mime type incase there is no extension */
 		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
