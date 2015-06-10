@@ -61,7 +61,7 @@ global $woocsv_import;
 			</thead>
 			<tbody>
 			<?php for ($i = 0; $i <= $length-1; $i++) : ?>
-			<tr class="<?php echo ($i % 2 == 0)?:'alt';?>">
+			<tr class="<?php echo ($i % 2 == 0)?'':'alt';?>">
 				<td>
 				<select name="fields_<?php echo $i;?>">
 					<option value="skip">Skip</option>
