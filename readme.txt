@@ -95,9 +95,8 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 
 == Changelog ==
 
-== Roadmap ==
-
-* schedule option
+= future development =
+* schedule options
 * sorting of headers
 * add-ons versions will be visible in add-ons part and upgrade notices
 * export options
@@ -109,6 +108,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * each imports creates a batch to track it's progress. needed for future scheduling option and fire and forget option.
 * use wc_delete_product_transients if the function is available
 * [BUGFIX] beter support for special characters in URL when you import images
+* add redirect option in Curl when using import images with the filename
 
 = 3.0.0 =
 * multiple headers
