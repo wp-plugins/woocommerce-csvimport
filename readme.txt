@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 	4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
