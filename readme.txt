@@ -3,7 +3,7 @@ Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 Requires at least: 	4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 Donate link: http://allaerd.org
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -93,8 +93,6 @@ and the other fields? They are in the several cool [add-on's](http://allaerd.org
 == Upgrade Notice ==
 Version 3.+  is mayor release. Please make a backup first before you upgrade! And be sure to upgrade you add-ons to version 3+.
 
-== Changelog ==
-
 == Roadmap ==
 
 * schedule option
@@ -103,12 +101,15 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * export options
 * support for xls, xml, feeds
 
+== Changelog ==
+
 = 3.0.1 =
 * convert to UTF-08 during import setting
 * added progress bar during import
 * each imports creates a batch to track it's progress. needed for future scheduling option and fire and forget option.
 * use wc_delete_product_transients if the function is available
 * [BUGFIX] beter support for special characters in URL when you import images
+* add redirect option in Curl when using import images with the filename
 
 = 3.0.0 =
 * multiple headers
