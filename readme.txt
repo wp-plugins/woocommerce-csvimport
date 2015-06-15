@@ -93,15 +93,14 @@ and the other fields? They are in the several cool [add-on's](http://allaerd.org
 == Upgrade Notice ==
 Version 3.+  is mayor release. Please make a backup first before you upgrade! And be sure to upgrade you add-ons to version 3+.
 
-== Roadmap ==
+== Changelog ==
 
-* schedule option
+= future development =
+* schedule options
 * sorting of headers
 * add-ons versions will be visible in add-ons part and upgrade notices
 * export options
 * support for xls, xml, feeds
-
-== Changelog ==
 
 = 3.0.1 =
 * convert to UTF-08 during import setting
