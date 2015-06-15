@@ -239,7 +239,6 @@ class woocsv_import_product
 		
 
 		if ( is_wp_error($post_id)) {
-			var_dump($this->body);
 			$woocsv_import->import_log[] = __('Import failed, could not save product body');
 			return;
 		}
