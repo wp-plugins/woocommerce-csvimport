@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class woocsv_import_product
 {
+	// @since 3.0.2 skip products if flag is set to true during runtime
+	public $skip = false;
 
 	public $new = true;
 	
@@ -234,10 +236,16 @@ class woocsv_import_product
 	public function save()
 	{
 		global $woocsv_import;
+		
+		// @since 3.0.2 if skip is true, skip the product during import
+		if ($this->skip) {
+			return false;
+		}
+		
 		//save the post
 		$post_id = wp_insert_post($this->body, true);
-		
-
+			
+	
 		if ( is_wp_error($post_id)) {
 			$woocsv_import->import_log[] = __('Import failed, could not save product body');
 			return;
