@@ -4,7 +4,7 @@ Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, 
 
 Requires at least: 	4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Donate link: http://allaerd.org
 
@@ -107,6 +107,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 
 = 3.0.2 =
 * add skip option, if skip is set to true during runtime, the product will not be imported.
+* fixed bug for image import using url's
 
 = 3.0.1 =
 * convert to UTF-08 during import setting
