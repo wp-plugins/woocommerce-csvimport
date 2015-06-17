@@ -438,9 +438,11 @@ class woocsv_import_product
 		$timeout = 0;
 
 		//special chars
-		// @ since 3.0.1
+		// @ since 3.0.1 added parse_url to encode path
+		// @ since 3.0.2 use rawurlencode so that / is not encoded
 		$parse = parse_url($image);
-		$parse['path'] = urlencode($parse['path']);
+
+		$parse['path'] = implode('/', array_map('rawurlencode', explode('/', $parse['path'])));	
 		$image = $parse['scheme'].'://'.$parse['host'].'/'.$parse['path'];
 		
 		// curl set options
@@ -454,8 +456,15 @@ class woocsv_import_product
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 		
+		//set user agent
+		curl_setopt($ch, CURLOPT_USERAGENT,'');
+		
 		//exec curl command
 		$image_data = curl_exec($ch);
+
+		var_dump($image_data);
+
+		var_dump($image_data);
 		
 		/* get the mime type incase there is no extension */
 		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
