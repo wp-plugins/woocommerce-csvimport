@@ -461,10 +461,6 @@ class woocsv_import_product
 		
 		//exec curl command
 		$image_data = curl_exec($ch);
-
-		var_dump($image_data);
-
-		var_dump($image_data);
 		
 		/* get the mime type incase there is no extension */
 		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
