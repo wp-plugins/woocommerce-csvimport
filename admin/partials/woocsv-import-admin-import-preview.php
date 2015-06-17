@@ -57,7 +57,7 @@
 		</thead>
 		<tbody>
 		<?php for ($i = 0; $i <= $length-1; $i++) : ?>
-		<tr class="<?php echo ($i % 2 == 0)?:'alt';?>">
+		<tr class="<?php echo ($i % 2 == 0)?'':'alt';?>">
 			<td class="row-title"><?php echo (isset($header[$i]))?$header[$i]:''; ?></td>
 			<td><?php if (isset($csvcontent[0 + $woocsv_import->get_skip_first_line() ][$i])) 
 				echo $csvcontent[ 0 + $woocsv_import->get_skip_first_line() ][$i];?>
