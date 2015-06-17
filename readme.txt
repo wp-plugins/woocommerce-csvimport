@@ -105,6 +105,10 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * export options
 * support for xls, xml, feeds
 
+
+= 3.0.4 =
+* change if statement in import preview to help out old php versions
+
 = 3.0.3 = 
 * fixed var_dump issue :-(
 
