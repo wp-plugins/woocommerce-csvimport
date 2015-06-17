@@ -4,7 +4,7 @@ Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, 
 
 Requires at least: 	4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 
 Donate link: http://allaerd.org
 
@@ -104,6 +104,9 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * add-ons versions will be visible in add-ons part and upgrade notices
 * export options
 * support for xls, xml, feeds
+
+= 3.0.3 = 
+* fixed var_dump issue :-(
 
 = 3.0.2 =
 * add skip option, if skip is set to true during runtime, the product will not be imported.
