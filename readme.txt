@@ -2,9 +2,9 @@
 Contributors: Allaerd
 Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, import, csv, multiple images, upload
 
-Requires at least: 	4.0
+Requires at least: 4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 
 Donate link: http://allaerd.org
 
