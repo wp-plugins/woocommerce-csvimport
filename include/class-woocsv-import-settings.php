@@ -53,6 +53,20 @@ class woocsv_import_settings {
 		//convert to utf8
 		add_settings_field('woocsv_convert_to_utf8', 'Convert to UTF-08', array($this,'convert_to_utf8'), 'woocsv-settings','woocsv-settings');
 		register_setting( 'woocsv-settings', 'woocsv_convert_to_utf8', array($this,'options_validate') );
+		
+		//enable CURLOPT_FOLLOWLOCATION
+		add_settings_field('woocsv_curl_followlocation', 'Follow to location during image import', array($this,'woocsv_curl_followlocation'), 'woocsv-settings','woocsv-settings');
+		
+		register_setting( 'woocsv-settings', 'woocsv_curl_followlocation', array($this,'options_validate') );
+	}
+	
+	function woocsv_curl_followlocation () {
+		$value = get_option('woocsv_curl_followlocation');
+		echo '<select id="woocsv_curl_followlocation" name="woocsv_curl_followlocation">';
+			echo '<option '. selected("0",$value).' value="0">No</option>';
+			echo '<option '. selected("1",$value).' value="1">Yes</option>';
+		echo '</select>';
+		echo '<p class="description">When you import images using an URL, the server sometimes redirects you to the actual path. This settings enabled that you follow that path. If you have safe_mode or open_basedir enabled, disable this setting.</p>';		
 	}
 	
 	//sections callback

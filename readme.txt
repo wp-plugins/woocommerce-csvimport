@@ -105,9 +105,9 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * export options
 * support for xls, xml, feeds
 
-
 = 3.0.4 =
 * change if statement in import preview to help out old php versions
+* add a setting to use CURLOPT_FOLLOWLOCATION, it can give warnings when safe_mode or open_basedir is used.
 
 = 3.0.3 = 
 * fixed var_dump issue :-(

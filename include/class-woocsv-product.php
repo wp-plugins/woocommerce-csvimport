@@ -449,8 +449,14 @@ class woocsv_import_product
 		curl_setopt ($ch, CURLOPT_URL, $image);
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		curl_setopt ($ch, CURLOPT_AUTOREFERER, true);
-		// @since 3.0.1 to follow redirects
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+		// @ since 3.0.1 to follow redirects
+		// @ since 3.0.4 have a setting because it can interfere with open_basedir or safe_mode
+		
+		if (get_option('woocsv_curl_followlocation')) {
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		} 
+		
 		
 		// Getting binary data
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
