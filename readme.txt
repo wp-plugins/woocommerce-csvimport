@@ -107,6 +107,8 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 
 = 3.0.5 =
 * add total_sales to new products so some themes that use this for sorting show the products.
+* utf-8 support for header preview
+* trim meta values to loose spaces
 
 = 3.0.4 =
 * change if statement in import preview to help out old php versions

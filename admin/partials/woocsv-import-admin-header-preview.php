@@ -18,15 +18,24 @@
 
 <?php 
 global $woocsv_import;
-		
+	
 		//open the temp file	
 		$handle = fopen($_FILES['csvfile']['tmp_name'], 'r');
 		$row = 1;
-		$csvcontent = '';
+		$csvcontent = array();
 		
 		// loop through the first 4 lines
 		while ($row < 5) {
-			$csvcontent[] = @fgetcsv($handle, 0, $woocsv_import->get_separator());
+			
+			$line  = @fgetcsv($handle, 0, $woocsv_import->get_separator());
+			
+			// @since 3.0.5 utf-8 support for header preview
+			if ( get_option('woocsv_convert_to_utf8') ) {
+				$line = array_map("utf8_encode", $line);	
+			}
+			
+			$csvcontent[] = $line;
+			
 			$row ++;
 		}
 
