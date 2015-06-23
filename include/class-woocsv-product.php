@@ -127,13 +127,6 @@ class woocsv_import_product
 			$woocsv_import->import_log[] = sprintf(__('menu order changed from %s to 0','woocsv-import'),$this->body['menu_order']);
 			$this->body['menu_order'] = 0;
 		}	
-		
-		//! DEV remove because SKU's can be numeric!!!!
-		//check post_parent
-		//if ( !is_numeric ( $this->body['post_parent'] )) {
-		//	$woocsv_import->import_log[] = __('post_parent was not numeric','woocsv-import');
-		//	$this->body['post_parent'] = '';
-		//}	
 
 		//==========================
 		// check some meta data and fill in the log
@@ -636,6 +629,7 @@ class woocsv_import_product
 			$this->merge_product($id);
 		}
 		
+		
 		//fill in the product body
 		foreach ($this->body as $key=>$value) {
 			if (in_array($key, $woocsv_import->header)) {
@@ -664,6 +658,13 @@ class woocsv_import_product
 			if (in_array(substr($key, 1), $woocsv_import->header)) {
 				$this->meta[$key] = $this->raw_data[array_search(substr($key, 1), $woocsv_import->header)];
 			}
+		}
+
+		// @since 3.0.5
+		// if the product is new add total_sales to show it in the front end
+		// some themes needed total_sales for popularity sorting
+		if ( !empty ( $this->body['ID'] ) ) {
+			$this->meta['total_sales'] = 0;
 		}
 		
 		//check if there are tags
