@@ -654,13 +654,15 @@ class woocsv_import_product
 		}
 		
 		//fill in the meta data
+		// @ since 3.0.5 
+		// trim meta values to loose spaces
 		foreach ($this->meta as $key=>$value) {
 			if (in_array(substr($key, 1), $woocsv_import->header)) {
-				$this->meta[$key] = $this->raw_data[array_search(substr($key, 1), $woocsv_import->header)];
+				$this->meta[$key] = trim ($this->raw_data[array_search(substr($key, 1), $woocsv_import->header)]) ;
 			}
 		}
 
-		// @since 3.0.5
+		// @ since 3.0.5
 		// if the product is new add total_sales to show it in the front end
 		// some themes needed total_sales for popularity sorting
 		if ( !empty ( $this->body['ID'] ) ) {
