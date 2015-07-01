@@ -1,5 +1,7 @@
-<?php
+<?php	
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+// @since 3.0.5 changed $woocsv_import->header to $this->header for future scheduling
 
 class woocsv_import_product
 {
@@ -570,9 +572,9 @@ class woocsv_import_product
 		$id = false;
 		
 		//check if the product already exists by checking it's ID		
-		if (in_array('ID', $woocsv_import->header) )  
+		if (in_array('ID', $this->header) )  
 		{
-			$tempID = $this->raw_data[array_search('ID', $woocsv_import->header)];
+			$tempID = $this->raw_data[array_search('ID', $this->header)];
 			if ($tempID) {			
 				
 				//use get_post instead of get_posts
@@ -581,9 +583,11 @@ class woocsv_import_product
 			 	if ($test->post) {
 				 	$woocsv_import->import_log[] = 'Product found (ID), ID is: '.$tempID;
 					$this->new = false;
+					// @ since 3.0.5 add ID else merging will not work using ID's
+				 	$id = $tempID;
 			 	} else {	 	
 					/* set the ID to null */
-				 	$this->raw_data[array_search('ID', $woocsv_import->header)] = '';
+				 	$this->raw_data[array_search('ID', $this->header)] = '';
 				 	$this->body['ID'] = '';
 				 	$woocsv_import->import_log[] = 'ID :'.$tempID . ' not found!';
 			 	}
@@ -591,9 +595,9 @@ class woocsv_import_product
 		 	
 		}
 		//check if the product already exists by checking it's sku
-		if (empty($id) && in_array('sku', $woocsv_import->header) && $woocsv_import->get_match_by() == 'sku' )  
+		if (empty($id) && in_array('sku', $this->header) && $woocsv_import->get_match_by() == 'sku' )  
 		{
-			$sku = $this->raw_data[array_search('sku', $woocsv_import->header)];
+			$sku = $this->raw_data[array_search('sku', $this->header)];
 			
 			if (!empty($sku)) {
 				$id = $this->get_product_by_id($sku);
@@ -607,9 +611,9 @@ class woocsv_import_product
 		}
 		
 		//check if the product already exists by checking it's post title		
-		if (empty($id) && in_array('post_title', $woocsv_import->header) && $woocsv_import->get_match_by() == 'title' )  
+		if (empty($id) && in_array('post_title', $this->header) && $woocsv_import->get_match_by() == 'title' )  
 		{
-			$post_title = $this->raw_data[array_search('post_title', $woocsv_import->header)];
+			$post_title = $this->raw_data[array_search('post_title', $this->header)];
 			
 			if ($post_title) {			
 			 	$testID = get_page_by_title( $post_title,ARRAY_A , 'product' );
@@ -629,11 +633,10 @@ class woocsv_import_product
 			$this->merge_product($id);
 		}
 		
-		
 		//fill in the product body
 		foreach ($this->body as $key=>$value) {
-			if (in_array($key, $woocsv_import->header)) {
-				$this->body[$key] = $this->raw_data[array_search($key, $woocsv_import->header)];
+			if (in_array($key, $this->header)) {
+				$this->body[$key] = $this->raw_data[array_search($key, $this->header)];
 			}
 		}
 		
@@ -657,8 +660,8 @@ class woocsv_import_product
 		// @ since 3.0.5 
 		// trim meta values to loose spaces
 		foreach ($this->meta as $key=>$value) {
-			if (in_array(substr($key, 1), $woocsv_import->header)) {
-				$this->meta[$key] = trim ($this->raw_data[array_search(substr($key, 1), $woocsv_import->header)]) ;
+			if (in_array(substr($key, 1), $this->header)) {
+				$this->meta[$key] = trim ($this->raw_data[array_search(substr($key, 1), $this->header)]) ;
 			}
 		}
 
@@ -670,30 +673,30 @@ class woocsv_import_product
 		}
 		
 		//check if there are tags
-		if (in_array('tags', $woocsv_import->header)) {
-			foreach ($woocsv_import->header as $key=>$value) {
+		if (in_array('tags', $this->header)) {
+			foreach ($this->header as $key=>$value) {
 				if ($value == 'tags')
 					$this->tags[] = $this->raw_data[$key];
 			}
 		}
 
 		//check if there is a shipping
-		if (in_array('shipping_class', $woocsv_import->header)) {
-			$key = array_search('shipping_class', $woocsv_import->header);
+		if (in_array('shipping_class', $this->header)) {
+			$key = array_search('shipping_class', $this->header);
 			$this->shipping_class = trim($this->raw_data[$key]);
 		}
 
 		//check if there are categories
-		if (in_array('category', $woocsv_import->header)) {
-			foreach ($woocsv_import->header as $key=>$value) {
+		if (in_array('category', $this->header)) {
+			foreach ($this->header as $key=>$value) {
 				if ($value == 'category')
 					$this->categories[] = $this->raw_data[$key];
 			}
 		} 
 		
 		/* change_stock */
-		if (in_array('change_stock', $woocsv_import->header)) {
-			$key = array_search('change_stock', $woocsv_import->header);
+		if (in_array('change_stock', $this->header)) {
+			$key = array_search('change_stock', $this->header);
 			$change_stock = $this->raw_data[$key];
 			
 			//get the stock
@@ -713,14 +716,14 @@ class woocsv_import_product
 		}
 		
 		//check if there is a featured image
-		if (in_array('featured_image', $woocsv_import->header)) {
-			$key = array_search('featured_image', $woocsv_import->header);
+		if (in_array('featured_image', $this->header)) {
+			$key = array_search('featured_image', $this->header);
 			$this->featured_image = $this->raw_data[$key];
 		}
 		
 		//check if there is a product gallery
-		if (in_array('product_gallery', $woocsv_import->header)) {
-			$key = array_search('product_gallery', $woocsv_import->header);
+		if (in_array('product_gallery', $this->header)) {
+			$key = array_search('product_gallery', $this->header);
 			$this->product_gallery = $this->raw_data[$key];
 		}
 

@@ -26,7 +26,8 @@
 		while ( ( $line = fgetcsv( $handle, 0 ,$woocsv_import->get_separator() ) ) !== FALSE ) {
 			
 			//utf-8 support
-			if ( get_option('woocsv_convert_to_utf8') ) {
+			// @since 3.0.5 added check if the $line is an array
+			if ( is_array($line) && get_option('woocsv_convert_to_utf8') ) {
 				$line = array_map("utf8_encode", $line);
 			}
 				

@@ -23,14 +23,12 @@ global $woocsv_import;
 		$handle = fopen($_FILES['csvfile']['tmp_name'], 'r');
 		$row = 1;
 		$csvcontent = array();
-		
 		// loop through the first 4 lines
 		while ($row < 5) {
 			
 			$line  = @fgetcsv($handle, 0, $woocsv_import->get_separator());
-			
 			// @since 3.0.5 utf-8 support for header preview
-			if ( get_option('woocsv_convert_to_utf8') ) {
+			if ( is_array($line) && get_option('woocsv_convert_to_utf8') ) {
 				$line = array_map("utf8_encode", $line);	
 			}
 			
@@ -92,8 +90,9 @@ global $woocsv_import;
 			</tbody>
 			<tfoot>			
 				<tr>
-					<th><input required type="text" class="regular-text" name="header_name" id="header_name" placeholder="The name of your header"></th>
-					<th><button type="submit" class="button-primary" disabled ><?php echo __('save','woocsv-import'); ?></button></th>
+					<!-- @since 3.0.5 use the filename as a default value for the header name -->
+					<th><input required type="text" class="regular-text" name="header_name" id="header_name" value = "<?php echo $_FILES['csvfile']['name']?>"placeholder="The name of your header"></th>
+					<th><button type="submit" class="button-primary" ><?php echo __('save','woocsv-import'); ?></button></th>
 				</tr>
 			</tfoot>
 			</table>
@@ -103,8 +102,9 @@ global $woocsv_import;
 </div>
 
 <script>
-	
-jQuery( '#header_name, select' ).keypress(function (e) {
+<!-- @since 3.0.5 use keyup instead of keypress to take backspace into account-->
+
+jQuery( '#header_name, select' ).keyup(function (e) {
 	chars = jQuery('#header_name').val();
 	
 	if ( chars.length > 0) {
@@ -117,7 +117,6 @@ jQuery( '#header_name, select' ).keypress(function (e) {
 		e.preventDefault();
 	}
 });
-
 
 </script>
 

@@ -99,16 +99,21 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 == Changelog ==
 
 = future development =
-* schedule options
+* schedule options ( in progress )
 * sorting of headers
 * add-ons versions will be visible in add-ons part and upgrade notices
 * export options
 * support for xls, xml, feeds
+* localised.
 
 = 3.0.5 =
 * add total_sales to new products so some themes that use this for sorting show the products.
 * utf-8 support for header preview
 * trim meta values to loose spaces
+* added a check to prevent an error that could happen in preview mode when a wrong separator is choosen
+* starting refactoring files for future scheduling options
+* utf-8 support for header preview
+* fixed bug when merging and using the ID to find products
 
 = 3.0.4 =
 * change if statement in import preview to help out old php versions
