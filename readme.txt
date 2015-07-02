@@ -114,6 +114,7 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * starting refactoring files for future scheduling options
 * utf-8 support for header preview
 * fixed bug when merging and using the ID to find products
+* use WP functions to upload and handle images with url's
 
 = 3.0.4 =
 * change if statement in import preview to help out old php versions

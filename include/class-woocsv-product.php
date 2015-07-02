@@ -422,8 +422,51 @@ class woocsv_import_product
 		}
 		
 	}
+	
+	//@ since 3.0.5 use WP functions to upload and handle images with url's
+	function save_image_with_url($url) {
+		global $woocsv_import;
+		
+		$tmp = download_url( $url , 10 );
+		$post_id = $this->body['ID'];
+		$desc = "";
+		$file_array = array();
+		$id = false;
+	
+		// Set variables for storage
+		// fix file filename for query strings
+		@preg_match('/[^\?]+\.(jpg|jpe|jpeg|gif|png)/i', $url, $matches);
+		if (!$matches) {
+			$woocsv_import->import_log[] = sprintf(__('Image with url: %s could not be uploaded', 'woocsv'),$url);
+			return $id;			
+		}
+		
+		$file_array['name'] = basename($matches[0]);
+		$file_array['tmp_name'] = $tmp;
+		$desc = $file_array['name'];
+		
+		// If error storing temporarily, unlink
+		if ( is_wp_error( $tmp ) ) {
+			@unlink($file_array['tmp_name']);
+			$file_array['tmp_name'] = '';
+			return $id;
+		}
+	
+		// do the validation and storage stuff
+		$id = media_handle_sideload( $file_array, $post_id, $desc );
+	
+		// If error storing permanently, unlink
+		if ( is_wp_error($id) ) {
+			@unlink($file_array['tmp_name']);
+			return $id;
+		}
+		
+		$woocsv_import->import_log[] = sprintf(__('Image with url: %s uploaded', 'woocsv'),$url);
+		return $id;
+	}
+	
 
-	public function save_image_with_url($image)
+	public function save_image_with_url_old($image)
 	{
 		$attach_id = false;
 		$upload_dir = wp_upload_dir();
@@ -484,7 +527,7 @@ class woocsv_import_product
 		$i= 1;
 		
 		//split it up
-		list($directory, , $extension, $filename) = array_values(pathinfo($file));
+		list($directory,, $extension, $filename) = array_values(pathinfo($file));
 		$new_file_name = $filename . '.' . $extension;
 		
 		//loop until it works
