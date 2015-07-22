@@ -4,7 +4,7 @@ Tags: Woocommerce, commerce, e-commerce, ecommerce, inventory, stock, products, 
 
 Requires at least: 4.0
 Tested up to: 4.2.2
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 
 Donate link: http://allaerd.org
 
@@ -110,9 +110,8 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * add total_sales to new products so some themes that use this for sorting show the products.
 * utf-8 support for header preview
 * trim meta values to loose spaces
-* added a check to prevent an error that could happen in preview mode when a wrong separator is choosen
+* added a check to prevent an error that could happen in preview mode when a wrong separator is chosen
 * starting refactoring files for future scheduling options
-* utf-8 support for header preview
 * fixed bug when merging and using the ID to find products
 * use WP functions to upload and handle images with url's
 
