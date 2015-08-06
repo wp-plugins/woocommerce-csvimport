@@ -17,7 +17,7 @@ class woocsv_import
 
 	public $message;
 	
-	public $version = '3.0.1';
+	public $version = '3.0.4';
 
 	public $options_default = array (
 		'woocsv_separator'=>',',
@@ -196,7 +196,7 @@ class woocsv_import
 			@mkdir($dir);
 		
 		if (!is_writable($upload_dir['basedir'] .'/csvimport/'))
-			$message .= __('Upload directory is not writable, please check you permissions','woocsv-import');
+			$message .= __('Upload directory is not writable, please check you permissions','woocsv');
 
 		$this->message = $message;
 		if ($message)
@@ -227,7 +227,7 @@ class woocsv_import
 	{
 		global $woocsv_product, $wpdb;
 		
-		//reset time to 30
+		//reset time
 		set_time_limit(0);
 		
 		//no more cache
@@ -310,7 +310,7 @@ class woocsv_import
 			}
 
 			// count the rows here else we have a row and than die.
-			$this->import_log[] = "--> ".__('row','woocsv-import').":". $realRow ." / ". ((int)$post_data['rows']) ;
+			$this->import_log[] = "--> ".__('row','woocsv')." : ". $realRow ." / ". ((int)$post_data['rows']) ;
 
 			//==================================
 			// We want to skip the first line
@@ -318,7 +318,7 @@ class woocsv_import
 
 			if ($this->get_skip_first_line() ==  1 && $post_data['currentrow'] == 0) {
 				$post_data['currentrow'] ++;
-				$this->import_log[] = __('Skipping the first row','woocsv-import');
+				$this->import_log[] = __('Skipping the first row','woocsv');
 				$this->die_nice($post_data);
 			}
 
@@ -406,7 +406,7 @@ class woocsv_import
 		//===============
 		// Add to logs
 		//===============
-		$post_data['log'] = $this->import_log;
+		$post_data['log'] = @array_merge($this->import_log, $woocsv_product->log) ;
 
 		//add done flag
 		if ($done) {

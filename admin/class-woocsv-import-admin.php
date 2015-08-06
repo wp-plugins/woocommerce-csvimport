@@ -58,17 +58,17 @@ class woocsv_import_admin
 		if (is_admin() &&  ( count( array_intersect($current_role, $allowed_roles)) > 0 || current_user_can( 'manage_options' ) ) ) {
 
 			//main page
-			$page = add_menu_page('CSV Import', 'CSV Import', current($current_role), 'woocsv_import', array($this,'import'), 'dashicons-randomize', 
+			$page = add_menu_page('CSV Import', __('CSV Import','woocsv') , current($current_role), 'woocsv_import', array($this,'import'), 'dashicons-randomize', 
 			'58.15011976');			
 			
 			//settings page
-			add_submenu_page( 'woocsv_import', 'Settings', 'Settings', 'manage_options', 'woocsv-settings', array($this, 'settings'));
+			add_submenu_page( 'woocsv_import', 'Settings', __('Settings','woocsv'), 'manage_options', 'woocsv-settings', array($this, 'settings'));
 		
 			//add-ons
-			add_submenu_page( 'woocsv_import', 'Docs', 'Docs', 'manage_options', 'woocsv-docs', array($this, 'docs'));
+			add_submenu_page( 'woocsv_import', 'Docs', __('Docs','woocsv'), 'manage_options', 'woocsv-docs', array($this, 'docs'));
 			
 			//documentation
-			add_submenu_page( 'woocsv_import', 'Add-ons', '<span style="color:#ef6c00">Add-ons</span>', 'manage_options', 'woocsv-addons', array($this, 'addons'));
+			add_submenu_page( 'woocsv_import', 'Add-ons', '<span style="color:#ef6c00">'.__('Add-ons','woocsv').'</span>', 'manage_options', 'woocsv-addons', array($this, 'addons'));
 		
 			//js and css
 			add_action( 'admin_print_scripts-' .$page, array( $this,'enqueue_scripts' ) );
@@ -180,9 +180,9 @@ class woocsv_import_admin
 		// localize javascript
 		//======================================
 		$strings = array (
-			'error' => __( 'Something went wrong. We could not make a connection with the server. Check your permissions and rights the do ajax requests!' ),
-			'done' 	=> __( 'Done' ),
-			'start' => __( 'Starting'),
+			'error' => __( 'Something went wrong. We could not make a connection with the server. Check your permissions and rights the do ajax requests!','woocsv' ),
+			'done' 	=> __( 'Done','woocsv' ),
+			'start' => __( 'Starting','woocsv'),
 		);
 		wp_localize_script( 'woocsv-script', 'strings', $strings );
 	

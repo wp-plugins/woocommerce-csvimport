@@ -102,9 +102,11 @@ Version 3.+  is mayor release. Please make a backup first before you upgrade! An
 * schedule options ( in progress )
 * sorting of headers
 * add-ons versions will be visible in add-ons part and upgrade notices
-* export options
+* export options all product types
 * support for xls, xml, feeds
-* localised.
+
+= 3.0.6 =
+* localised
 
 = 3.0.5 =
 * add total_sales to new products so some themes that use this for sorting show the products.

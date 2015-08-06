@@ -8,23 +8,22 @@ global $woocsv_import;
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <div class="wrap">
-	<h2>Headers</h2>
+	<h2><?php echo __('Headers','woocsv'); ?></h2>
 	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=import');?>">Import</a> |</li>
-		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=headers');?>" class="current">Headers</a></li>
+		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=import');?>"><?php echo __('Import','woocsv'); ?></a> |</li>
+		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=headers');?>" class="current"><?php echo __('Headers','woocsv'); ?></a></li>
 	</ul>
 	<br class="clear">
 	<hr>
-
 	<p class="description">
-		Headers are the mappings between your CSV columns and the actual fields of woocommerce. It is essential that you make a header before you import. You can make multiple headers and use them for different CSV files or for the same. Example: one header to import new products and one to only merge prices and stock.
+		<?php echo __('Headers are the mappings between your CSV columns and the actual fields of woocommerce. It is essential that you make a header before you import. You can make multiple headers and use them for different CSV files or for the same. Example: one header to import new products and one to only merge prices and stock.','woocsv'); ?>
 	</p>
 
 	<table id="headertable" class="widefat">
 	<thead>
 		<tr>
-			<th><?php echo __('name','woocsv-import'); ?></th>
-			<th><?php echo __('header','woocsv-import'); ?></th>
+			<th><?php echo __('name','woocsv'); ?></th>
+			<th><?php echo __('header','woocsv'); ?></th>
 			<!--
 				<th>&nbsp;</th>
 			-->
@@ -41,7 +40,7 @@ global $woocsv_import;
 			<td><span class="dashicons dashicons-arrow-up-alt2 up" data-header-name="<?php echo $key; ?>"></span></td>
 			<td><span class="dashicons dashicons-arrow-down-alt2 down" data-header-name="<?php echo $key; ?>"></span></td>
 			-->
-			<td><button class="button-primary delete" data-header-name="<?php echo $key; ?>">delete</button></td>
+			<td><button class="button-primary delete" data-header-name="<?php echo $key; ?>"><?php echo __('delete','woocsv'); ?></button></td>
 		</tr>
 	<?php $i++; ?>
 	<?php endforeach;?>
@@ -52,10 +51,10 @@ global $woocsv_import;
 	
 	<form name="upload_header_form" id="upload_header_form" enctype="multipart/form-data" method="POST">
 		<fieldset style="border:1px solid; padding:10px;">
-			<legend><span>Upload a CSV file to create a header</span></legend>
+			<legend><span><?php echo __('Upload a CSV file to create a header','woocsv'); ?></span></legend>
 			<input id="csvfile" name="csvfile" type="file" accept="text/csv" />
 			<input type="text" hidden name="action" value="start_header_preview">
-			<button type="submit" class="button-primary"><?php echo __('Load file','woocsv-import'); ?></button>
+			<button type="submit" class="button-primary"><?php echo __('load','woocsv'); ?></button>
 		<?php wp_nonce_field('upload_header_file', 'upload_header_file'); ?>
 		</fieldset>
 	</form>

@@ -27,6 +27,11 @@ class woocsv_import_product
 	public $product_gallery = '';
 	
 	public $product_type = 'simple';
+	
+	/* since 3.0.6
+		no more use of the global $woocsv_import
+	*/
+	public $log = array ();
 
 	//body
 	public $body = array(
@@ -100,33 +105,34 @@ class woocsv_import_product
 				empty($this->body['post_content']) && 
 				$this->body['post_type'] == 'product'
 			) {
-			$woocsv_import->import_log[] = 'No title, slug or content. Filled in dummy content';
+			
+			$this->log[] = __('No title, slug or content. Filled in dummy content','woocsv');
 			$this->body['post_content'] = ' ';
 		}
 		
 		//check the post_status
 		$post_status = array('publish','pending','draft','auto-draft','future','private','inherit','trash');
 		if ( !in_array( $this->body['post_status'], $post_status) ) {
-			$woocsv_import->import_log[] = sprintf(__('post status changed from %s to publish','woocsv-import'),$this->body['post_status']);
+			$this->log[] = sprintf(__('post status changed from %s to publish','woocsv'),$this->body['post_status']);
 			$this->body['post_status'] = 'publish';
 		}
 		
 		//check if there is a name or a title, else put status to draft
 		//added product type check to make sure only to check for simple products 
 		if (empty($this->body['post_title']) && $this->body['post_type'] == 'product'  ) {
-			$woocsv_import->import_log[] = __('title is empty status changed to draft','woocsv-import');
+			$this->log[] = __('title is empty status changed to draft','woocsv');
 			$this->body['post_status'] = 'draft';
 		}
 		
 		//check ping status
 		if ( !in_array( $this->body['ping_status'], array('open','closed')) ) {
-			$woocsv_import->import_log[] = sprintf(__('ping status changed from %s to ping','woocsv-import'),$this->body['ping_status']);
+			$this->log[] = sprintf(__('ping status changed from %s to ping','woocsv'),$this->body['ping_status']);
 			$this->body['ping_status'] = 'open';
 		}	
 	
 		//check menu_order
 		if ( !is_numeric ( $this->body['menu_order'] )) {
-			$woocsv_import->import_log[] = sprintf(__('menu order changed from %s to 0','woocsv-import'),$this->body['menu_order']);
+			$this->log[] = sprintf(__('menu order changed from %s to 0','woocsv'),$this->body['menu_order']);
 			$this->body['menu_order'] = 0;
 		}	
 
@@ -136,31 +142,31 @@ class woocsv_import_product
 		
 		//check stock status
 		if (in_array('stock_status', $this->header) && !in_array($this->meta['_stock_status'], array('instock', 'outofstock'))) { 
-			$woocsv_import->import_log[] = sprintf(__('stock status changed from %s to instock','woocsv-import'),$this->meta['_stock_status']);
+			$this->log[] = sprintf(__('stock status changed from %s to instock','woocsv'),$this->meta['_stock_status']);
 			$this->meta['_stock_status'] = 'instock';
 		}
 
 		//check visibility
 		if (in_array('visibility', $this->header) && !in_array($this->meta['_visibility'], array('visible', 'catalog', 'search', 'hidden'))) { 
-			$woocsv_import->import_log[] = sprintf(__('visibility changed from %s to visible','woocsv-import'),$this->meta['_visibility']);
+			$this->log[] = sprintf(__('visibility changed from %s to visible','woocsv'),$this->meta['_visibility']);
 			$this->meta['_visibility'] = 'visible';
 		}
 
 		//check backorders
 		if (in_array('backorders', $this->header) && !in_array($this->meta['_backorders'], array('yes','no','notify'))) { 
-			$woocsv_import->import_log[] = sprintf(__('backorders changed from %s to no','woocsv-import'),$this->meta['_backorders']);
+			$this->log[] = sprintf(__('backorders changed from %s to no','woocsv'),$this->meta['_backorders']);
 			$this->meta['_backorders'] = 'no';
 		}
 
 		//check featured
 		if (in_array('featured', $this->header) && !in_array($this->meta['_featured'], array('yes','no'))) { 
-			$woocsv_import->import_log[] = sprintf(__('featured changed from %s to no','woocsv-import'),$this->meta['_featured']);
+			$this->log[] = sprintf(__('featured changed from %s to no','woocsv'),$this->meta['_featured']);
 			$this->meta['_featured'] = 'no';
 		}
 
 		//check manage_stock
 		if (in_array('manage_stock', $this->header) && !in_array($this->meta['_manage_stock'], array('yes','no'))) { 
-			$woocsv_import->import_log[] = sprintf(__('manage_stock changed from %s to no','woocsv-import'),$this->meta['_manage_stock']);
+			$this->log[] = sprintf(__('manage_stock changed from %s to no','woocsv'),$this->meta['_manage_stock']);
 			$this->meta['_manage_stock'] = 'no';
 		}
 		
@@ -177,7 +183,7 @@ class woocsv_import_product
 			
 		//product on sale
 		if ($sale_price >0 && $sale_price < $regular_price) {
-			$woocsv_import->import_log[] = __('Product is on sale','woocsv-import');
+			$this->log[] = __('Product is on sale','woocsv');
 			$price = $sale_price;
 		} else {
 		//the product is not on sale
@@ -240,17 +246,11 @@ class woocsv_import_product
 		//save the post
 		$post_id = wp_insert_post($this->body, true);
 			
-	
-		if ( is_wp_error($post_id)) {
-			$woocsv_import->import_log[] = __('Import failed, could not save product body');
-			return;
-		}
-		 
-		
 		if (is_wp_error($post_id)) {
-			$woocsv_import->import_log[] = __('Product could not be saved ','woocsv-import');
+			$this->log[] = __('Product could not be saved and skipped','woocsv');
+			return false;
 		} else {
-			$woocsv_import->import_log[] = sprintf(__('Product saved with ID: %s','woocsv-import'),$post_id);
+			$this->log[] = sprintf(__('Product saved with ID: %s','woocsv'),$post_id);
 			$this->body['ID'] = $post_id;
 		}
 		
@@ -334,6 +334,7 @@ class woocsv_import_product
 		if ( ! $woocsv_import->get_merge_products() ) {
 			wp_set_object_terms( $this->body['ID'], null, 'product_shipping_class' );
 		}
+		
 		$term = term_exists($this->shipping_class, 'product_shipping_class');
 		
 		// @since  2.2.2 beter handling for shipping class
@@ -390,10 +391,10 @@ class woocsv_import_product
 		
 		$imageID = false;
 		if ($this->is_valid_url($this->featured_image)) {
-			$woocsv_import->import_log[] = 'featured image is imported using the URL';
+			$this->log[] = __('featured image is imported using the URL','woocsv');
 			$imageID = $this->save_image_with_url($this->featured_image);
 		} else {
-			$woocsv_import->import_log[] = 'featured image is imported using the filename';			
+			$this->log[] = __('featured image is imported using the filename','woocsv');			
 			$imageID = $this->save_image_with_name($this->featured_image);
 		}
 		
@@ -423,7 +424,7 @@ class woocsv_import_product
 		
 	}
 	
-	//@ since 3.0.5 use WP functions to upload and handle images with url's
+	//@since 3.0.5 use WP functions to upload and handle images with url's
 	function save_image_with_url($url) {
 		global $woocsv_import;
 		
@@ -437,7 +438,7 @@ class woocsv_import_product
 		// fix file filename for query strings
 		@preg_match('/[^\?]+\.(jpg|jpe|jpeg|gif|png)/i', $url, $matches);
 		if (!$matches) {
-			$woocsv_import->import_log[] = sprintf(__('Image with url: %s could not be uploaded', 'woocsv'),$url);
+			$this->log[] = sprintf(__('Image with url: %s could not be uploaded', 'woocsv'),$url);
 			return $id;			
 		}
 		
@@ -461,115 +462,8 @@ class woocsv_import_product
 			return $id;
 		}
 		
-		$woocsv_import->import_log[] = sprintf(__('Image with url: %s uploaded', 'woocsv'),$url);
+		$this->log[] = sprintf(__('Image with url: %s uploaded', 'woocsv'),$url);
 		return $id;
-	}
-	
-
-	public function save_image_with_url_old($image)
-	{
-		$attach_id = false;
-		$upload_dir = wp_upload_dir();
-
-		/* use curl to get image instead of $image_data = file_get_contents($image);*/
-		$ch = curl_init();
-		$timeout = 0;
-
-		//special chars
-		// @ since 3.0.1 added parse_url to encode path
-		// @ since 3.0.2 use rawurlencode so that / is not encoded
-		$parse = parse_url($image);
-
-		$parse['path'] = implode('/', array_map('rawurlencode', explode('/', $parse['path'])));	
-		$image = $parse['scheme'].'://'.$parse['host'].'/'.$parse['path'];
-		
-		// curl set options
-		curl_setopt ($ch, CURLOPT_URL, $image);
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		curl_setopt ($ch, CURLOPT_AUTOREFERER, true);
-
-		// @ since 3.0.1 to follow redirects
-		// @ since 3.0.4 have a setting because it can interfere with open_basedir or safe_mode
-		
-		if (get_option('woocsv_curl_followlocation')) {
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-		} 
-		
-		
-		// Getting binary data
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-		
-		//set user agent
-		curl_setopt($ch, CURLOPT_USERAGENT,'');
-		
-		//exec curl command
-		$image_data = curl_exec($ch);
-		
-		/* get the mime type incase there is no extension */
-		$mime_type =  curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-
-		//close the curl command
-		curl_close($ch);
-
-		//get the filename
-		$filename =  sanitize_file_name( basename(urldecode($image)) );
-
-		//create the dir or take the current one
-		if (wp_mkdir_p($upload_dir['path'])) {
-			$file = $upload_dir['path'] . '/' . $filename;
-		} else {
-			$file = $upload_dir['basedir'] . '/' . $filename;
-		}
-		
-
-		/* check if file is already there and rename it if needed */
-		$i= 1;
-		
-		//split it up
-		list($directory,, $extension, $filename) = array_values(pathinfo($file));
-		$new_file_name = $filename . '.' . $extension;
-		
-		//loop until it works
-		while (file_exists($file))
-		{
-			//create a new filename
-			$file = $directory . '/' . $filename . '-' . $i . '.' . $extension;
-			// ! DEV fix file url in image
-			$new_file_name = $filename . '-' . $i . '.' . $extension;
-			$i++;
-		}
-		
-		// ! DEV fix file url in image
-		$file_url = $upload_dir['url'] . '/' . $new_file_name;
-		
-		if (file_put_contents($file, $image_data)) {
-			$wp_filetype = wp_check_filetype($filename, null );
-			
-			/* added mime type */
-			if (!$wp_filetype['type'] && !empty($mime_type)) {
-				$allowed_content_types = wp_get_mime_types();
-				
-				if (in_array($mime_type, $allowed_content_types)){
-					$wp_filetype['type'] = $mime_type;
-				}
-			}
-			
-			$attachment = array(
-				'post_mime_type' => $wp_filetype['type'],
-				'post_title' => sanitize_file_name($filename),
-				'post_content' => '',
-				'post_status' => 'inherit',
-				'guid' => $file_url,
-			);
-			
-			$attach_id = wp_insert_attachment( $attachment, $file );
-			require_once ABSPATH . 'wp-admin/includes/image.php';
-			$attach_data = @wp_generate_attachment_metadata( $attach_id, $file );
-			
-			wp_update_attachment_metadata( $attach_id, $attach_data );	
-		}
-		return $attach_id;
 	}
 
 	public function save_image_with_name($image)
@@ -624,7 +518,7 @@ class woocsv_import_product
 				$test = new WC_Product($tempID);
 				
 			 	if ($test->post) {
-				 	$woocsv_import->import_log[] = 'Product found (ID), ID is: '.$tempID;
+				 	$this->log[] = sprintf(__('Product found (ID), ID is: %s','woocsv'), $tempID );
 					$this->new = false;
 					// @ since 3.0.5 add ID else merging will not work using ID's
 				 	$id = $tempID;
@@ -632,7 +526,7 @@ class woocsv_import_product
 					/* set the ID to null */
 				 	$this->raw_data[array_search('ID', $this->header)] = '';
 				 	$this->body['ID'] = '';
-				 	$woocsv_import->import_log[] = 'ID :'.$tempID . ' not found!';
+				 	$this->log[] = sprinf(__('ID : %s not found!','woocsv'),$tempID);
 			 	}
 		 	}
 		 	
@@ -646,9 +540,9 @@ class woocsv_import_product
 				$id = $this->get_product_by_id($sku);
 				if ( !empty( $id ) ) {
 					$this->new = false;
-					$woocsv_import->import_log[] = 'Product found (SKU), ID is: '. $id;
+					$this->log[] = sprintf(__('Product found (SKU), ID is: %s','woocsv'), $id);
 				} else {
-					$woocsv_import->import_log[] = "New product";
+					$this->log[] = __('New product','woocsv');
 				}
 			}
 		}
@@ -661,11 +555,11 @@ class woocsv_import_product
 			if ($post_title) {			
 			 	$testID = get_page_by_title( $post_title,ARRAY_A , 'product' );
 			 	if ($testID) {
-				 	$woocsv_import->import_log[] = 'Product found (TITLE), ID is: '.$testID['ID'];
+				 	$this->log[] = sprintf(__('Product found (TITLE), ID is: %s','woocsv'),$testID['ID']);;
 				 	$id = $testID['ID'];
 					$this->new = false;
 			 	} else {
-				 	$woocsv_import->import_log[] = 'ID :'.$testID['ID'] . ' not found!';
+				 	$this->log[] = sprintf(__('ID : %s not found!','woocsv'),$testID['ID']);
 			 	}
 		 	}
 		}
@@ -688,9 +582,11 @@ class woocsv_import_product
 			
 			$user = get_user_by( ($woocsv_import->get_match_author_by())?$woocsv_import->get_match_author_by():'login', $this->body['post_author'] );
 			if ($user) {
-				$this->body['post_author'] = $user->ID;				
+				$this->body['post_author'] = $user->ID;
+				$this->log[] = __('user found','woocsv');			
 			} else {
 				$this->body['post_author'] = '';
+				$this->log[] = __('user not found','woocsv');
 			} 
 		}
 		
@@ -755,7 +651,7 @@ class woocsv_import_product
 			$this->meta['_stock'] = $new_stock;
 
 			//set log
-			$woocsv_import->import_log[] = "Change stock modus: stock changed from $stock to $new_stock";
+			$this->log[] = sprintf(__('Change stock modus: stock changed from %s to %s','woocsv'),$stock, $new_stock);
 		}
 		
 		//check if there is a featured image
@@ -769,7 +665,6 @@ class woocsv_import_product
 			$key = array_search('product_gallery', $this->header);
 			$this->product_gallery = $this->raw_data[$key];
 		}
-
 
 		do_action( 'woocsv_product_after_fill_in_data');
 

@@ -4,14 +4,14 @@
 	Plugin URI: http://allaerd.org/
 	Description: Import CSV files in Woocommerce
 	
-	Version: 3.0.4
+	Version: 3.0.5
 	
 	License: GPLv2 or later
 	
 	Author: Allaerd Mensonides
 	Author URI: http://allaerd.org
 	
-	Text Domain: woocsv-import
+	Text Domain: woocsv
 	Domain Path: /languages
 */
 
@@ -32,7 +32,7 @@ if (!function_exists('woocsv_load_plugin_textdomain')) {
 
 function woocsv_load_plugin_textdomain()
 	{
-	    load_plugin_textdomain('woocsv-import', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
+	    load_plugin_textdomain('woocsv', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
 	}
 }
 
@@ -69,8 +69,8 @@ function add_support_link($links, $file) {
 	}
 	//if($file == $this->plugin_basefile){
 	if( $file == $plugin	){ 
-		$links[] = '<a href="https://allaerd.org/knowledgebase/" target="_blank">'.__('Docs', 'woocsv-import').'</a>';
-		$links[] = '<a href="https://allaerd.org/shop/" target="_blank">'.__('Add-ons', 'woocsv-import').'</a>';			}
+		$links[] = '<a href="https://allaerd.org/knowledgebase/" target="_blank">'.__('Docs', 'woocsv').'</a>';
+		$links[] = '<a href="https://allaerd.org/shop/" target="_blank">'.__('Add-ons', 'woocsv').'</a>';			}
 	return $links;
 }
 */

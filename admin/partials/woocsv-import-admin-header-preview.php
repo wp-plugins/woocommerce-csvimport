@@ -8,14 +8,13 @@
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <div class="wrap">
-	<h2>Headers</h2>
+	<h2><?php echo __('Headers','woocsv'); ?></h2>
 	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=import');?>">Import</a> |</li>
-		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=headers');?>" class="current">Headers</a></li>
+		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=import');?>"><?php echo __('Import','woocsv'); ?></a> |</li>
+		<li><a href="<?php echo admin_url('admin.php?page=woocsv_import&amp;tab=headers');?>" class="current"><?php echo __('Headers','woocsv'); ?></a></li>
 	</ul>
 	<br class="clear">
 	<hr>
-
 <?php 
 global $woocsv_import;
 	
@@ -39,8 +38,8 @@ global $woocsv_import;
 
 		//check to see if the we might have the wrong separator
 		if (count($csvcontent[0]) == 1 ) {
-			echo '<h2>'. __('I think you have the wrong separator','woocsv-import').'</h2>';
-			echo '<p>'.__('Please goto the settings page and change your separator!','woocsv-import').'</p>';
+			echo '<h2>'. __('I think you have the wrong separator','woocsv').'</h2>';
+			echo '<p>'.__('Please goto the settings page and change your separator!','woocsv').'</p>';
 			return;
 		}
 		
@@ -54,16 +53,16 @@ global $woocsv_import;
 		do_action('woocsv_header_preview', $woocsv_import->header);
 		
 ?>
-			<h2><?php echo __('Header preview','woocsv-import'); ?></h2>
+			<h2><?php echo __('Header preview','woocsv'); ?></h2>
 			<form id="header_prieview_form" method="POST">
 			<table class="widefat">
 			<thead>
 				<tr>
-					<th><?php echo __('Fields','woocsv-import'); ?></th>
-					<th><?php echo __('Row 1','woocsv-import'); ?></th>
-					<th><?php echo __('Row 2','woocsv-import'); ?></th>
-					<th><?php echo __('Row 3','woocsv-import'); ?></th>
-					<th><?php echo __('Row 4','woocsv-import'); ?></th>
+					<th><?php echo __('Fields','woocsv'); ?></th>
+					<th><?php echo __('Row 1','woocsv'); ?></th>
+					<th><?php echo __('Row 2','woocsv'); ?></th>
+					<th><?php echo __('Row 3','woocsv'); ?></th>
+					<th><?php echo __('Row 4','woocsv'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -71,7 +70,7 @@ global $woocsv_import;
 			<tr class="<?php echo ($i % 2 == 0)?'':'alt';?>">
 				<td>
 				<select name="fields_<?php echo $i;?>">
-					<option value="skip">Skip</option>
+					<option value="skip"><?php echo __('Skip','woocsv'); ?></option>
 					<?php 
 					// loop through the fields and check if the match the defined ones.
 					foreach (array_unique($woocsv_import->fields) as $field) : ?> 
@@ -92,7 +91,7 @@ global $woocsv_import;
 				<tr>
 					<!-- @since 3.0.5 use the filename as a default value for the header name -->
 					<th><input required type="text" class="regular-text" name="header_name" id="header_name" value = "<?php echo $_FILES['csvfile']['name']?>"placeholder="The name of your header"></th>
-					<th><button type="submit" class="button-primary" ><?php echo __('save','woocsv-import'); ?></button></th>
+					<th><button type="submit" class="button-primary" ><?php echo __('save','woocsv'); ?></button></th>
 				</tr>
 			</tfoot>
 			</table>
